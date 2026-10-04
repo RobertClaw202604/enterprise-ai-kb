@@ -1,0 +1,1475 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Céges tudásbázis a nagy AI platformokon — OpenAI · Anthropic · Microsoft · Google</title>
+<meta name="description" content="Hogyan oldja meg az OpenAI, az Anthropic, a Microsoft és a Google a vállalati tudásbázis beépítését az enterprise AI rendszerükbe? Összehasonlító elemzés 2026.">
+<style>
+  :root{
+    --bg:#0d1117; --bg2:#161b22; --bg3:#1c2330; --line:#2a3340;
+    --txt:#e6edf3; --dim:#9aa7b4; --dim2:#6e7c8c;
+    --oai:#10a37f; --ant:#d97757; --ms:#58a6ff; --goo:#f2b93b;
+    --acc:#ff5100;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; background:var(--bg); color:var(--txt);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.65; font-size:16px;
+  }
+  a{color:var(--ms)}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 22px}
+
+  /* ---- header ---- */
+  header{
+    background:linear-gradient(150deg,#0d1117 0%,#141b2b 55%,#1b1526 100%);
+    border-bottom:1px solid var(--line); padding:64px 0 52px; position:relative; overflow:hidden;
+  }
+  header::after{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background:radial-gradient(600px 300px at 85% 10%,rgba(255,81,0,.13),transparent 70%);
+  }
+  .kicker{
+    display:inline-block;font-size:12px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--acc);border:1px solid rgba(255,81,0,.35);border-radius:100px;
+    padding:5px 14px;margin-bottom:22px;font-weight:600;
+  }
+  h1{font-size:clamp(1.9rem,4.4vw,3rem);line-height:1.15;margin:0 0 18px;letter-spacing:-.02em;font-weight:750}
+  h1 span{color:var(--dim);display:block;font-size:.55em;font-weight:400;letter-spacing:0;margin-top:14px}
+  .lede{font-size:1.13rem;color:var(--dim);max-width:760px;margin:0}
+  .meta{margin-top:26px;font-size:.85rem;color:var(--dim2)}
+  .meta b{color:var(--dim)}
+
+  /* ---- nav ---- */
+  nav.toc{
+    position:sticky;top:0;z-index:50;background:rgba(13,17,23,.92);
+    backdrop-filter:blur(10px);border-bottom:1px solid var(--line);
+  }
+  nav.toc ul{display:flex;gap:4px;list-style:none;margin:0;padding:10px 22px;overflow-x:auto;max-width:1120px;margin:0 auto}
+  nav.toc a{
+    color:var(--dim);text-decoration:none;font-size:.84rem;white-space:nowrap;
+    padding:6px 12px;border-radius:7px;font-weight:500;transition:.15s;
+  }
+  nav.toc a:hover{background:var(--bg3);color:var(--txt)}
+
+  section{padding:56px 0;border-bottom:1px solid var(--line)}
+  section:last-of-type{border-bottom:none}
+
+  h2{font-size:clamp(1.4rem,2.6vw,1.95rem);margin:0 0 8px;letter-spacing:-.015em}
+  h3{font-size:1.12rem;margin:34px 0 12px;color:#fff}
+  h4{font-size:.95rem;margin:22px 0 8px;color:var(--dim);text-transform:uppercase;letter-spacing:.08em;font-weight:600}
+  .sub{color:var(--dim2);font-size:.9rem;margin:0 0 26px}
+  p{margin:0 0 15px}
+  ul,ol{margin:0 0 16px;padding-left:22px}
+  li{margin-bottom:7px}
+  li::marker{color:var(--dim2)}
+  strong{color:#fff;font-weight:640}
+  code{
+    background:var(--bg3);padding:2px 7px;border-radius:5px;font-size:.86em;
+    font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:#a5d6ff;border:1px solid var(--line);
+  }
+
+  /* ---- cards ---- */
+  .grid{display:grid;gap:18px}
+  .g2{grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
+  .g4{grid-template-columns:repeat(auto-fit,minmax(238px,1fr))}
+
+  .card{
+    background:var(--bg2);border:1px solid var(--line);border-radius:14px;
+    padding:22px;position:relative;overflow:hidden;
+  }
+  .card p:last-child{margin-bottom:0}
+  .card h3{margin-top:0}
+
+  .vendor{border-top:3px solid var(--line)}
+  .vendor.openai{border-top-color:var(--oai)}
+  .vendor.anthropic{border-top-color:var(--ant)}
+  .vendor.microsoft{border-top-color:var(--ms)}
+  .vendor.google{border-top-color:var(--goo)}
+
+  .vhead{display:flex;align-items:center;gap:12px;margin-bottom:4px}
+  .dot{width:11px;height:11px;border-radius:50%;flex:none}
+  .dot.openai{background:var(--oai)}
+  .dot.anthropic{background:var(--ant)}
+  .dot.microsoft{background:var(--ms)}
+  .dot.google{background:var(--goo)}
+  .vhead h3{margin:0;font-size:1.15rem}
+  .vpromise{color:var(--dim);font-size:.9rem;margin:10px 0 18px;font-style:italic}
+
+  dl.kv{margin:0;font-size:.9rem}
+  dl.kv dt{color:var(--dim2);font-size:.72rem;text-transform:uppercase;letter-spacing:.09em;font-weight:600;margin:14px 0 4px}
+  dl.kv dd{margin:0;color:var(--txt)}
+
+  .tag{
+    display:inline-block;font-size:.72rem;padding:3px 9px;border-radius:6px;
+    background:var(--bg3);border:1px solid var(--line);color:var(--dim);margin:2px 3px 2px 0;
+  }
+
+  /* ---- vendor sections ---- */
+  .hero-vendor{
+    display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:6px;
+  }
+  .logo-mark{
+    width:46px;height:46px;border-radius:11px;display:grid;place-items:center;
+    font-weight:800;font-size:1.2rem;flex:none;color:#0d1117;
+  }
+  .lm-oai{background:var(--oai)} .lm-ant{background:var(--ant)}
+  .lm-ms{background:var(--ms)}   .lm-goo{background:var(--goo)}
+
+  .stack{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));margin:18px 0}
+  .layer{
+    background:var(--bg2);border:1px solid var(--line);border-left:3px solid var(--acc);
+    border-radius:10px;padding:14px 16px;
+  }
+  .layer h4{margin:0 0 6px;color:#fff;text-transform:none;letter-spacing:0;font-size:.94rem}
+  .layer p{margin:0;font-size:.87rem;color:var(--dim)}
+
+  /* ---- table ---- */
+  .tscroll{overflow-x:auto;border:1px solid var(--line);border-radius:12px;margin:22px 0}
+  table{border-collapse:collapse;width:100%;font-size:.86rem;min-width:720px}
+  th,td{padding:12px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+  th{background:var(--bg3);color:#fff;font-weight:640;font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;position:sticky;top:0}
+  tbody tr:nth-child(even){background:rgba(255,255,255,.018)}
+  tbody tr:last-child td{border-bottom:none}
+  td:first-child{color:var(--dim);font-weight:600}
+  .c-oai{color:var(--oai)} .c-ant{color:var(--ant)} .c-ms{color:var(--ms)} .c-goo{color:var(--goo)}
+
+  /* ---- callout ---- */
+  .callout{
+    background:linear-gradient(135deg,rgba(255,81,0,.09),rgba(255,81,0,.02));
+    border:1px solid rgba(255,81,0,.28);border-radius:12px;padding:20px 22px;margin:26px 0;
+  }
+  .callout p:last-child{margin-bottom:0}
+  .callout strong{color:var(--acc)}
+
+  .note{
+    background:var(--bg2);border:1px solid var(--line);border-radius:12px;
+    padding:18px 20px;margin:22px 0;font-size:.92rem;color:var(--dim);
+  }
+  .note b{color:#fff}
+
+  /* ---- patterns ---- */
+  .pattern{counter-reset:pc}
+  .pattern .card{display:flex;gap:16px;align-items:flex-start}
+  .pattern .card::before{
+    counter-increment:pc;content:counter(pc);
+    font-size:1.5rem;font-weight:800;color:var(--acc);opacity:.55;line-height:1;flex:none;min-width:30px;
+  }
+
+  /* ---- checklist ---- */
+  .check{list-style:none;padding:0}
+  .check li{padding-left:30px;position:relative;margin-bottom:11px}
+  .check li::before{
+    content:"✓";position:absolute;left:0;top:0;color:var(--oai);font-weight:700;
+  }
+
+  footer{padding:44px 0 60px;color:var(--dim2);font-size:.84rem}
+  footer a{color:var(--dim)}
+  .srcline{font-size:.78rem;color:var(--dim2);margin-top:8px}
+  .srcline a{color:var(--dim2);text-decoration:none;border-bottom:1px dotted var(--line)}
+  .srcline a:hover{color:var(--ms)}
+
+  /* ---- glosszárium ---- */
+  .gloss{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));margin-top:24px}
+  .term{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:20px 22px}
+  .term h3{margin:0 0 4px;font-size:1.02rem;color:#fff;display:flex;align-items:center;gap:9px}
+  .term .abbr{font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:var(--acc);font-weight:700;display:block;margin-bottom:6px}
+  .term p{margin:0 0 10px;font-size:.9rem;color:var(--dim)}
+  .term p:last-child{margin-bottom:0}
+  .analogy{
+    background:rgba(255,81,0,.07);border-left:3px solid var(--acc);border-radius:0 8px 8px 0;
+    padding:9px 14px;margin:10px 0 0;font-size:.86rem;color:#e6edf3;
+  }
+  .analogy b{color:var(--acc)}
+  .term code{font-size:.82em}
+
+  /* ---- lépéssor ---- */
+  .steps{counter-reset:st;margin-top:22px}
+  .steps .layer{counter-increment:st;border-left-color:var(--ms)}
+  .steps .layer h4::before{
+    content:counter(st) ". ";color:var(--ms);font-weight:800;
+  }
+
+  /* ---- döntés doboz ---- */
+  .decide{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));margin-top:20px}
+  .decide .card h3{font-size:1rem}
+  .good{border-top:3px solid var(--oai)}
+  .bad{border-top:3px solid #e5534b}
+
+  /* ---- fájl-útvonal ---- */
+  .flow{display:flex;flex-direction:column;gap:0;margin:22px 0}
+  .fnode{
+    background:var(--bg2);border:1px solid var(--line);border-radius:12px;
+    padding:14px 18px;position:relative;
+  }
+  .fnode b{color:#fff}
+  .fnode span{display:block;font-size:.84rem;color:var(--dim);margin-top:3px}
+  .farrow{text-align:center;color:var(--dim2);font-size:1.1rem;line-height:1;padding:6px 0}
+
+  /* ---- szimulátor ---- */
+  .sim-tabs{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 18px}
+  .sim-tab{
+    padding:9px 16px;border-radius:9px;border:1px solid var(--line);background:var(--bg2);
+    color:var(--dim);cursor:pointer;font-size:.88rem;font-weight:600;font-family:inherit;transition:.15s;
+  }
+  .sim-tab:hover{border-color:var(--dim2);color:var(--txt)}
+  .sim-tab.active{background:var(--acc);border-color:var(--acc);color:#fff}
+
+  .sim-panel{display:none}
+  .sim-panel.active{display:block;animation:fade .3s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+  .sim{display:grid;gap:16px;grid-template-columns:repeat(3,1fr);align-items:start}
+  @media(max-width:820px){.sim{grid-template-columns:1fr}}
+  .sim-col{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:18px}
+  .sim-col h4{margin:0 0 12px;font-size:.76rem;letter-spacing:.09em;text-transform:uppercase;color:var(--dim2)}
+  .sim-col.col-user{border-top:3px solid var(--acc)}
+  .sim-col.col-bg{border-top:3px solid var(--ms)}
+  .sim-col.col-out{border-top:3px solid var(--oai)}
+  .sim-q{
+    background:var(--bg3);border:1px solid var(--line);border-radius:11px;padding:13px 15px;
+    font-size:.92rem;color:#fff;font-style:italic;position:relative;
+  }
+  .sim-q::before{content:'”';position:absolute;top:-6px;left:8px;font-size:1.6rem;color:var(--acc);opacity:.5}
+
+  .step-list{list-style:none;margin:0;padding:0}
+  .step-list li{
+    position:relative;padding:0 0 14px 26px;font-size:.86rem;color:var(--dim);
+    border-left:2px solid var(--line);margin-left:6px;
+  }
+  .step-list li:last-child{border-left-color:transparent;padding-bottom:0}
+  .step-list li::before{
+    content:'';position:absolute;left:-7px;top:3px;width:12px;height:12px;border-radius:50%;
+    background:var(--bg);border:2px solid var(--ms);
+  }
+  .step-list li b{color:#fff;display:block;margin-bottom:2px;font-size:.88rem}
+  .step-list li.reveal{animation:slidein .45s ease both}
+  @keyframes slidein{from{opacity:0;transform:translateX(-8px)}to{opacity:1;transform:none}}
+
+  .sim-answer{background:var(--bg3);border:1px solid var(--line);border-radius:11px;padding:14px 16px;font-size:.88rem}
+  .sim-answer p{margin:0 0 10px;color:var(--txt)}
+  .sim-answer .cite{
+    display:block;font-size:.78rem;color:var(--dim2);border-top:1px dashed var(--line);
+    padding-top:8px;margin-top:10px;
+  }
+  .sim-answer .cite a{color:var(--ms);text-decoration:none}
+
+  .sim-run{
+    margin-top:14px;background:var(--oai);color:#04140f;border:none;border-radius:9px;
+    padding:10px 18px;font-weight:700;font-size:.87rem;cursor:pointer;font-family:inherit;transition:.15s;
+  }
+  .sim-run:hover{filter:brightness(1.1)}
+  .sim-run:disabled{opacity:.45;cursor:default;filter:none}
+
+  /* ---- ügynök-tábla / kártyák ---- */
+  .agents{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));margin-top:22px}
+  .agent{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:20px;border-left:4px solid var(--acc)}
+  .agent h3{margin:0 0 6px;font-size:1.02rem}
+  .agent .who{font-size:.75rem;color:var(--dim2);text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px}
+  .agent p{font-size:.88rem;color:var(--dim);margin:0 0 8px}
+  .agent p:last-child{margin-bottom:0}
+  .agent .io{font-size:.83rem;color:var(--dim);background:var(--bg3);border-radius:8px;padding:9px 12px;margin-top:8px}
+
+  .qa{margin-top:24px}
+  .qa details{
+    background:var(--bg2);border:1px solid var(--line);border-radius:11px;
+    padding:14px 18px;margin-bottom:10px;
+  }
+  .qa summary{cursor:pointer;font-weight:640;color:#fff;font-size:.95rem;list-style:none}
+  .qa summary::-webkit-details-marker{display:none}
+  .qa summary::before{content:'▸ ';color:var(--acc);font-weight:800}
+  .qa details[open] summary::before{content:'▾ '}
+  .qa details p{margin:12px 0 0;font-size:.9rem;color:var(--dim)}
+
+  @media(max-width:640px){
+    header{padding:48px 0 38px}
+    section{padding:42px 0}
+    .lede{font-size:1.03rem}
+  }
+
+  /* ---- MCP mélymerítés ---- */
+  .mcp-pipe{margin:22px 0}
+  .mcp-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;align-items:stretch}
+  .mcp-box{
+    background:var(--bg2);border:1px solid var(--line);border-radius:12px;
+    padding:16px 18px;position:relative;
+  }
+  .mcp-box.side{border-top:3px solid var(--dim2)}
+  .mcp-box.mid{border-top:3px solid var(--acc);box-shadow:0 0 0 1px rgba(255,81,0,.14)}
+  .mcp-box.win{border-top:3px solid var(--oai)}
+  .mcp-box h4{margin:0 0 8px;color:#fff;font-size:.95rem;text-transform:none;letter-spacing:0}
+  .mcp-box .who{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--dim2);font-weight:600;margin-bottom:8px}
+  .mcp-box p,.mcp-box ul{margin:0;font-size:.86rem;color:var(--dim);line-height:1.6}
+  .mcp-box ul{padding-left:16px}
+  .mcp-box li{margin-bottom:5px}
+  .mcp-arrowline{
+    text-align:center;color:var(--acc);font-size:1.15rem;font-weight:800;letter-spacing:1px;margin:6px 0 2px
+  }
+  .mcp-caption{font-size:.78rem;color:var(--dim2);text-align:center;margin:0 0 20px}
+
+  .tools{
+    background:var(--bg2);border:1px solid var(--line);border-radius:12px;
+    overflow:hidden;margin:18px 0;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.82rem
+  }
+  .tools .trow{padding:11px 16px;border-bottom:1px solid var(--line);display:grid;grid-template-columns:auto 1fr;gap:14px}
+  .tools .trow:last-child{border-bottom:none}
+  .tools .tname{color:var(--oai);font-weight:700;white-space:nowrap}
+  .tools .tdesc{color:var(--dim)}
+  .tools .tname.mut{color:var(--dim2)}
+  .tools .tname.ok{color:#3fb950}
+
+  .askgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;margin:18px 0}
+  .askcard{background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:15px 17px}
+  .askcard h4{margin:0 0 6px;color:#fff;font-size:.92rem;text-transform:none;letter-spacing:0}
+  .askcard p{margin:0;font-size:.85rem;color:var(--dim)}
+  .askcard .q{color:var(--acc);font-style:italic;margin-bottom:8px;font-size:.86rem}
+
+  .mgmt{background:linear-gradient(180deg,rgba(255,81,0,.06),rgba(255,81,0,0));border:1px solid var(--line);border-left:4px solid var(--acc);border-radius:12px;padding:20px 22px;margin:22px 0}
+  .mgmt h3{margin:0 0 10px;color:#fff;text-transform:none;letter-spacing:0}
+  .mgmt ul{margin:0;padding-left:20px;font-size:.9rem;color:var(--dim)}
+  .mgmt li{margin-bottom:8px}
+
+  @media(max-width:820px){.mcp-row{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <span class="kicker">Enterprise AI · Tudásbázis-integráció</span>
+    <h1>A céges tudás beépítése a nagy AI platformokba
+      <span>OpenAI · Anthropic · Microsoft · Google — hogyan oldják meg a vállalati tudás elérését az enterprise ügyfeleknél (2026)</span>
+    </h1>
+    <p class="lede">
+      A nagy nyelvi modellek önmagukban nem ismerik a cég belső dokumentumait, szerződéseit, ticketjeit vagy
+      Slack-beszélgetéseit. Az igazi üzleti érték ott kezdődik, amikor a modell a <strong>hivatalos céges tudásbázissal
+      összekötve</strong> válaszol — jogosultság-tudatosan, forrásmegjelöléssel. Ez az oldal azt mutatja be, hogy a négy
+      vezető szolgáltató milyen technológiával, milyen termékkel és milyen irányba haladva oldja meg ezt a problémát.
+    </p>
+    <p class="meta">Készítette: <b>Rob</b> (ARworks) · Összeállítva: <b>2026. október 4.</b> · Források: hivatalos szolgáltatói dokumentációk és bejelentések</p>
+  </div>
+</header>
+
+<nav class="toc">
+  <ul>
+    <li><a href="#osszefoglalo">Összefoglaló</a></li>
+    <li><a href="#minta">Közös minta</a></li>
+    <li><a href="#architektura">Architektúra</a></li>
+    <li><a href="#openai">OpenAI</a></li>
+    <li><a href="#anthropic">Anthropic</a></li>
+    <li><a href="#microsoft">Microsoft</a></li>
+    <li><a href="#google">Google</a></li>
+    <li><a href="#tabla">Összehasonlítás</a></li>
+    <li><a href="#glosszarium">Szótár</a></li>
+    <li><a href="#sajat-rendszerek">Saját rendszerek</a></li>
+    <li><a href="#mcp">MCP mélymerítés</a></li>
+    <li><a href="#fajlok">Fájlok sorsa</a></li>
+    <li><a href="#ugynokok">Ügynökök</a></li>
+    <li><a href="#szimulator">Szimulátor</a></li>
+    <li><a href="#kockazatok">Kockázatok</a></li>
+    <li><a href="#vallalati">Mit válasszon a cég?</a></li>
+  </ul>
+</nav>
+
+<!-- ============ ÖSSZEFOGLALÓ ============ -->
+<section id="osszefoglalo">
+  <div class="wrap">
+    <h2>Összefoglaló — miről is van szó</h2>
+    <p class="sub">A probléma és a négyféle megoldás egy képernyőn.</p>
+
+    <p>
+      Az enterprise AI bevezetésének legfontosabb kérdése 2026-ra nem az, hogy <em>melyik modell okosabb</em>, hanem az,
+      hogy <strong>hogyan kerül a cég saját tudása a modell elé</strong> úgy, hogy közben a jogosultságok, az adatvédelem és a
+      megfelelőség ne sérüljön. A szolgáltatók erre négy eltérő filozófiával válaszolnak — de a megoldás szerkezete
+      mindegyiküknél ugyanaz: <strong>connectorok → index vagy valós idejű lekérés → jogosultság-tudatos retrieval → válasz forrásmegjelöléssel</strong>.
+    </p>
+
+    <div class="grid g4" style="margin-top:26px">
+      <div class="card vendor openai">
+        <div class="vhead"><span class="dot openai"></span><h3>OpenAI</h3></div>
+        <p class="vpromise">„Company knowledge" — a ChatGPT összekötött appokból dolgozik.</p>
+        <p style="font-size:.88rem;color:var(--dim)">Több forráson átívelő, GPT-5-alapú keresés; adminisztrátor által kezelt sync-connectorok; minden válaszban idézetek.</p>
+      </div>
+      <div class="card vendor anthropic">
+        <div class="vhead"><span class="dot anthropic"></span><h3>Anthropic</h3></div>
+        <p class="vpromise">„Enterprise Search" — dedikált „Ask Your Org" projekt.</p>
+        <p style="font-size:.88rem;color:var(--dim)">MCP-n alapuló connectorok, Anthropic által hangolt keresési system prompt, jogosultság-tudatos találatok.</p>
+      </div>
+      <div class="card vendor microsoft">
+        <div class="vhead"><span class="dot microsoft"></span><h3>Microsoft</h3></div>
+        <p class="vpromise">„Work IQ" + Copilot connectors + Graph.</p>
+        <p style="font-size:.88rem;color:var(--dim)">Beindexelt és valós idejű (federated, MCP) connectorok; szemantikus index a Microsoft Graphban; beépített, permission-aware governance.</p>
+      </div>
+      <div class="card vendor google">
+        <div class="vhead"><span class="dot google"></span><h3>Google</h3></div>
+        <p class="vpromise">„Gemini Enterprise" — connectorok és data store-ok.</p>
+        <p style="font-size:.88rem;color:var(--dim)">Entitás-szintű data store-ok, indexing vagy federation választással; grounding API; régió- és CMEK-vezérelt adatelhelyezés.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ KÖZÖS MINTA ============ -->
+<section id="minta">
+  <div class="wrap">
+    <h2>A közös minta — mind a négyen ugyanazt a hat lépést járják</h2>
+    <p class="sub">Ha ezt a vázat érti, a konkrét terméknevek már csak részletek.</p>
+
+    <div class="stack">
+      <div class="layer"><h4>1. Connectorok</h4><p>Előre megépített csatlakozók a tipikus forrásokhoz: SharePoint, Google Drive, Slack, Teams, Jira, Confluence, ServiceNow, GitHub, Salesforce stb.</p></div>
+      <div class="layer"><h4>2. Betöltés: index vagy valós idő</h4><p>Vagy beindexelik a tartalmat (jobb keresési minőség, több tároló), vagy valós időben, federáltan kérik le (friss adat, nincs tárolás).</p></div>
+      <div class="layer"><h4>3. Feldolgozás és indexelés</h4><p>Chunkolás, vektorizálás, szemantikus index, metaadatok és — kritikus módon — a forrás jogosultsági adatainak együtt tárolása.</p></div>
+      <div class="layer"><h4>4. Jogosultság-tudatos retrieval</h4><p>A keresés a felhasználó identitásához kötött: csak azt hozza vissza, amit az adott munkatárs a forrásrendszerben is látna.</p></div>
+      <div class="layer"><h4>5. Grounding</h4><p>A visszakapott részletek bekerülnek a modell kontextusába, és a modell kizárólag ezekre (plusz a saját tudására) támaszkodva válaszol.</p></div>
+      <div class="layer"><h4>6. Válasz forrásmegjelöléssel</h4><p>Minden állítás mellett idézet és link a forrásdokumentumra — ez teszi ellenőrizhetővé és bizalmassá a választ.</p></div>
+    </div>
+
+    <div class="callout">
+      <p><strong>Miért ez a lényeg:</strong> a szolgáltatók nem „megtanítják" a modellt a cég adataira (az nem is skálázódna és adatvédelmileg sem működne).
+      Helyette <strong>minden kérésnél a helyes részleteket keresik ki, és a modell elé teszik</strong> — ez a RAG (Retrieval-Augmented Generation) enterprise szintű,
+      jogosultság- és megfelelőség-tudatos változata. A verseny a connectorok szélességében, a jogosultságkezelés mélységében és a retrieval minőségében dől el.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ OPENAI ============ -->
+<section id="openai">
+  <div class="wrap">
+    <div class="hero-vendor">
+      <div class="logo-mark lm-oai">AI</div>
+      <div>
+        <h2 style="margin:0">OpenAI — „Company knowledge" a ChatGPT-ben</h2>
+        <p class="sub" style="margin:4px 0 0">Business, Enterprise és Edu csomagokon</p>
+      </div>
+    </div>
+
+    <p>
+      Az OpenAI 2025 októberében vezette be a <strong>Company knowledge</strong> funkciót, amely a ChatGPT-n belül egyesíti a
+      csatlakoztatott appokból származó kontextust. A megoldás lényege, hogy egy <strong>GPT-5-re épülő változat</strong> több
+      forráson átívelően keres, és az így összegyűjtött részletekből ad cégspecifikus választ — minden válaszhoz
+      forrásmegjelöléssel.
+    </p>
+
+    <h3>Hogyan működik a gyakorlatban</h3>
+    <ul>
+      <li>A felhasználó a <code>@Company Knowledge</code> említéssel vagy a <em>+ tools</em> menüből indítja a funkciót (pluginként viselkedik).</li>
+      <li>ChatGPT végigkövethetően, oldalsávban mutatja, éppen mit vizsgál, majd idézetekkel és kattintható forráslinkekkel zárja a választ.</li>
+      <li>Több keresést is futtathat, hogy <strong>feloldja az egymásnak ellentmondó információkat</strong> — kifejezetten jól kezeli a bizonytalan, „még nincs döntés" típusú kérdéseket.</li>
+      <li>Dátumkezeléssel és időbeli szűréssel is dolgozik (pl. „Q1-es teljesítmény áttekintése").</li>
+    </ul>
+
+    <h3>Technológiai építőelemek</h3>
+    <div class="stack">
+      <div class="layer"><h4>Connected apps</h4><p>Slack, SharePoint, Google Drive, GitHub, Teams és mások — egyéni hitelesítéssel vagy adminisztrátor által kezelt kapcsolattal.</p></div>
+      <div class="layer"><h4>MCP-alapú custom apps</h4><p>Vállalatok saját, MCP-vel épített appokat köthetnek be; ezek lehetnek kereső, interaktív felületű vagy író (write) képességű appok is.</p></div>
+      <div class="layer"><h4>Adminisztrátor-kezelt sync</h4><p>Google Drive, SharePoint és Microsoft Teams esetén az admin workspace-szintű kapcsolatot hoz létre — a munkatársaknak nem kell külön bejelentkezniük.</p></div>
+      <div class="layer"><h4>RBAC és csoport-szintű jogosultságok</h4><p>Enterprise/Edu adminok szabályozzák, mely appok érhetők el, és a jogosultságok a forrásrendszerrel összhangban érvényesülnek.</p></div>
+    </div>
+
+    <h3>Adatvédelem és megfelelőség</h3>
+    <ul>
+      <li>A rendszer tiszteletben tartja a forrás meglévő jogosultságait — a felhasználó <strong>csak azt látja, amit a forrásban is láthatna</strong>.</li>
+      <li>Az OpenAI alapértelmezésben <strong>nem tanít</strong> az ügyfél adatain.</li>
+      <li>SSO + SCIM a hozzáférés-kezeléshez, IP allowlisting, iparági szabványú titkosítás.</li>
+      <li>Enterprise Compliance API a beszélgetésnaplókhoz és a szabályozási megfeleléshez.</li>
+      <li><strong>Adatrezidencia:</strong> az admin-kezelt sync kapcsolatok konkrét régiókra korlátozottak (Google Drive és SharePoint: EEA + Svájc, Japán, USA — országonként eltérően).</li>
+    </ul>
+
+    <div class="note">
+      <b>Fejlesztői oldal — Knowledge Retrieval blueprint.</b> Azoknak, akik nem a ChatGPT-t, hanem saját alkalmazást építenek,
+      az OpenAI külön <em>Knowledge Retrieval</em> blueprintet kínál: ez a saját adatra épülő, idézetekkel ellátott válaszok
+      megbízható mintája az API-n keresztül (vector store + file search).
+    </div>
+
+    <p class="srcline">Források:
+      <a href="https://openai.com/index/introducing-company-knowledge/" target="_blank" rel="noopener">openai.com — Introducing company knowledge</a> ·
+      <a href="https://help.openai.com/en/articles/12628342-company-knowledge-in-chatgpt-business-enterprise-and-edu" target="_blank" rel="noopener">OpenAI Help — Company knowledge</a> ·
+      <a href="https://help.openai.com/en/articles/10847137-chatgpt-synced-connectors-faq" target="_blank" rel="noopener">Admin-managed apps with sync</a> ·
+      <a href="https://openai.com/solutions/blueprints/knowledge-retrieval/" target="_blank" rel="noopener">Knowledge Retrieval blueprint</a>
+    </p>
+  </div>
+</section>
+
+<!-- ============ ANTHROPIC ============ -->
+<section id="anthropic">
+  <div class="wrap">
+    <div class="hero-vendor">
+      <div class="logo-mark lm-ant">A</div>
+      <div>
+        <h2 style="margin:0">Anthropic — „Enterprise Search" és MCP connectorok</h2>
+        <p class="sub" style="margin:4px 0 0">Team és Enterprise csomagokon</p>
+      </div>
+    </div>
+
+    <p>
+      Az Anthropic megoldása az <strong>Enterprise Search</strong>: egy előre konfigurált, <em>„Ask Your Org"</em> nevű projekt,
+      amely a Claude oldalsávjában jelenik meg, és amelyet kifejezetten a szervezet teljes tudásbázisán való keresésre
+      hangoltak. Ez a projekt <strong>Anthropic által kezelt és folyamatosan finomított system prompttal</strong> dolgozik —
+      szemben a normál projektekkel, ahol a promptot a felhasználó írja.
+    </p>
+
+    <h3>Hogyan működik a gyakorlatban</h3>
+    <ul>
+      <li>A projekt első használat előtt <strong>tulajdonosi (Owner) beállítást</strong> igényel; utána a szervezet minden tagjának oldalsávjában megjelenik, csillagozva.</li>
+      <li>A felhasználó egy kérdésre a Claude <strong>valamennyi csatlakoztatott forráson</strong> végigkeres, és egységes, jól hivatkozott választ ad.</li>
+      <li>Példaforrások: SharePoint-dokumentumok, Slack-beszélgetések, Gmail-szálak, Google Drive-fájlok.</li>
+      <li>Ajánlott használat: konkrét forrás megjelölése, dátumtartományok, több forrás kombinálása, lépésekre bontott kutatás.</li>
+    </ul>
+
+    <h3>Technológiai építőelemek — az MCP a gerinc</h3>
+    <div class="stack">
+      <div class="layer"><h4>Model Context Protocol (MCP)</h4><p>Az Anthropic nyílt szabványa, amellyel a Claude külső eszközökhöz, adatokhoz és felületekhez kapcsolódik — ez a connectorok alapja.</p></div>
+      <div class="layer"><h4>Remote MCP connectorok</h4><p>Előre megépített és egyéni connectorok köthetők be a Settings &gt; Connectors alatt, a szervezet engedélyezésétől függően.</p></div>
+      <div class="layer"><h4>Messages API + MCP connector</h4><p>Fejlesztők a Messages API-ból közvetlenül, külön MCP-kliens nélkül csatlakozhatnak távoli MCP-szerverekhez.</p></div>
+      <div class="layer"><h4>Guided onboarding</h4><p>Az enterprise search projekt ajánlott connectorokkal, vezetett beállítással indul — nem kell mindent kézzel konfigurálni.</p></div>
+    </div>
+
+    <h3>Adatvédelem és megfelelőség</h3>
+    <ul>
+      <li><strong>Jogosultság-tudatos keresés:</strong> mindenki csak azt látja, amire az adott rendszerben jogosultsága van. Kivétel: a megosztott hitelesítő adatot (pl. API-kulcsot) használó egyéni connector — ott mindenki azt látja, ami a kulcsnak elérhető.</li>
+      <li>A beszélgetések privátak, hacsak a felhasználó nem osztja meg őket; Enterprise csomagon a szervezet adatmegőrzési szabályai érvényesek.</li>
+      <li>A keresési eredmények a beszélgetéssel együtt tárolódnak és azzal törölhetők.</li>
+    </ul>
+
+    <div class="note">
+      <b>Fejlesztői oldal.</b> Az Anthropic külön kínál <em>knowledge graph</em> építési mintát (Claude Cookbook):
+      entitás- és relációkinyerés strukturálatlan szövegből, deduplikáció, többugrásos gráf-lekérdezés — ez a „tudásbázis"
+      fogalmát a dokumentumkeresésnél mélyebb, összefüggés-alapú szintre emeli.
+    </div>
+
+    <p class="srcline">Források:
+      <a href="https://support.claude.com/en/articles/12489464-use-enterprise-search" target="_blank" rel="noopener">Claude Help — Use enterprise search</a> ·
+      <a href="https://support.claude.com/en/articles/14503689-mcp-connectors" target="_blank" rel="noopener">MCP connectors</a> ·
+      <a href="https://platform.claude.com/docs/en/agents-and-tools/mcp-connector" target="_blank" rel="noopener">Platform — MCP connector</a> ·
+      <a href="https://claude.com/docs/connectors/overview" target="_blank" rel="noopener">Connectors overview</a>
+    </p>
+  </div>
+</section>
+
+<!-- ============ MICROSOFT ============ -->
+<section id="microsoft">
+  <div class="wrap">
+    <div class="hero-vendor">
+      <div class="logo-mark lm-ms">MS</div>
+      <div>
+        <h2 style="margin:0">Microsoft — Work IQ, Copilot connectors és Microsoft Graph</h2>
+        <p class="sub" style="margin:4px 0 0">Microsoft 365 Copilot + Power Platform + Dynamics 365</p>
+      </div>
+    </div>
+
+    <p>
+      A Microsoft a legmélyebb, leginkább „platformos" megoldást kínálja, mert a céges tudás nagy része eleve náluk él
+      (SharePoint, OneDrive, Exchange, Teams, Dynamics, Power Platform). Erre épül a <strong>Work IQ</strong>: egy munkahelyi
+      intelligencia-réteg, amely agents-ek számára teszi elérhetővé a szervezeti és üzleti adatokat, kontextust és
+      eszközöket — <strong>beépített, jogosultság-tudatos governance-nel</strong>.
+    </p>
+
+    <h3>Hogyan működik a gyakorlatban</h3>
+    <ul>
+      <li>A Work IQ <strong>folyamatosan szemantikus megértést épít</strong> a Microsoft 365 és külső rendszerek fölött.</li>
+      <li>Négy összetevője: <strong>chat</strong> (társalgás), <strong>context</strong> (kontextus-összeállítás), <strong>tools</strong> (eszközök), <strong>workspaces</strong>.</li>
+      <li>A kontextust <strong>belül, orchestration-overhead nélkül</strong> állítja össze: az agent kész, „agent-ready" inputot kap, nem kell nyers jelzéseket összefűznie.</li>
+      <li>Elérése szabványos protokollokon át: <strong>A2A</strong> (agent-to-agent), <strong>remote MCP server</strong> és <strong>REST API</strong> — használatalapú elszámolással, függetlenül a Copilot-licenctől.</li>
+      <li>A <strong>Work IQ MCP</strong> több száz műveletet sűrít <strong>10 általános eszközbe</strong> (fetch, create, update stb.) az e-mail, naptár, fájlok, emberek, chat és site-ok eléréséhez.</li>
+      <li>Az agentek <strong>futásidőben fedezik fel az adatok szerkezetét</strong>, nem előre definiált modellek alapján.</li>
+    </ul>
+
+    <h3>A tudásbázis bekötése — Copilot connectors</h3>
+    <p>A Microsoft két alapvető mechanizmust kínál, és a kettő kombinálható:</p>
+    <div class="tscroll">
+      <table>
+        <thead>
+          <tr><th>Jellemző</th><th>Synced — tenant szintű</th><th>Synced — self-serve</th><th>Federated (MCP)</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Adatkezelés</td><td>Beindexelve a Microsoft 365-be</td><td>Beindexelve a Microsoft 365-be</td><td>Valós idejű lekérés, indexelés nélkül</td></tr>
+          <tr><td>Hozzáférési modell</td><td>Szervezeti szintű</td><td>Felhasználói szintű</td><td>Felhasználói szintű</td></tr>
+          <tr><td>Beállítás</td><td>Admin konfigurálja</td><td>Admin engedélyezi, felhasználó hitelesít</td><td>Admin engedélyezi, felhasználó hitelesít</td></tr>
+          <tr><td>Jellemző eset</td><td>Széles körű indexelés</td><td>Személyesen releváns tartalom</td><td>Érzékeny, dinamikus, élő adatok</td></tr>
+          <tr><td>Egyéni connector</td><td>Igen</td><td>Nem</td><td>Nem</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <ul>
+      <li>A <strong>synced connectorok</strong> a Microsoft Graphba indexelnek, és a Copilot + Microsoft Search is használja őket.</li>
+      <li>A <strong>federated connectorok</strong> MCP-modell szerint, valós időben kérnek le adatot — ideális érzékeny vagy gyorsan változó forrásokhoz.</li>
+      <li>A <strong>Copilot Retrieval API</strong> lehetővé teszi, hogy saját (custom engine) agentek is a Copilot retrieval-képességeit használják.</li>
+      <li><strong>Dataverse</strong> bekötése üzleti „értelem” réteggel gazdagítja a Copilotot — az üzleti alkalmazásokban rejlő adat válik kereshetővé.</li>
+      <li>Adminisztrátori oldalról a Copilot Studio-ban <strong>knowledge source-ként</strong> adható hozzá SharePoint, Dataverse, weboldal, feltöltött dokumentum és Power Platform connector.</li>
+    </ul>
+
+    <div class="callout">
+      <p><strong>A Microsoft előnye:</strong> a céges tudás jelentős része már eleve a saját ökoszisztémájukban él, és a <strong>jogosultsági modell (Entra ID, csoportok, címkék) egyetlen, egységes rendszerben</strong> érvényesül. A „tudásbázis” itt nem más, mint a Microsoft Graph szemantikus indexe kiegészítve a külső forrásokkal. Az ára a platformfüggés.</p>
+    </div>
+
+    <p class="srcline">Források:
+      <a href="https://learn.microsoft.com/en-us/microsoft-365/copilot/extensibility/work-iq/" target="_blank" rel="noopener">Learn — Work IQ overview</a> ·
+      <a href="https://learn.microsoft.com/en-us/microsoft-365/copilot/connectors/overview" target="_blank" rel="noopener">Copilot connectors overview</a> ·
+      <a href="https://learn.microsoft.com/en-us/microsoft-copilot-studio/knowledge-copilot-studio" target="_blank" rel="noopener">Knowledge sources summary</a> ·
+      <a href="https://learn.microsoft.com/en-us/microsoft-365-copilot/extensibility/api/ai-services/retrieval/overview" target="_blank" rel="noopener">Copilot Retrieval API</a>
+    </p>
+  </div>
+</section>
+
+<!-- ============ GOOGLE ============ -->
+<section id="google">
+  <div class="wrap">
+    <div class="hero-vendor">
+      <div class="logo-mark lm-goo">G</div>
+      <div>
+        <h2 style="margin:0">Google — Gemini Enterprise connectorok és data store-ok</h2>
+        <p class="sub" style="margin:4px 0 0">Google Cloud, Enterprise verziók</p>
+      </div>
+    </div>
+
+    <p>
+      A Google megoldása a <strong>Gemini Enterprise</strong>, amelynek közepén az úgynevezett <strong>connectorok és data
+      store-ok</strong> állnak. A connectorok a Google és harmadik féltől származó forrásokból gyűjtik az adatot, és
+      dedikált <em>data store-okban</em> tárolják. A megoldás technikailag a leg-granulárisabb: az adatforrásokat
+      <strong>entitástípusonként</strong> bontja szét (pl. egy Jira-adatforrás külön store-t kap az issue-knak, csatolmányoknak,
+      kommenteknek és worklogoknak).
+    </p>
+
+    <h3>Hogyan működik a gyakorlatban</h3>
+    <ul>
+      <li>A connectorok a Google Workspace és harmadik féltől forrásokat (Microsoft 365, Jira, Salesforce, HubSpot stb.) kötik be pár kattintással.</li>
+      <li>Minden entitástípus külön data store-ba kerül — ez tisztább keresést és finomabb szabályozást tesz lehetővé.</li>
+      <li>A strukturálatlan tartalom (PDF, HTML, DOCX, PPTX, XLSX) <strong>unstructured data store-ba</strong> kerül, a strukturált adat külön séma szerint.</li>
+      <li>A séma automatikusan felismerhető, vagy API-ból megadható.</li>
+    </ul>
+
+    <h3>A két betöltési mód — a fő döntés</h3>
+    <div class="stack">
+      <div class="layer"><h4>Data federation</h4><p>Valós időben kéri le az adatot a forrásból; nem másolódik a Gemini indexébe. Előnye: nincs plusz tárolás. Hátránya: gyengébb keresési minőség.</p></div>
+      <div class="layer"><h4>Data ingestion (indexing)</h4><p>Bemásolja az adatot a Gemini indexébe. Előnye: jobb keresési minőség. Hátránya: több tároló és idő. Ahol a connector mindkettőt támogatja, szabadon választható.</p></div>
+      <div class="layer"><h4>Data sync-ek</h4><p>Full sync (teljes állapot, beleértve törléseket) és inkrementális sync. Külön szinkronizálható az entitás-adat és az identitás-adat (szerepek, jogosultságok, felhasználók).</p></div>
+      <div class="layer"><h4>Grounding API</h4><p>A modell kimenetét ellenőrizhető forrásokhoz köti; agent search-tel a saját adatra lehet groundolni a válaszokat.</p></div>
+    </div>
+
+    <h3>Adatvédelem és megfelelőség</h3>
+    <ul>
+      <li><strong>Adatrezidencia-választás:</strong> betöltéskor megadható a régió (global, US, EU).</li>
+      <li><strong>Titkosítás:</strong> a US/EU régiókban kötelező; alapból Google-kezelt kulcsok, de támogatott a <strong>customer-managed encryption key (CMEK)</strong>.</li>
+      <li>Az identitás-sync biztosítja, hogy a keresés a szervezet szerep- és jogosultságrendjét kövesse.</li>
+      <li>A Gemini Enterprise a Google saját agent-építő platformjával (Agent Platform, korábban Vertex AI) integráltan működik.</li>
+    </ul>
+
+    <p class="srcline">Források:
+      <a href="https://docs.cloud.google.com/gemini/enterprise/docs/connectors/introduction-to-connectors-and-data-stores" target="_blank" rel="noopener">Gemini Enterprise — Connectors and data stores</a> ·
+      <a href="https://cloud.google.com/gemini-enterprise/connectors" target="_blank" rel="noopener">Connectors for Gemini Enterprise app</a> ·
+      <a href="https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/grounding/overview" target="_blank" rel="noopener">Grounding overview</a>
+    </p>
+  </div>
+</section>
+
+<!-- ============ ÖSSZEHASONLÍTÁS ============ -->
+<section id="tabla">
+  <div class="wrap">
+    <h2>Összehasonlítás — a négy megoldás egymás mellett</h2>
+    <p class="sub">Ahol a szolgáltatók „tanulásról” beszélnek, a háttérben mindenhol retrieval + grounding áll.</p>
+
+    <div class="tscroll">
+      <table>
+        <thead>
+          <tr>
+            <th>Szempont</th>
+            <th class="c-oai">OpenAI</th>
+            <th class="c-ant">Anthropic</th>
+            <th class="c-ms">Microsoft</th>
+            <th class="c-goo">Google</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Termék / funkció</td>
+            <td>Company knowledge (ChatGPT)</td>
+            <td>Enterprise Search („Ask Your Org”)</td>
+            <td>Work IQ + Copilot connectors</td>
+            <td>Gemini Enterprise connectors</td>
+          </tr>
+          <tr>
+            <td>Elsődleges felület</td>
+            <td>ChatGPT web + appok, @említés</td>
+            <td>Claude dedikált projekt</td>
+            <td>Microsoft 365 Copilot, Copilot Studio, agentek</td>
+            <td>Gemini Enterprise app + Agent Platform</td>
+          </tr>
+          <tr>
+            <td>Connector-protokoll</td>
+            <td>Connected apps + MCP custom apps</td>
+            <td>MCP (remote), egyéni connectorok</td>
+            <td>Synced + federated (MCP) connectorok</td>
+            <td>Saját connectorok + data store-ok</td>
+          </tr>
+          <tr>
+            <td>Index vagy valós idő?</td>
+            <td>Indexelt (admin-sync) + élő app-kapcsolat</td>
+            <td>Connector-tól függő, jellemzően élő</td>
+            <td>Mindkettő választható</td>
+            <td>Mindkettő választható (federation vs ingestion)</td>
+          </tr>
+          <tr>
+            <td>Jogosultságkezelés</td>
+            <td>Forrás-jogosultság + RBAC, csoportok</td>
+            <td>Permission-aware, connector-szinten</td>
+            <td>Entra ID, egységes Graph governance</td>
+            <td>Identitás-sync, szerep- és jogosultságkövetés</td>
+          </tr>
+          <tr>
+            <td>Forrásmegjelölés</td>
+            <td>Idézetek + kattintható linkek</td>
+            <td>Idézetek, forráslinkek</td>
+            <td>Hivatkozások, Graph-alapú források</td>
+            <td>Grounding-források visszaadása</td>
+          </tr>
+          <tr>
+            <td>Adatrezidencia / CMEK</td>
+            <td>Régióhoz kötött admin-sync</td>
+            <td>Szervezeti adatmegőrzés</td>
+            <td>Microsoft 365 adatrezidencia</td>
+            <td>Régióválasztás + CMEK</td>
+          </tr>
+          <tr>
+            <td>Fejlesztői út</td>
+            <td>Knowledge Retrieval blueprint, MCP appok</td>
+            <td>Messages API + MCP connector</td>
+            <td>Work IQ API (A2A/MCP/REST), Retrieval API</td>
+            <td>Agent Platform, Grounding API</td>
+          </tr>
+          <tr>
+            <td>Erőssége</td>
+            <td>Egyszerűség, többforrásos szintézis</td>
+            <td>Nyílt szabvány (MCP), tiszta modell</td>
+            <td>Legmélyebb integráció, kész vállalati ökoszisztéma</td>
+            <td>Granularitás, régió- és kulcskezelés</td>
+          </tr>
+          <tr>
+            <td>Figyelendő</td>
+            <td>Funkció érettsége, plugin-függés</td>
+            <td>Connector-fedés, mobil-korlát</td>
+            <td>Platformfüggés, licencelés</td>
+            <td>Beállítási komplexitás</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ARCHITEKTÚRA ============ -->
+<section id="architektura">
+  <div class="wrap">
+    <h2>A teljes rendszer egyben — hogyan működik a vállalaton belül</h2>
+    <p class="sub">A hat réteg, amelyen egy kérés végigmegy — a felhasználótól a céges tudásig és vissza.</p>
+
+    <figure style="margin:24px 0 26px">
+      <img src="architektura.svg" alt="Vállalati AI-rendszer architektúrája: felhasználók, AI réteg, hozzáférési réteg (connectorok és MCP), jogosultság, céges tudás, eredmény" style="width:100%;height:auto;display:block;border-radius:14px;border:1px solid var(--line)">
+      <figcaption style="font-size:.82rem;color:var(--dim2);margin-top:10px;text-align:center">A hat réteg együtt: felhasználók → AI réteg → hozzáférés (connectorok és MCP) → jogosultság → céges tudás → eredmény. A folyamat hat lépése az alsó sorban.</figcaption>
+    </figure>
+
+    <div class="grid g2">
+      <div class="card">
+        <h3>Amit az ábra mutat</h3>
+        <ul style="font-size:.9rem;color:var(--dim);margin:0;padding-left:18px">
+          <li><strong>Egy kérés hat rétegen megy át</strong> — nem varázslat, hanem mérnöki folyamat.</li>
+          <li>A <strong>jogosultság nem egy lépés</strong>, hanem végig jelen van: minden rétegen egyszerre érvényesül.</li>
+          <li>A <strong>hivatkozási pont a céges tudás</strong>: a modell nem tanul belőle, csak felhasználja.</li>
+          <li>Ez a mûködés <strong>ugyanígy néz ki mind a négy szolgáltatónál</strong> — a különbség a connectorok szélességében és a jogosultság mélységében van.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Az öt kulcskérdés egy bevezetésnél</h3>
+        <ul style="font-size:.9rem;color:var(--dim);margin:0;padding-left:18px">
+          <li><strong>Melyik rendszerekre kell hozzáférés?</strong> Kész connector vagy MCP-szerver?</li>
+          <li><strong>Föderált vagy indexelt</strong> elérés kell az egyes adatokhoz?</li>
+          <li><strong>Hogyan érvényesül a jogosultság</strong> a forrásrendszerben? A kérés a hívó nevében fut-e?</li>
+          <li><strong>Mi naplózódik</strong>, és visszakereshető-e utólag?</li>
+          <li><strong>Mi az, amihez az AI egyáltalán hozzányúlhat</strong> (tool-lista) — és ehhez ki ad jóváhagyást?</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="note">
+      <b>A vizuális rövidítés:</b> az ábra szándékosan nem említ konkrét termékneveket a rétegeknél — mert a mûködés a négy szolgáltatónál azonos logikájú. A terméknevek a fenti szolgáltatói szekciókban vannak (Copilot Studio, Gemini agent gallery, Workspace agents, MCP connector).
+    </div>
+  </div>
+</section>
+
+<!-- ============ GLOSSZÁRIUM ============ -->
+<section id="glosszarium">
+  <div class="wrap">
+    <h2>Szótár — a kulcsfogalmak laikus nyelven</h2>
+    <p class="sub">A technikai kifejezések, amelyek minden szolgáltatónál visszatérnek — példával, hasonlattal.</p>
+
+    <div class="gloss">
+
+      <div class="term">
+        <span class="abbr">MCP</span>
+        <h3>Model Context Protocol</h3>
+        <p>Egy nyílt szabvány, amely leírja, hogyan csatlakozhat egy AI-asszisztens külső rendszerekhez (dokumentumtárak, adatbázisok, eszközök). Az Anthropic nyílt szabványa; ma már a Microsoft és sokan mások is átvették.</p>
+        <div class="analogy"><b>Hasonlat:</b> az MCP az AI világának USB-C csatlakozója. Ahogy egy USB-C kábel bármelyik gépet bármelyik eszközhöz köti, úgy az MCP egyetlen szabványos „dugóval” köti össze az AI-t a céges rendszerekkel. Nem kell minden rendszerhez külön integrációt írni.</div>
+        <p style="margin-top:12px"><b>Példa:</b> a cég szerződésadatbázisa kap egy MCP-szervert (egy kis programot, amely „beszéli” az MCP nyelvét). Utána bármely MCP-képes AI — Claude, ChatGPT, saját agent — ugyanazon a dugón keresztül kérheti le a szerződéseket.</p>
+      </div>
+
+      <div class="term">
+        <span class="abbr">Federated vs. Indexed</span>
+        <h3>Föderált (valós idejű) vs. indexelt betöltés</h3>
+        <p><b>Indexelt:</b> a rendszer előre bemásolja az adatot a saját keresőmotorjába. <b>Föderált:</b> nem másol semmit, hanem minden kérdésnél a forrásrendszertől kéri le élőben.</p>
+        <div class="analogy"><b>Hasonlat:</b> az indexelés olyan, mint a könyvtár katalóguscédulái — gyorsan kereshetsz benne, de csak arról tud, amit egyszer már beírtak. A föderáció olyan, mint amikor felhívod a raktárt: „épp van-e ez a könyv?” — mindig friss, de lassabb.</div>
+        <p style="margin-top:12px"><b>Mikor melyik:</b> indexelést ott, ahol a dokumentumok lassan változnak és sokat kell keresni (belső wiki, szabályzatok). Föderációt ott, ahol az adat élő és érzékeny (ügyféladatok, friss árak, jogosultság-vezérelt iratok).</p>
+      </div>
+
+      <div class="term">
+        <span class="abbr">RAG</span>
+        <h3>Retrieval-Augmented Generation</h3>
+        <p>Az a minta, amellyel a modell nem a „fejéből” válaszol, hanem előbb <b>kikeresi</b> a releváns részleteket a céges forrásokból, majd azokból <b>fogalmazza meg</b> a választ.</p>
+        <div class="analogy"><b>Hasonlat:</b> nem megkérdezed a kollégát, hogy „emlékszel-e a szerződés 4. pontjára?”, hanem odaadod neki a dokumentumot: „olvasd el, és foglald össze”. Ugyanaz az ember, sokkal pontosabb válasz.</div>
+      </div>
+
+      <div class="term">
+        <span class="abbr">Grounding</span>
+        <h3>Grounding (földelés)</h3>
+        <p>Annak biztosítása, hogy a modell válasza olyan ellenőrizhető forrásokra támaszkodjon, amelyeket meg is jelöl. Ez az, ami a csevegőbotot vállalati eszközzé teszi.</p>
+        <div class="analogy"><b>Hasonlat:</b> mint amikor egy tanulmányban láblábjegyzetet követelnek meg. Nem elég a vélemény — meg kell mutatni, honnan tudod.</div>
+      </div>
+
+      <div class="term">
+        <span class="abbr">Permission-aware</span>
+        <h3>Jogosultság-tudatos keresés</h3>
+        <p>A keresés nem egyszerűen „gyorsabb”, hanem <b>személyre szabottan korlátozott</b>: mindenki csak azt a tartalmat kapja vissza, amit a forrásrendszerben is látna.</p>
+        <div class="analogy"><b>Hasonlat:</b> olyan könyvtár, ahol a polcok maguktól zárulnak be azok előtt, akiknek nincs belépési engedélyük. Az AI „vak” a számára tiltott részre.</div>
+        <p style="margin-top:12px"><b>Buktató:</b> ha egy egyéni connector <em>megosztott</em> API-kulccsal működik, a rendszer nem tud különbséget tenni a dolgozók között — mindenki azt látja, amit a kulcs lát.</p>
+      </div>
+
+      <div class="term">
+        <span class="abbr">Ingestion / Indexing</span>
+        <h3>Betöltés és indexelés</h3>
+        <p>A folyamat, amelynek során a nyers céges tartalmat feldolgozzák és kereshetővé teszik. Ide tartozik a szöveg darabolása, vektoros átalakítása és a keresési index felépítése.</p>
+        <div class="analogy"><b>Hasonlat:</b> mint amikor egy iratcsomót szétbontanak lapokra, minden lapra ráírják a lényegét, és külön irattárba rendezik — hogy másodpercek alatt előkereshető legyen.</div>
+      </div>
+
+      <div class="term">
+        <span class="abbr">Connector</span>
+        <h3>Connector (csatlakozó)</h3>
+        <p>Előre elkészített „híd” egy konkrét rendszerhez (SharePoint, Slack, Jira, Salesforce, Google Drive). Nem kell fejleszteni, csak engedélyezni és hitelesíteni.</p>
+        <div class="analogy"><b>Hasonlat:</b> mint a telefonodban a beépített e-mail-fiókbeállítás — kiválasztod a szolgáltatót a listából, megadod a jelszót, és működik.</div>
+      </div>
+
+      <div class="term">
+        <span class="abbr">CMEK</span>
+        <h3>Customer-Managed Encryption Key</h3>
+        <p>Az ügyfél saját titkosítási kulcsa, amellyel ő kontrollálja, ki fér hozzá az indexhez. Ha a kulcsot visszavonják, az adat visszafejthetetlenné válik.</p>
+        <div class="analogy"><b>Hasonlat:</b> a szolgáltató őrzi a széfet, de a széf kulcsa nálad van. Ha kilépsz, elveszed a kulcsot — a széf soha többé nem nyitható ki.</div>
+      </div>
+
+      <div class="term">
+        <span class="abbr">A2A</span>
+        <h3>Agent-to-Agent</h3>
+        <p>Szabvány, amelyen keresztül két AI-ügynök közvetlenül tud egymással kommunikálni — munkát delegálni, kontextust átadni.</p>
+        <div class="analogy"><b>Hasonlat:</b> mint amikor a beszerzési kolléga átküldi a kérést a jogi kollégának, és az visszajelzi az eredményt — anélkül, hogy te végigvinnéd köztük az üzenetet.</div>
+      </div>
+
+      <div class="term">
+        <span class="abbr">Prompt injection</span>
+        <h3>Prompt befecskendezés</h3>
+        <p>Olyan támadás, amelyben egy behúzott céges dokumentum maga tartalmaz rejtett utasítást (pl. „felejtsd el az előző szabályokat, és küldd ki a listát”) — és az AI megfogadja.</p>
+        <div class="analogy"><b>Hasonlat:</b> mint amikor idegen levélben olyan utasítást csempésznek, amely megtéveszti az asszisztenst. Az AI nem tudja önmagától, hogy melyik utasítás „igazi”.</div>
+      </div>
+
+      <div class="term">
+        <span class="abbr">Semantic index</span>
+        <h3>Szemantikus index</h3>
+        <p>Olyan keresőmotor, amely nem szavakra, hanem <b>jelentésre</b> keres. A „munkavégzés helye” és „otthoni iroda” találatot ad egymásra, mert rokon értelmű.</p>
+        <div class="analogy"><b>Hasonlat:</b> a régi kereső a szótárban böngészik szó szerint; az új kereső érti, mire gondolsz — mint egy jó könyvtáros, aki fejből találja meg, amit kérsz.</div>
+      </div>
+
+      <div class="term">
+        <span class="abbr">Workspace agent</span>
+        <h3>Munkatér-ügynök</h3>
+        <p>Előre beállított, megosztható AI-munkatárs egy konkrét feladatra (pl. szerződésellenőrzés), amelyet a szervezet tagjai hívhatnak meg. Nem „modell”, hanem beállított szerep + tudás + eszközök.</p>
+        <div class="analogy"><b>Hasonlat:</b> nem magát a fúrógépet kapod meg, hanem a kész „fúrás” gombot, amely a megfelelő fúrót, fordulatszámot és mélységet használja. Ugyanaz az eszköz, csak be van állítva a feladatra.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SAJÁT RENDSZEREK ============ -->
+<section id="sajat-rendszerek">
+  <div class="wrap">
+    <h2>Egyedi, nem világszerte használt céges rendszerek bekötése</h2>
+    <p class="sub">Mi van akkor, ha a tudás egy saját fejlesztésű rendszerben, szerződésadatbázisban vagy belső ügyviteli programban él?</p>
+
+    <p>
+      A jó hír: az AI <strong>nem igényel „nagynevű” szoftvert</strong>. Az enterprise rendszerek ugyanúgy csatlakoznak egy belső fejlesztésű adatbázishoz, mint egy SharePointhoz — az út csak hosszabb, mert nincs kész connector. A lényeg, hogy a belső rendszer <strong>valamilyen programozható felületen (API) keresztül hozzáférhető legyen</strong>.
+    </p>
+
+    <h3>A fő lépések — a szerződésadatbázis példáján</h3>
+    <p class="sub" style="margin-bottom:8px">Tegyük fel, hogy van egy saját fejlesztésű szerződésnyilvántartó. Így kötöd be az AI-hoz:</p>
+
+    <div class="steps">
+      <div class="layer"><h4>Programozható hozzáférés biztosítása</h4><p>A belső rendszer kap egy <strong>API-t</strong> (alkalmazásprogramozási felület) — vagy ha már van, dokumentálni kell. Ez az a „konnektor”, amelyen a külvilág adatot kérhet. Ha nincs, ezt kell elsőként megépíteni (ez a legnagyobb, de nem áthidalhatatlan feladat).</p></div>
+      <div class="layer"><h4>Azonosítás és jogosultság</h4><p>A csatlakozó úgy lép be, mint egy felhasználó: <strong>megadott azonosító, jogosultsági szint</strong>, és fontos: a lekérdezés a <em>hívó munkatárs</em> nevében történjen, ne egy mindenható szuperfiókkal (különben mindenki mindent lát).</p></div>
+      <div class="layer"><h4>MCP-szerver vagy egyéni connector</h4><p>Két út van: (a) írunk egy <strong>MCP-szervert</strong>, amely a szabványos „dugón” keresztül kínálja a szerződéskeresést — így több AI is használhatja; vagy (b) a választott szolgáltatóhoz írunk <strong>egyéni connectort</strong> — gyorsabb, de platformhoz köt.</p></div>
+      <div class="layer"><h4>Tartalom feldolgozása</h4><p>A szerződésszöveg bekerül az indexbe (vagy federáltan érkezik). Ehhez <strong>szövegkinyerés</strong> kell: a rendszer tudja olvasni a PDF/DOCX/HTML tartalmat, és darabolni a kereséshez.</p></div>
+      <div class="layer"><h4>Metaadatok és jogosultsági szintek átvitele</h4><p>A szerződéshez tartozó adatok (ügyfél, dátum, titkosítási szint, ki láthatja) át kell, hogy kerüljenek — különben az AI nem tudja szűrni, és kiszivárogtathatja a bizalmas iratot.</p></div>
+      <div class="layer"><h4>Tesztelés valós kérdésekkel</h4><p>Próbakérdésekkel ellenőrizzük: jól talál-e, jól idéz-e, és <strong>tényleg nem adja-e ki azt, amit nem szabad</strong>. Ez a lépés nem kihagyható.</p></div>
+      <div class="layer"><h4>Bevezetés és felügyelet</h4><p>Ki kap hozzáférést, ki az admin, hogyan naplózzák a kéréseket. A működés közben derül ki, hol kell finomítani a keresést.</p></div>
+    </div>
+
+    <div class="callout">
+      <p><strong>A lényeg:</strong> nem az számít, hogy a rendszer ismert-e — hanem hogy <strong>van-e rajta API és van-e jogosultsági modellje</strong>. Ha a válasz mindkettőre igen, beköthető. Ha nincs, akkor első feladat az API megépítése.</p>
+    </div>
+
+    <h3>Érdemes-e inkább új rendszert építeni vibe codinggal?</h3>
+    <p class="sub" style="margin-bottom:12px">Reális döntés: maradjon-e a meglévő, régi belső rendszer, vagy építsünk újat AI-segítséggel?</p>
+
+    <div class="decide">
+      <div class="card good">
+        <h3 style="color:var(--oai)">Maradj a meglévőnél, ha…</h3>
+        <ul style="font-size:.89rem;color:var(--dim);margin:0;padding-left:18px">
+          <li>Az adat <strong>kritikus és terhelt</strong> — nem szabad kockáztatni a migrációval.</li>
+          <li>A rendszer <strong>működik, van API-ja</strong>, csak csatlakoztatni kell.</li>
+          <li>Megfelelőségi, könyvvizsgálati vagy jogi okból bizonyított működés kell.</li>
+          <li>Kicsi a házon belüli fejlesztői kapacitás.</li>
+        </ul>
+        <p style="font-size:.84rem;color:var(--dim2);margin-top:12px"><b>Jellemző út:</b> MCP-szerver vagy egyéni connector a meglévő rendszer elé — a rendszer maga nem változik.</p>
+      </div>
+      <div class="card bad">
+        <h3 style="color:#e5534b">Építs újat (akár vibe codinggal), ha…</h3>
+        <ul style="font-size:.89rem;color:var(--dim);margin:0;padding-left:18px">
+          <li>A régi rendszer <strong>nem tud API-t adni</strong>, és a kiterjesztése drága volna.</li>
+          <li>A tudás most <strong>táblázatokban, e-mailekben, papíron</strong> szétszórva él.</li>
+          <li>A folyamat maga is átalakul — nem csak technológiát, működést is cserélsz.</li>
+          <li>Van egy <strong>elkülöníthető, nem kritikus</strong> terület, ahol lehet kísérletezni.</li>
+        </ul>
+        <p style="font-size:.84rem;color:var(--dim2);margin-top:12px"><b>Vigyázat:</b> a vibe coding remek prototípusra és belső eszközre, de <strong>kritikus adatbázisra vagy pénzügyi rendszerre nem</strong> — ott a biztonság, a jogosultság és a visszaállíthatóság emberi tervezést igényel.</p>
+      </div>
+    </div>
+
+    <div class="note">
+      <b>Gyakorlati tanács.</b> A legtöbb cégnél a helyes út a <b>hibrid</b>: a kritikus, bizonyított rendszereket (pénzügy, szerződések, HR) meghagyni és API-n/MCP-n bekötni, az új, kísérleti vagy kellemetlen régi eszközöket pedig AI-segítséggel újratervezni — de szigorúan elkülönítve a kritikus adattól, amíg bizonyítottan stabil.
+    </div>
+  </div>
+</section>
+
+<!-- ============ MCP MÉLYMERÍTÉS ============ -->
+<section id="mcp">
+  <div class="wrap">
+    <h2>Az MCP a gyakorlatban — döntéshozói szemmel</h2>
+    <p class="sub">Mi az, hol van, mit szabályoz — és mit kell kérdezni attól, aki MCP-alapú megoldást ajánl. Végig egy szerződésadatbázis példáján.</p>
+
+    <p>
+      Az <strong>MCP (Model Context Protocol)</strong> egy szabvány, amely leírja, hogyan kérdezhet egy AI egy külső rendszert.
+      A lényeg döntéshozóknak: <strong>az AI felé egységes, kiszámítható felületet ad, a cég rendszere felé viszont egyedi hidat kell építeni.</strong>
+      Az MCP nem termék, hanem csatlakozási szabály — olyan, mint a konnektorok szabványa: az áramforrás és a gép közti csatlakozás mindenkinél ugyanúgy néz ki, de a gép belseje minden cégnél más.
+    </p>
+
+    <h3>Mi hova kerül? — a három szereplő</h3>
+
+    <figure style="margin:24px 0 26px">
+      <img src="mcp-infografika.svg" alt="Infografika: az MCP-szerver az AI és a céges rendszer között — tool-lista, olvasási és írási jogok" style="width:100%;height:auto;display:block;border-radius:14px;border:1px solid var(--line)">
+      <figcaption style="font-size:.82rem;color:var(--dim2);margin-top:10px;text-align:center">Az MCP-szerver felfelé szabványos nyelven beszél, lefelé a céges rendszerhez kapcsolódik. A tool-lista dönti el, mit kérhet egyáltalán az AI.</figcaption>
+    </figure>
+
+    <div class="mcp-pipe">
+      <div class="mcp-row">
+        <div class="mcp-box win">
+          <div class="who">1 · Az AI oldala</div>
+          <h4>AI asszisztens / ügynök</h4>
+          <p>Claude, ChatGPT, Copilot, saját ügynök. Ez indítja a kérést. Az AI <strong>nem tudja magától</strong>, hogy létezik az MCP — ezt neki <strong>meg kell adni, be kell állítani</strong> (a kliensben hozzárendeljük a szervert). Ezután az AI már a szabványos „dugón” keresztül kérdez.</p>
+        </div>
+        <div class="mcp-box mid">
+          <div class="who">2 · A középső réteg</div>
+          <h4>MCP-szerver (a te programod)</h4>
+          <p>Egy külön kis szolgáltatás, amely <strong>a meglévő rendszered mellé kerül</strong> — nem az adatbázis belsejébe, nem a frontend kódjába. Ő a tolmács: felfelé szabványos nyelven beszél, lefelé a te rendszeredhez szól. Ez az a rész, amit <strong>meg kell építeni</strong> (vagy megépíttetni az ajánlattevővel).</p>
+        </div>
+        <div class="mcp-box side">
+          <div class="who">3 · A céges valóság</div>
+          <h4>Adatbázis / frontend / weboldal</h4>
+          <p>Ahol az adat valójában él: Postgres, MySQL, Supabase, a meglévő webes felület, a referencia-lista, a fotótár. <strong>Itt nem kell semmit átépíteni</strong> — az MCP-szerver ugyanazt az adatot kérdezi, amit az emberek is használnak.</p>
+        </div>
+      </div>
+      <p class="mcp-caption">Felfelé szabvány · lefelé egyedi — ezt a két végét köti össze az MCP-szerver.</p>
+    </div>
+
+    <div class="callout">
+      <p><strong>Amit ez jelent döntéshozóként:</strong> nem kell sem a Postgres adatbázist, sem a frontend kódját átírni, hogy az AI hozzáférjen. Nem kell API-t beépíteni a meglévő rendszerbe. Az MCP-szerver <strong>elé</strong> kerül, és a szabályokat egy helyen, benne tartod. Az MCP lényegében az AI világának USB-C csatlakozója: egy szabványos dugó, sokféle rendszerhez.</p>
+    </div>
+
+    <h3>A tool-lista — a legfontosabb szabályozási pont</h3>
+    <p>
+      Az MCP-szerver <strong>nem fogad el bármit</strong>. Induláskor meghirdeti a saját <strong>tool-listáját (eszközkatalógusát)</strong>: milyen mûveleteket tud egyáltalán elvégezni, milyen névvel, milyen bemeneti adatokat vár. Az AI kizárólag ebből a listából választhat — mást nem tud kérni.
+    </p>
+
+    <p class="sub" style="margin-bottom:4px"><b>1. példa — adatbázis (szerződésadatbázis):</b> itt a tool-lista azt szabja meg, milyen lekérdezéseket futtathat az AI, és mit állíthat be.</p>
+    <div class="tools">
+      <div class="trow"><span class="tname">kereses_szerzodesre</span><span class="tdesc">Keresés ügyfél, dátum vagy státusz szerint → <b>csak olvasás</b></span></div>
+      <div class="trow"><span class="tname">szerzodes_reszletei</span><span class="tdesc">Egy szerződés teljes szövege és metaadatai → <b>csak olvasás</b></span></div>
+      <div class="trow"><span class="tname">lejarat_kozeledik</span><span class="tdesc">Közelgő lejáratok listája → <b>csak olvasás, vezetői nézet</b></span></div>
+      <div class="trow"><span class="tname mut">statusz_modositas</span><span class="tdesc">Szerződés állapotának átírása → <b>írás, emberi jóváhagyással</b></span></div>
+      <div class="trow"><span class="tname mut">nyers_sql</span><span class="tdesc">⚠️ Ha ezt felveszed, gyakorlatilag az egész adatbázist megnyitod — tipikusan <b>nem javasolt</b></span></div>
+    </div>
+
+    <p class="sub" style="margin-bottom:4px"><b>2. példa — weboldal (referencialista + fotótár):</b> itt a tool-lista azt szabja meg, mit módosíthat az AI, és <b>milyen adatokat kell küldenie</b> hozzá.</p>
+    <div class="tools">
+      <div class="trow"><span class="tname">projekt_hozzaadas</span><span class="tdesc">Új projekt a referencialistába → kötelező: <code>cim</code>, <code>leiras</code>, <code>ev</code>; opcionális: <code>fotok[]</code>, <code>ugyfel</code>, <code>cimkek[]</code></span></div>
+      <div class="trow"><span class="tname">foto_csere</span><span class="tdesc">Meglévő projekt fotójának cseréje → kötelező: <code>projekt_id</code>, <code>kep</code>; opcionális: <code>sorrend</code>, <code>alt_szoveg</code></span></div>
+      <div class="trow"><span class="tname">foto_torles</span><span class="tdesc">Fotó törlése → <b>csak megerősítéssel</b>, naplózva</span></div>
+      <div class="trow"><span class="tname ok">projekt_lista</span><span class="tdesc">Referencialisták olvasása → <b>csak olvasás</b></span></div>
+    </div>
+
+    <div class="note">
+      <b>Ez a lényeg, amit menedzsmentként érteni kell.</b> A tool-lista az a hely, ahol eldől, mihez nyúlhat az AI. Ugyanaz a technológia tud <b>csak olvasni</b> és tud <b>írni/módosítani is</b> — a különbség nem a technológiában van, hanem abban, <b>mit veszel fel a listára</b>. Ezért az MCP-szerver tervezése valójában <b>üzleti és jogosultsági döntés</b>, nem csak technikai.
+    </div>
+
+    <h3>Mi történik egy kérésnél? — lépésről lépésre</h3>
+    <p class="sub" style="margin-bottom:8px">Példa: a munkatárs az AI-tól kéri: „Vegyél fel egy új projektet a referencialistába.”</p>
+    <div class="steps">
+      <div class="layer"><h4>1. Az AI felismeri a szándékot</h4><p>Az AI megérti, hogy ez egy projekthozzáadás. Megnézi, van-e erre eszköz a tool-listán — van: <code>projekt_hozzaadas</code>.</p></div>
+      <div class="layer"><h4>2. Bekéri a kötelező adatokat</h4><p>A tool sémája megmondja, mi kell: cím, leírás, év. Ha a felhasználó nem adta meg mindet, az AI <strong>visszakérdez</strong> — nem taksál.</p></div>
+      <div class="layer"><h4>3. Meghívja az eszközt a megadott adatokkal</h4><p>Az AI elküldi: <code>{cim: „...”, leiras: „...”, ev: 2026, fotok: [...]}</code>. Ez már szabványos MCP-hívás.</p></div>
+      <div class="layer"><h4>4. Az MCP-szerver ellenőrzi és végrehajtja</h4><p>A szerver <strong>a te kódod</strong>: ellenőrzi a jogosultságot, megnézi, hogy minden kötelező mező megvan-e, majd <strong>elvégzi a mûveletet</strong> — pl. beilleszt egy sort az adatbázisba, és elmenti a fotókat a megfelelő helyre.</p></div>
+      <div class="layer"><h4>5. Visszajelzés és naplózás</h4><p>A szerver visszaadja az eredményt („sikeres, projekt ID: 41”). A mûvelet naplóba kerül: ki, mikor, mit módosított. Ez az, ami utólag visszakereshetővé teszi.</p></div>
+      <div class="layer"><h4>6. Az AI összegzi a felhasználónak</h4><p>„Felvettem a projektet a listára. Ha szeretnéd, hozzáadhatok fotókat is.” — a felhasználó látja, mi történt.</p></div>
+    </div>
+
+    <h3>Honnan tudja az MCP-szerver, mit kell csinálni?</h3>
+    <p>
+      Ezt nem találja ki: <strong>azt a fejlesztő írja meg, aki az MCP-szervert készíti</strong>. Minden egyes toolhoz tartozik egy konkrét programkód, amely leírja, mi történik a beérkező adattal. Tehát:
+    </p>
+    <div class="askgrid">
+      <div class="askcard">
+        <h4>Ha a tool <code>projekt_hozzaadas</code>…</h4>
+        <div class="q">Az AI ezt küldi: cím, leírás, év, fotók</div>
+        <p>…akkor a kód: új sor a projekt-táblába, a fotók feltöltése a tárhelyre, a kapcsolatok beállítása. <b>Ezt a lépést a fejlesztő programozza meg.</b></p>
+      </div>
+      <div class="askcard">
+        <h4>Ha az AI hibás adatot küld…</h4>
+        <div class="q">Pl. hiányzik a cím, vagy rossz a fotó formátuma</div>
+        <p>…akkor a szerver <b>elutasítja</b> és hibaüzenetet ad vissza. Az AI ezt megkapja, és vagy javítja, vagy jelzi a felhasználónak. <b>A szabályt a szerver kódja érvényesíti.</b></p>
+      </div>
+      <div class="askcard">
+        <h4>Ha jogosultság kell…</h4>
+        <div class="q">Pl. csak bizonyos kollégák módosíthatják a listát</div>
+        <p>…akkor a szerver <b>a hívó személye alapján</b> dönt: engedi vagy elutasítja. Nem az AI dönt erről. <b>Ez a legfontosabb biztonsági pont.</b></p>
+      </div>
+    </div>
+
+    <div class="mgmt">
+      <h3>Mit kérdezz attól, aki MCP-alapú megoldást ajánl?</h3>
+      <ul>
+        <li><b>Milyen eszközök kerülnek a tool-listára?</b> Kérj írásos listát. Ha bármelyik eszköz <em>írni</em> tud (módosít, töröl, feltölt), az külön indoklást és jóváhagyást igényel.</li>
+        <li><b>Ki szabja meg a jogosultságot?</b> A válasznak az kell legyen, hogy a szerver a <em>hívó munkatárs</em> nevében dönt — nem egy közös, mindenható fiókkal mûködik.</li>
+        <li><b>Mi történik, ha az AI hibás adatot küld?</b> Legyen világos: a szerver elutasítja, nem próbálja kitalálni. A hibás bemenet nem kerülhet be az adatbázisba.</li>
+        <li><b>Naplózva lesz minden mûvelet?</b> Kérd, hogy igen: ki, mikor, melyik rendszerben mit módosított az AI. Ez a megfelelőség és az audit alapja.</li>
+        <li><b>Mi van, ha később új rendszert akarunk bekötni?</b> Az MCP elõnye éppen ez: <em>egy új rendszerhez új szervert írunk, de az AI oldalán semmit nem kell változtatni</em>. Kérdezd meg, mennyi munka egy új csatlakozás.</li>
+        <li><b>Ki felelõs, ha az AI rosszat tesz?</b> A válasz sosem az, hogy „a modell” — hanem a cég, mert a szabályokat a saját MCP-szerverében õ szabja meg.</li>
+      </ul>
+    </div>
+
+    <div class="note">
+      <b>Egy mondatban menedzsmentnek:</b> az MCP egy szabvány, amelynek köszönhetően az AI <b>nem a rendszereid belsejébe nyúl be</b>, hanem egy <b>általad meghatározott, szûk eszközlistán</b> keresztül — és hogy ez a lista mit enged meg, az <b>üzleti döntés</b>, amit neked kell jóváhagynod.
+    </div>
+  </div>
+</section>
+
+<!-- ============ FÁJLOK SORSA ============ -->
+<section id="fajlok">
+  <div class="wrap">
+    <h2>Mi történik a kért fájlokkal? — hova kerülnek?</h2>
+    <p class="sub">A leggyakoribb gyakorlati kérdés: ha az AI-val készíttetek egy dokumentumot, az hol landol, és ki fér hozzá?</p>
+
+    <p>
+      Az AI <strong>alapból nem „ment el” fájlokat a gépedre</strong> észrevétlenül. A fájl ott keletkezik, ahol a beszélgetést folytatod, és onnan továbbítódik a cég arra kijelölt tárolójába — vagy a beszélgetésben marad, ha nem rendeltél tárolót. A helyes céges működéshez <strong>előre meg kell szabni a célmappát</strong>.
+    </p>
+
+    <h3>Egy dokumentum életútja</h3>
+    <div class="flow">
+      <div class="fnode"><b>1. Keletkezés — beszélgetés</b><span>A munkatárs a csevegésben kéri: „készítsd el a X. ügyfél szerződésének összefoglalóját”. A tartalom itt jön létre, a beszélgetés kontextusában.</span></div>
+      <div class="farrow">▼</div>
+      <div class="fnode"><b>2. Célmappa kijelölése (a cég döntése)</b><span>Vagy a felhasználó adja meg („mentsd a Szerződések/2026 mappába”), vagy az admin <strong>előre beállít egy célhelyet</strong> (SharePoint, Drive, belső tároló). Enterprise beállításnál ez szabályzat kérdése.</span></div>
+      <div class="farrow">▼</div>
+      <div class="fnode"><b>3. Tárolórendszer — a cég felhője</b><span>A fájl a cég <strong>saját</strong> tárhelyére kerül (SharePoint, Google Drive, OneDrive, belső szerver) — nem az AI szolgáltató szerverére, és nem tűnik el nyomtalanul. Az AI csak a „toll”, nem az irattár.</span></div>
+      <div class="farrow">▼</div>
+      <div class="fnode"><b>4. Jogosultság és verzió</b><span>A fájl a mappa jogosultságait örökli. Ha jól van beállítva, csak az látja, aki a mappához is hozzáfér. A verziókövetés (ki, mikor, mit módosított) a tárolórendszer dolga — nem az AI „emlékszik rá”.</span></div>
+      <div class="farrow">▼</div>
+      <div class="fnode"><b>5. Visszakeresés és audit</b><span>A fájlt a szokásos helyen találod meg, mintha kézzel készült volna. Enterprise csomagoknál a beszélgetés is naplózódik (Compliance API), így utólag visszakereshető, ki kérte.</span></div>
+    </div>
+
+    <div class="grid g2" style="margin-top:26px">
+      <div class="card">
+        <h3>Hol NEM lesz a fájl?</h3>
+        <ul style="font-size:.9rem;color:var(--dim);margin:0;padding-left:18px">
+          <li>Nem kerül automatikusan a szolgáltató nyilvános felhőjébe.</li>
+          <li>Nem osztja meg magától senkivel.</li>
+          <li>Nem lesz „rejtett másolat” a modellben — a modell nem tanul belőle.</li>
+          <li>Nem tűnik el, ha a beszélgetést törlöd — ha már célmappába mentetted, az a cég tulajdona marad.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Amit a cégnek szabályoznia kell</h3>
+        <ul style="font-size:.9rem;color:var(--dim);margin:0;padding-left:18px">
+          <li><strong>Kötelező célmappa</strong> megadása minden generált iratnak.</li>
+          <li>Ki kaphat jogot fájl <em>írására</em> (nem csak keresésére).</li>
+          <li>Megtartási és törlési szabályok (mennyi ideig őrzünk).</li>
+          <li>Naplózás: ki, mikor, milyen dokumentumot készíttetett.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ÜGYNÖKÖK ============ -->
+<section id="ugynokok">
+  <div class="wrap">
+    <h2>Ügynökök — ki csinálja, hol vannak, honnan tudom, hogy vannak?</h2>
+    <p class="sub">Célügynökök (pl. szerződésíró, szerződésellenőrző) működése a szervezetben.</p>
+
+    <p>
+      Az „ügynök” (agent) nem önálló lény, hanem egy <strong>beállított AI-szerep</strong>: utasítások + hozzáférés a tudáshoz + engedélyezett eszközök. A szervezetben él, ott, ahol a platform adminisztrátora létrehozza — és onnantól a dolgozók a szokásos felületükön (ChatGPT, Claude, Copilot, Teams, belső portál) hívhatják meg.
+    </p>
+
+    <div class="agents">
+      <div class="agent">
+        <h3>Szerződés-ellenőrző ügynök</h3>
+        <div class="who">Ki csinálja: jogi / compliance csapat + admin</div>
+        <p>Feladata: feltölteni a szerződéstervezetet, és kiszűrni a kockázatos kitételeket, hiányzó szakaszokat, eltérő felelősségi pontokat — a cég korábbi szerződéseihez és sablonjaihoz mérve.</p>
+        <div class="io"><b>Input:</b> a szerződéstervezet + referencia-szerződések<br><b>Output:</b> jelölt kockázatok listája, forrásmegjelöléssel</div>
+      </div>
+      <div class="agent">
+        <h3>Szerződésíró ügynök</h3>
+        <div class="who">Ki csinálja: jogi csapat + admin</div>
+        <p>Feladata: a jóváhagyott sablonból és az ügyféladatokból első változatú szerződést készíteni, kitöltött mezőkkel és a cég standard nyelvezetével.</p>
+        <div class="io"><b>Input:</b> ügyféladatok + sablon<br><b>Output:</b> szerződéstervezet a kijelölt célmappába, verziókövetve</div>
+      </div>
+      <div class="agent">
+        <h3>HR-onboarding ügynök</h3>
+        <div class="who">Ki csinálja: HR + IT-admin</div>
+        <p>Feladata: új munkatárs első hetének végigvezetése — szükséges iratok, belső szabályok, hozzáférési kérések, gyakori kérdések megválaszolása a céges tudásbázisból.</p>
+        <div class="io"><b>Input:</b> új munkatárs szerepköre<br><b>Output:</b> feladatsor, dokumentumok, következő lépések</div>
+      </div>
+      <div class="agent">
+        <h3>Sales-ajánlat ügynök</h3>
+        <div class="who">Ki csinálja: sales vezető + admin</div>
+        <p>Feladata: egy ügyfél kéréséből kiindulva árajánlat-vázlatot és ügyfél-specifikus anyagot összeállítani a korábbi, sikeres ajánlatok mintájára.</p>
+        <div class="io"><b>Input:</b> ügyfél neve, igény<br><b>Output:</b> ajánlatvázlat, hivatkozott korábbi ajánlatokkal</div>
+      </div>
+    </div>
+
+    <div class="qa">
+      <details>
+        <summary>Hogyan hívom meg az ügynököt?</summary>
+        <p>A platformtól függ, de mindegyiknél a dolgozó szokásos felületén keresztül: a ChatGPT-ben <code>@</code>-említéssel vagy a tools-menüből, Claude-ban a dedikált projektből, Copilotnál a Copilot-felületről vagy Teams-ből, Google-nél a Gemini Enterprise appból. A lényeg: <strong>nem külön programot kell megnyitni</strong>, hanem a megszokott helyen előkerül az ügynök.</p>
+      </details>
+      <details>
+        <summary>Mi lesz az ügynök outputjával?</summary>
+        <p>Az output ugyanoda kerül, mint bármely más generált fájl: a kijelölt célmappába a cég tárolójában, a szokásos jogosultságokkal és verziókövetéssel. Ha döntést igényel (pl. aláírás), az <strong>emberhez kerül jóváhagyásra</strong> — az ügynök javasol, nem dönt helyetted.</p>
+      </details>
+      <details>
+        <summary>Honnan tudom, hogy léteznek ilyen ügynökök?</summary>
+        <p>Egy jól működő cégnél <strong>van egy nyilvántartás</strong>: mely ügynökök elérhetők, mit tudnak, ki a felelős gazdájuk, és ki jogosult használni. Ez vagy a platform saját lista-nézete (pl. Copilot Studio, ChatGPT workspace agents, Gemini agent gallery), vagy egy belső katalógus. Az adminisztrátor hozza létre és osztja meg — a dolgozó pedig a listából választ.</p>
+      </details>
+      <details>
+        <summary>Ki felelős az ügynökért, ha hibázik?</summary>
+        <p>Mindig a szervezet és a kijelölt <strong>gazda (owner)</strong> — nem az AI szolgáltató és nem a modell. Ezért fontos, hogy minden ügynöknek legyen nevesített felelőse, és időnként felülvizsgálják: pontos-e, naprakész-e, nem ad-e ki érzékeny adatot. Az ügynök beállítása, a hozzáférései és a működése a cég felelőssége.</p>
+      </details>
+      <details>
+        <summary>Lehet egy saját szerződésellenőrző ügynököm, csak a jogi dokumentumokra szabva?</summary>
+        <p>Igen — ez a célügynök lényege. Kap egy szűk tudásbázist (csak a jogi mappa), egy szigorú utasítást („csak a jogi anyagokból dolgozz”), és csak a szükséges eszközöket. Minél szűkebb a hatókör, annál megbízhatóbb és biztonságosabb. Ugyanígy külön ügynök készíthető a HR, pénzügy vagy a belső it-helpdesk számára — mindegyik a saját tudására és jogosultságaira szabva.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SZIMULÁTOR ============ -->
+<section id="szimulator">
+  <div class="wrap">
+    <h2>Szimulátor — mit kérdez a user, mi történik a háttérben, mit kap?</h2>
+    <p class="sub">Négy terület, négy valósághű példa. Kattints a „Futtatás” gombra, és végignézheted a folyamatot.</p>
+
+    <div class="sim-tabs">
+      <button class="sim-tab active" data-sim="hr">HR</button>
+      <button class="sim-tab" data-sim="sales">Sales</button>
+      <button class="sim-tab" data-sim="penzugy">Pénzügy</button>
+      <button class="sim-tab" data-sim="jogi">Jogi / Szerződés</button>
+    </div>
+
+    <!-- HR -->
+    <div class="sim-panel active" id="sim-hr">
+      <div class="sim">
+        <div class="sim-col col-user">
+          <h4>1 · Amit a user kérdez</h4>
+          <div class="sim-q">Mennyi szabadság jár nekem idén, és hogyan kell kivenni a karácsonyi időszakban?</div>
+        </div>
+        <div class="sim-col col-bg">
+          <h4>2 · Mi történik a háttérben</h4>
+          <ul class="step-list">
+            <li><b>Azonosítás</b>Az AI tudja, ki kérdez (a belépett fiók alapján) — megnézi a szerepkörödet és a csapatodat.</li>
+            <li><b>Jogosultság-ellenőrzés</b>Csak a HR-mappák és a hozzád rendelt dokumentumok jönnek szóba. A vezetői anyagok eleve kizárva.</li>
+            <li><b>Keresés a céges tudásbázisban</b>HR-szabályzat, szabadság-nyilvántartó rendszer, karácsonyi belső közlemény, csapat-naptár.</li>
+            <li><b>Grounding</b>A megtalált részleteket összerakja, és a válaszállítások mellett megmutatja a forrásokat.</li>
+            <li><b>Válasz + forrás</b>Ha akció kell (szabadságkérés), az ügynök a HR-rendszer űrlapjára irányít — nem nyújt be helyetted jóváhagyás nélkül.</li>
+          </ul>
+          <button class="sim-run" data-target="hr">▶ Futtatás</button>
+        </div>
+        <div class="sim-col col-out">
+          <h4>3 · Amit kap</h4>
+          <div class="sim-answer" id="ans-hr" hidden>
+            <p>Neked idén <b>24 nap</b> alapszabadság jár, plusz a ledolgozott évek után járó pótnapok. A karácsonyi időszakban (dec. 22–31.) a szabadságkiadás <b>csapaton belül rotációban</b> működik — egyszerre legfeljebb ketten lehetnek távol.</p>
+            <p>Kérvényt a HR-portál „Szabadság” menüjében adhatsz be, legalább 5 munkanappal előbb. A jóváhagyás a közvetlen vezetődnél van.</p>
+            <span class="cite">Forrás: HR Szabályzat 4.2 · Karácsonyi ügyeleti közlemény (2025.11.28.) · Szabadság-nyilvántartó</span>
+          </div>
+          <div class="sim-answer" id="ph-hr"><p style="color:var(--dim2)">A válasz itt fog megjelenni a futtatás után…</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SALES -->
+    <div class="sim-panel" id="sim-sales">
+      <div class="sim">
+        <div class="sim-col col-user">
+          <h4>1 · Amit a user kérdez</h4>
+          <div class="sim-q">Készíts egy rövid briefet a következő hétfői találkozóra a Kovács Kft.-vel. Mi a legutóbbi állapot, és mit ajánljunk?</div>
+        </div>
+        <div class="sim-col col-bg">
+          <h4>2 · Mi történik a háttérben</h4>
+          <ul class="step-list">
+            <li><b>Ügyfél beazonosítása</b>A CRM-ből és az e-mail-szálakból összeköti a Kovács Kft.-t a kapcsolattartókkal és az ügyekkel.</li>
+            <li><b>Több forrás egyidejű keresése</b>Sales CRM, e-mail-szálak, Slack-üzenetek, korábbi ajánlatok, jegyzőkönyvek.</li>
+            <li><b>Időrendezés</b>A legfrissebb és legfontosabb forrásokat előre veszi, a régieket háttérbe szorítja.</li>
+            <li><b>Ellentmondás-kezelés</b>Ha a CRM mást mond, mint a legutóbbi levél, azt jelzi — és a frissebbet veszi alapul.</li>
+            <li><b>Javaslattétel</b>A korábbi, hasonló ügyfélnél sikeres csomagot felajánlja kiindulópontként.</li>
+          </ul>
+          <button class="sim-run" data-target="sales">▶ Futtatás</button>
+        </div>
+        <div class="sim-col col-out">
+          <h4>3 · Amit kap</h4>
+          <div class="sim-answer" id="ans-sales" hidden>
+            <p><b>Legutóbbi állapot:</b> a Kovács Kft. az április ajánlat óta jelezte, hogy az AR-modul kiemelt prioritás, de költségkeret csak Q1-ben lesz.</p>
+            <p><b>Amit érdemes ajánlani:</b> indulócsomag az AR-modullal + opciós bővítés Q2-re. Figyelmeztetés: az utolsó levélben említett határidő eltér a CRM-ben rögzítettől — érdemes tisztázni a hétfői találkozón.</p>
+            <span class="cite">Forrás: Sales CRM (Kovács Kft. ügy) · 2 e-mail-szál · április ajánlat · Slack #sales-kovács</span>
+          </div>
+          <div class="sim-answer" id="ph-sales"><p style="color:var(--dim2)">A válasz itt fog megjelenni a futtatás után…</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PÉNZÜGY -->
+    <div class="sim-panel" id="sim-penzugy">
+      <div class="sim">
+        <div class="sim-col col-user">
+          <h4>1 · Amit a user kérdez</h4>
+          <div class="sim-q">Mennyi volt az elmúlt negyedévben a marketingköltség, és hogyan viszonyul a büdzséhez?</div>
+        </div>
+        <div class="sim-col col-bg">
+          <h4>2 · Mi történik a háttérben</h4>
+          <ul class="step-list">
+            <li><b>Adatforrás azonosítása</b>Pénzügyi nyilvántartás, költségkeret-terv, jóváhagyott számlák.</li>
+            <li><b>Szerepkör-szűrés</b>Csak azt a pénzügyi adatot kapja, amire a szerepköröd jogosít — más részlegek számai nem jelennek meg.</li>
+            <li><b>Számítás</b>Összesíti a negyedév költéseit, és összeveti a jóváhagyott büdzsével.</li>
+            <li><b>Ellenőrzés</b>Az eredményt a tényadat kíséri (nem a modell „számol fejből” — a rendszer a valódi rekordokat összegzi).</li>
+            <li><b>Összegzés</b>Szám + szöveges értelmezés + forrásmegjelölés.</li>
+          </ul>
+          <button class="sim-run" data-target="penzugy">▶ Futtatás</button>
+        </div>
+        <div class="sim-col col-out">
+          <h4>3 · Amit kap</h4>
+          <div class="sim-answer" id="ans-penzugy" hidden>
+            <p>A negyedév marketingköltsége <b>18,4 M Ft</b> volt, ami a jóváhagyott <b>20 M Ft</b> büdzsé <b>92%-a</b>. A legnagyobb tétel a rendezvényköltség (7,1 M Ft).</p>
+            <p><b>Megjegyzés:</b> a büdzsé 8%-a maradt a negyedév végére — a következő hónapban van mozgástér, de a terv szerint a tartalék célzott felhasználása javasolt.</p>
+            <span class="cite">Forrás: Pénzügyi nyilvántartás · Q3 költségkeret-terv · jóváhagyott számlák összesítője</span>
+          </div>
+          <div class="sim-answer" id="ph-penzugy"><p style="color:var(--dim2)">A válasz itt fog megjelenni a futtatás után…</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- JOGI -->
+    <div class="sim-panel" id="sim-jogi">
+      <div class="sim">
+        <div class="sim-col col-user">
+          <h4>1 · Amit a user kérdez</h4>
+          <div class="sim-q">Nézd át ezt a szerződéstervezetet: van-e benne kockázatos pont a korábbi szerződéseinkhez képest?</div>
+        </div>
+        <div class="sim-col col-bg">
+          <h4>2 · Mi történik a háttérben</h4>
+          <ul class="step-list">
+            <li><b>Ügynök kiválasztása</b>A „szerződés-ellenőrző” célügynök indul, amely csak a jogi tudásbázisra és sablonokra van szabva.</li>
+            <li><b>Referencia-keresés</b>Előkeresi a cég korábbi, hasonló szerződéseit és a jóváhagyott sablonokat.</li>
+            <li><b>Összehasonlítás</b>Pontról pontra veti össze: felelősség, felmondás, fizetési feltételek, adatvédelem.</li>
+            <li><b>Kockázat-jelölés</b>Megjelöli az eltéréseket és a hiányzó szakaszokat — nem dönt, csak jelez.</li>
+            <li><b>Emberi jóváhagyás</b>Az eredmény a jogi kollégához kerül; az aláírás emberi döntés marad.</li>
+          </ul>
+          <button class="sim-run" data-target="jogi">▶ Futtatás</button>
+        </div>
+        <div class="sim-col col-out">
+          <h4>3 · Amit kap</h4>
+          <div class="sim-answer" id="ans-jogi" hidden>
+            <p><b>3 jelölt kockázat:</b></p>
+            <p>1. A felelősségi pont a mi standardunknál <b>szélesebb</b> (a szokásos korlát helyett korlátlan).<br>
+            2. Hiányzik az <b>adatvédelmi melléklet</b>, amely a többi szerződésünkben szerepel.<br>
+            3. A felmondási idő <b>30 nap</b>, a szokásos 60 helyett.</p>
+            <p>Javaslat: a 2. pont javítása feltétlen, az 1. pont tárgyalásra érdemes.</p>
+            <span class="cite">Forrás: Szerződés-sablon v4.2 · 3 korábbi hasonló szerződés · Jogi kockázatkezelési irányelv</span>
+          </div>
+          <div class="sim-answer" id="ph-jogi"><p style="color:var(--dim2)">A válasz itt fog megjelenni a futtatás után…</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ KOCKÁZATOK ============ -->
+<section id="kockazatok">
+  <div class="wrap">
+    <h2>Amit minden bevezetésnél át kell gondolni</h2>
+    <p class="sub">A technológia készen van — a buktatók a szervezeti és megfelelőségi oldalon vannak.</p>
+
+    <div class="grid g2">
+      <div class="card">
+        <h3>Jogosultsági öröklődés</h3>
+        <p>A retrieval csak akkor biztonságos, ha a forrásrendszer jogosultságai pontosan átkerülnek az indexbe. Rossz mappamegosztás a forrásban <em>automatikusan</em> rossz AI-választ eredményez — az AI nem javítja, hanem felnagyítja a meglévő hibát.</p>
+      </div>
+      <div class="card">
+        <h3>Megosztott hitelesítő adatok</h3>
+        <p>Ha egy egyéni connector egyetlen API-kulccsal működik, mindenki azt látja, amit az a kulcs lát. Ez a leggyakoribb adatszivárgási pont.</p>
+      </div>
+      <div class="card">
+        <h3>Prompt injection az adatban</h3>
+        <p>A behúzott céges dokumentum maga is tartalmazhat rosszindulatú utasítást. A „csak megbízható forrás” elv és a forrás-korlátozás csökkenti a kockázatot.</p>
+      </div>
+      <div class="card">
+        <h3>Adatrezidencia és CMEK</h3>
+        <p>EU-s cégeknél nem mindegy, hol tárolódik az index. Az előírásoknak megfelelő régiót (EU) és saját kulcskezelési módot előre rögzíteni kell.</p>
+      </div>
+      <div class="card">
+        <h3>Frissesség vs. minőség</h3>
+        <p>Az indexelt tudás jobb keresést ad, de elavulhat; a federált mindig friss, de gyengébb találatokat hozhat. A helyes választás forrásonként eltérő lehet.</p>
+      </div>
+      <div class="card">
+        <h3>Konfliktusok és duplikációk</h3>
+        <p>Ugyanaz az információ több helyen, eltérő változatban. Az OpenAI kifejezetten erre épített többkereséses feloldást — de a rendezett tudásbázis hosszú távon mindenhol alapkövetelmény.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MIT VÁLASSZON A CÉG ============ -->
+<section id="vallalati">
+  <div class="wrap">
+    <h2>Mit válasszon a cég?</h2>
+    <p class="sub">Rövid döntési támpont a négy irány közül.</p>
+
+    <div class="grid g2">
+      <div class="card vendor microsoft">
+        <h3>Microsoft 365 központú cég</h3>
+        <p style="color:var(--dim);font-size:.9rem;margin-bottom:10px">Ha a tudás SharePointban, Teams-ben, Outlookban és Dynamics-ban él.</p>
+        <p>A Work IQ + Copilot a legkevesebb integrációs munkát igényli, mert a jogosultsági modell már egységes. Ez a legérettebb, legmélyebb vállalati megoldás.</p>
+      </div>
+      <div class="card vendor google">
+        <h3>Google Workspace központú cég</h3>
+        <p style="color:var(--dim);font-size:.9rem;margin-bottom:10px">Ha Drive, Gmail és Google Cloud a gerinc.</p>
+        <p>A Gemini Enterprise connectorjai natívan illeszkednek, és ha EU-s adatrezidencia vagy saját kulcskezelés kell, ez adja a legtöbb szabályozási fogantyút.</p>
+      </div>
+      <div class="card vendor openai">
+        <h3>Vegyes ökoszisztéma, gyors indulás</h3>
+        <p style="color:var(--dim);font-size:.9rem;margin-bottom:10px">Ha több rendszer van, és gyorsan kell működő megoldás.</p>
+        <p>A ChatGPT Company knowledge a legkevesebb súrlódással indul, és erős a többforrásos szintézisben. Fejlesztéshez ott a Knowledge Retrieval blueprint.</p>
+      </div>
+      <div class="card vendor anthropic">
+        <h3>Nyílt szabványra építő, fejlesztőbarát cég</h3>
+        <p style="color:var(--dim);font-size:.9rem;margin-bottom:10px">Ha saját agenteket/rendszereket épít, és nem akar egyetlen platformhoz láncolódni.</p>
+        <p>Az MCP nyílt ökoszisztémája és az Anthropic fejlesztői eszközei (Messages API, knowledge graph minta) ezt támogatják leginkább.</p>
+      </div>
+    </div>
+
+    <h3 style="margin-top:38px">Bevezetési ellenőrzőlista</h3>
+    <ul class="check">
+      <li>Feltérképezve: hol él a valódi céges tudás (dokumentumok, chat, ticketek, CRM, belső wiki)?</li>
+      <li>Tisztázva: mely források jogosultsági modellje megbízható és naprakész?</li>
+      <li>Döntés: indexelés vagy federáció forrásonként (frissesség vs. keresési minőség)?</li>
+      <li>Rögzítve: adatrezidencia és titkosítási követelmények (EU, CMEK)?</li>
+      <li>Kijelölve: ki az admin, aki a connectorokat és jogosultságokat kezeli?</li>
+      <li>Tervezve: hogyan mérik a válaszok pontosságát és a megtérülést?</li>
+    </ul>
+
+    <div class="callout">
+      <p><strong>A lényeg egy mondatban:</strong> 2026-ban nem az a kérdés, hogy <em>melyik AI a legokosabb</em>, hanem az, hogy
+      <strong>melyik szolgáltató tudja a legpontosabban, jogosultság-tudatosan és ellenőrizhetően behúzni a cég saját tudását</strong>.
+      A modell már mindegyiküknél elég jó — a különbség a tudásbázis-integráció mélységében és a governance-ben van.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p><strong>Céges tudásbázis a nagy AI platformokon</strong> — összehasonlító elemzés. Készítette: Rob (ARworks), 2026. október 4.</p>
+    <p>Az oldal nyilvános szolgáltatói dokumentációk és bejelentések alapján készült. A terméknevek és funkciók a szolgáltatók tulajdonát képezik; a részletek idővel változhatnak — éles döntés előtt érdemes a legfrissebb hivatalos dokumentációt ellenőrizni.</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  // Tab váltás
+  var tabs = document.querySelectorAll('.sim-tab');
+  tabs.forEach(function(t){
+    t.addEventListener('click', function(){
+      tabs.forEach(function(x){x.classList.remove('active')});
+      t.classList.add('active');
+      document.querySelectorAll('.sim-panel').forEach(function(p){p.classList.remove('active')});
+      var panel = document.getElementById('sim-' + t.dataset.sim);
+      if(panel) panel.classList.add('active');
+    });
+  });
+
+  // Futtatás: lépések egymás után megjelennek, majd a válasz
+  document.querySelectorAll('.sim-run').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var key = btn.dataset.target;
+      var panel = document.getElementById('sim-' + key);
+      if(!panel) return;
+      var steps = panel.querySelectorAll('.step-list li');
+      var ans = document.getElementById('ans-' + key);
+      var ph = document.getElementById('ph-' + key);
+
+      // reset
+      steps.forEach(function(s){s.classList.remove('reveal')});
+      steps.forEach(function(s){s.style.visibility = 'hidden'});
+      if(ans){ans.hidden = true}
+      if(ph){ph.hidden = false}
+      btn.disabled = true;
+
+      var i = 0;
+      function next(){
+        if(i < steps.length){
+          var s = steps[i];
+          s.style.visibility = 'visible';
+          void s.offsetWidth;
+          s.classList.add('reveal');
+          i++;
+          setTimeout(next, 420);
+        } else {
+          if(ph){ph.hidden = true}
+          if(ans){ans.hidden = false}
+          btn.disabled = false;
+        }
+      }
+      // kezdetben minden lépés elrejtve
+      steps.forEach(function(s){s.style.visibility = 'hidden'});
+      next();
+    });
+  });
+
+  // Első betöltéskor a HR panel lépései legyenek rejtve, de nem törötten
+  document.querySelectorAll('.sim-panel .step-list li').forEach(function(s){
+    if(!s.closest('.sim-panel').classList.contains('active')){
+      // nem aktív panelen maradjon rejtve, amíg nem futtatják
+    }
+  });
+})();
+</script>
+
+</body>
+</html>

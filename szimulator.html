@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Szervezeti AI bevezetés — vezetői útmutató</title>
-<meta name="description" content="Gyors, vezetői szintű áttekintés arról, mit jelent egy szervezeti AI bevezetés: architektúra, szállítók, működés, use case-ek. Enterprise AI tudásbázis.">
+<title>Use case szimulátor — vállalati AI példák</title>
+<meta name="description" content="Interaktív szimulátor: HR, Sales, Pénzügy és Jogi use case-ek, lépésről lépésre, forrásmegjelöléssel.">
 <style>
   :root{
     --bg:#0d1117; --bg2:#161b22; --bg3:#1c2330; --line:#2a3340;
@@ -332,133 +332,161 @@
   .mgmt li{margin-bottom:8px}
 
   @media(max-width:820px){.mcp-row{grid-template-columns:1fr}}
-
-  .landing-hero{padding:78px 0 64px}
-  .hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin:30px 0 0}
-  .btn{
-    display:inline-block;text-decoration:none;font-size:.95rem;font-weight:600;
-    padding:12px 22px;border-radius:10px;border:1px solid var(--line);color:var(--txt);
-    background:var(--bg2);transition:.15s;
-  }
-  .btn:hover{border-color:var(--dim2);transform:translateY(-1px)}
-  .btn.primary{background:var(--acc);border-color:var(--acc);color:#fff}
-  .btn.primary:hover{background:#ff6a1f;border-color:#ff6a1f}
-  nav.toc a.active{background:var(--bg3);color:var(--txt);box-shadow:inset 0 -2px 0 var(--acc)}
-  .lp-grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));margin-top:28px}
-  .lp-card{
-    display:block;text-decoration:none;color:inherit;background:var(--bg2);
-    border:1px solid var(--line);border-radius:16px;padding:26px 26px 22px;
-    position:relative;transition:.18s;overflow:hidden;
-  }
-  .lp-card::before{content:"";position:absolute;left:0;top:0;height:4px;width:100%;background:var(--acc);opacity:.85}
-  .lp-card:hover{border-color:var(--dim2);transform:translateY(-3px);background:var(--bg3)}
-  .lp-num{
-    display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;
-    border-radius:9px;background:rgba(255,81,0,.14);color:var(--acc);font-weight:800;font-size:.95rem;margin-bottom:14px;
-  }
-  .lp-card h3{margin:0 0 10px;font-size:1.18rem;color:#fff;text-transform:none;letter-spacing:0}
-  .lp-card p{margin:0 0 16px;font-size:.92rem;color:var(--dim);line-height:1.6}
-  .lp-go{font-size:.86rem;font-weight:600;color:var(--acc)}
-  .g3{grid-template-columns:repeat(auto-fit,minmax(270px,1fr))}
 </style>
 </head>
 <body>
+<header>
+  <div class="wrap">
+    <span class="kicker">Enterprise AI · Use case szimulátor</span>
+    <h1>Use case szimulátor
+      <span>Mit kérdez a felhasználó, mi történik a háttérben, és mit kap vissza — négy részleg példáján</span>
+    </h1>
+    <p class="lede">Válassz egy részleget, és indítsd el a folyamatot: lépésről lépésre látszik, hogyan dolgozza fel az AI a kérést, milyen rendszerekhez nyúl, és milyen választ ad forrásmegjelöléssel.</p>
+  </div>
+</header>
 <nav class="toc topnav">
   <ul>
-    <li><a href="index.html" class="active" aria-current="page">Kezdőlap</a></li>
+    <li><a href="index.html">Kezdőlap</a></li>
     <li><a href="vallalati-ai-rendszer.html">Vállalati AI rendszer</a></li>
     <li><a href="szallitok.html">Elérhető szállítók</a></li>
-    <li><a href="szimulator.html">Use case szimulátor</a></li>
+    <li><a href="szimulator.html" class="active" aria-current="page">Use case szimulátor</a></li>
     <li><a href="mukodesi-pontok.html">Fő működési pontok</a></li>
     <li><a href="terminologia.html">Terminológia</a></li>
   </ul>
 </nav>
-<header class="landing-hero">
+<section id="szimulator">
   <div class="wrap">
-    <span class="kicker">Enterprise AI · Vezetői útmutató</span>
-    <h1>Mit jelent egy szervezeti AI bevezetés?
-      <span>Gyors áttekintés cégvezetőknek és management tagoknak — közérthetően, döntéshozatalhoz</span>
-    </h1>
-    <p class="lede">
-      A nagy nyelvi modellek önmagukban nem ismerik a cég belső dokumentumait, szerződéseit, ticketjeit vagy
-      beszélgetéseit. Az igazi üzleti érték ott kezdődik, amikor a modell a <strong>hivatalos céges tudásbázissal
-      összekötve</strong> válaszol — jogosultság-tudatosan, forrásmegjelöléssel. Ez az oldal végigvezet azon, amit
-      egy vezetőnek tudnia érdemes, mielőtt döntést hoz.
-    </p>
-    <div class="hero-actions">
-      <a class="btn primary" href="vallalati-ai-rendszer.html">Kezdjük a nagy képpel →</a>
-      <a class="btn" href="terminologia.html">Fogalmak gyorsan</a>
+    <h2>Szimulátor — mit kérdez a user, mi történik a háttérben, mit kap?</h2>
+    <p class="sub">Négy terület, négy valósághű példa. Kattints a „Futtatás” gombra, és végignézheted a folyamatot.</p>
+
+    <div class="sim-tabs">
+      <button class="sim-tab active" data-sim="hr">HR</button>
+      <button class="sim-tab" data-sim="sales">Sales</button>
+      <button class="sim-tab" data-sim="penzugy">Pénzügy</button>
+      <button class="sim-tab" data-sim="jogi">Jogi / Szerződés</button>
     </div>
-    <p class="meta">Készítette: <b>Rob</b> (ARworks) · Összeállítva: <b>2026. október 4.</b> · Források: hivatalos szolgáltatói dokumentációk és bejelentések</p>
-  </div>
-</header>
 
-<section id="big-picture">
-  <div class="wrap">
-    <h2>A nagy kép — öt téma, öt oldal</h2>
-    <p class="sub">Ez a kezdőlap csak az átjáró. A lényeg az öt aloldalon van, ahol minden témát részletesen kifejtünk.</p>
-
-    <div class="lp-grid">
-      <a class="lp-card" href="vallalati-ai-rendszer.html">
-        <span class="lp-num">1</span>
-        <h3>Vállalati AI rendszer</h3>
-        <p>Hogyan néz ki egy szervezeti AI bevezetés belülről: a teljes architektúra-ábra — felhasználók, AI réteg, céges rendszerek, jogosultság —, majd azok a kockázatok, amelyeket minden bevezetésnél át kell gondolni.</p>
-        <span class="lp-go">Architektúra és kockázatok →</span>
-      </a>
-
-      <a class="lp-card" href="szallitok.html">
-        <span class="lp-num">2</span>
-        <h3>Elérhető szállítók</h3>
-        <p>OpenAI, Anthropic, Microsoft és Google — négy vezető szolgáltató, egy közös logika. Szolgáltatónként a részletek, egy összehasonlító táblázat, végül egy döntési javaslat: melyiket válassza a cég?</p>
-        <span class="lp-go">Összehasonlítás →</span>
-      </a>
-
-      <a class="lp-card" href="szimulator.html">
-        <span class="lp-num">3</span>
-        <h3>Use case szimulátor</h3>
-        <p>Interaktív: válassz egy részleget (HR, Sales, Pénzügy, Jogi), és lépésről lépésre végignézheted, mit kérdez a felhasználó, mi történik a háttérben, és mit kap vissza — forrásmegjelöléssel.</p>
-        <span class="lp-go">Szimulátor indítása →</span>
-      </a>
-
-      <a class="lp-card" href="mukodesi-pontok.html">
-        <span class="lp-num">4</span>
-        <h3>Fő működési pontok</h3>
-        <p>A gyakorlati rész: saját, egyedi céges rendszerek bekötése, az MCP mélymerítése döntéshozói szemmel, a keletkező fájlok sorsa, és az ügynökök működése.</p>
-        <span class="lp-go">Gyakorlati témák →</span>
-      </a>
-
-      <a class="lp-card" href="terminologia.html">
-        <span class="lp-num">5</span>
-        <h3>Terminológia</h3>
-        <p>A kulcsfogalmak laikus nyelven, hasonlatokkal: MCP, RAG, grounding, föderált vagy indexelt elérés, CMEK, prompt injection és a többiek — hogy mindenki ugyanazt értse.</p>
-        <span class="lp-go">Fogalomtár →</span>
-      </a>
-    </div>
-  </div>
-</section>
-
-<section id="miert">
-  <div class="wrap">
-    <h2>Miért fontos ez egy vezetőnek?</h2>
-    <p class="sub">Három mondat, amely megadja a keretet.</p>
-    <div class="grid g3">
-      <div class="card">
-        <h3>A tudás a cégé marad</h3>
-        <p style="color:var(--dim);font-size:.92rem">A modell nem „tanulja be" a céges adatot. A tudás a helyén marad, a válasz pedig forrásmegjelöléssel érkezik — ellenőrizhetően.</p>
-      </div>
-      <div class="card">
-        <h3>A jogosultság nem sérül</h3>
-        <p style="color:var(--dim);font-size:.92rem">Minden kérés a bejelentkezett munkatárs nevében fut, és csak azt kapja vissza, amihez a forrásrendszerben is joga van.</p>
-      </div>
-      <div class="card">
-        <h3>A döntés embernél marad</h3>
-        <p style="color:var(--dim);font-size:.92rem">Az AI javasol, nem dönt. A jóváhagyás, az aláírás és a felelősség emberi — és minden lépés naplózva van.</p>
+    <!-- HR -->
+    <div class="sim-panel active" id="sim-hr">
+      <div class="sim">
+        <div class="sim-col col-user">
+          <h4>1 · Amit a user kérdez</h4>
+          <div class="sim-q">Mennyi szabadság jár nekem idén, és hogyan kell kivenni a karácsonyi időszakban?</div>
+        </div>
+        <div class="sim-col col-bg">
+          <h4>2 · Mi történik a háttérben</h4>
+          <ul class="step-list">
+            <li><b>Azonosítás</b>Az AI tudja, ki kérdez (a belépett fiók alapján) — megnézi a szerepkörödet és a csapatodat.</li>
+            <li><b>Jogosultság-ellenőrzés</b>Csak a HR-mappák és a hozzád rendelt dokumentumok jönnek szóba. A vezetői anyagok eleve kizárva.</li>
+            <li><b>Keresés a céges tudásbázisban</b>HR-szabályzat, szabadság-nyilvántartó rendszer, karácsonyi belső közlemény, csapat-naptár.</li>
+            <li><b>Grounding</b>A megtalált részleteket összerakja, és a válaszállítások mellett megmutatja a forrásokat.</li>
+            <li><b>Válasz + forrás</b>Ha akció kell (szabadságkérés), az ügynök a HR-rendszer űrlapjára irányít — nem nyújt be helyetted jóváhagyás nélkül.</li>
+          </ul>
+          <button class="sim-run" data-target="hr">▶ Futtatás</button>
+        </div>
+        <div class="sim-col col-out">
+          <h4>3 · Amit kap</h4>
+          <div class="sim-answer" id="ans-hr" hidden>
+            <p>Neked idén <b>24 nap</b> alapszabadság jár, plusz a ledolgozott évek után járó pótnapok. A karácsonyi időszakban (dec. 22–31.) a szabadságkiadás <b>csapaton belül rotációban</b> működik — egyszerre legfeljebb ketten lehetnek távol.</p>
+            <p>Kérvényt a HR-portál „Szabadság” menüjében adhatsz be, legalább 5 munkanappal előbb. A jóváhagyás a közvetlen vezetődnél van.</p>
+            <span class="cite">Forrás: HR Szabályzat 4.2 · Karácsonyi ügyeleti közlemény (2025.11.28.) · Szabadság-nyilvántartó</span>
+          </div>
+          <div class="sim-answer" id="ph-hr"><p style="color:var(--dim2)">A válasz itt fog megjelenni a futtatás után…</p></div>
+        </div>
       </div>
     </div>
-    <div class="callout">
-      <p><strong>A lényeg egy mondatban:</strong> 2026-ban nem az a kérdés, hogy <em>melyik AI a legokosabb</em>, hanem az,
-      hogy <strong>melyik megoldás tudja a céges tudást jogosultság-tudatosan és ellenőrizhetően a modell elé tenni</strong>.
-      A modell már mindegyik szolgáltatónál elég jó — a különbség a tudásbázis-integráció mélységében és a governance-ben van.</p>
+
+    <!-- SALES -->
+    <div class="sim-panel" id="sim-sales">
+      <div class="sim">
+        <div class="sim-col col-user">
+          <h4>1 · Amit a user kérdez</h4>
+          <div class="sim-q">Készíts egy rövid briefet a következő hétfői találkozóra a Kovács Kft.-vel. Mi a legutóbbi állapot, és mit ajánljunk?</div>
+        </div>
+        <div class="sim-col col-bg">
+          <h4>2 · Mi történik a háttérben</h4>
+          <ul class="step-list">
+            <li><b>Ügyfél beazonosítása</b>A CRM-ből és az e-mail-szálakból összeköti a Kovács Kft.-t a kapcsolattartókkal és az ügyekkel.</li>
+            <li><b>Több forrás egyidejű keresése</b>Sales CRM, e-mail-szálak, Slack-üzenetek, korábbi ajánlatok, jegyzőkönyvek.</li>
+            <li><b>Időrendezés</b>A legfrissebb és legfontosabb forrásokat előre veszi, a régieket háttérbe szorítja.</li>
+            <li><b>Ellentmondás-kezelés</b>Ha a CRM mást mond, mint a legutóbbi levél, azt jelzi — és a frissebbet veszi alapul.</li>
+            <li><b>Javaslattétel</b>A korábbi, hasonló ügyfélnél sikeres csomagot felajánlja kiindulópontként.</li>
+          </ul>
+          <button class="sim-run" data-target="sales">▶ Futtatás</button>
+        </div>
+        <div class="sim-col col-out">
+          <h4>3 · Amit kap</h4>
+          <div class="sim-answer" id="ans-sales" hidden>
+            <p><b>Legutóbbi állapot:</b> a Kovács Kft. az április ajánlat óta jelezte, hogy az AR-modul kiemelt prioritás, de költségkeret csak Q1-ben lesz.</p>
+            <p><b>Amit érdemes ajánlani:</b> indulócsomag az AR-modullal + opciós bővítés Q2-re. Figyelmeztetés: az utolsó levélben említett határidő eltér a CRM-ben rögzítettől — érdemes tisztázni a hétfői találkozón.</p>
+            <span class="cite">Forrás: Sales CRM (Kovács Kft. ügy) · 2 e-mail-szál · április ajánlat · Slack #sales-kovács</span>
+          </div>
+          <div class="sim-answer" id="ph-sales"><p style="color:var(--dim2)">A válasz itt fog megjelenni a futtatás után…</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PÉNZÜGY -->
+    <div class="sim-panel" id="sim-penzugy">
+      <div class="sim">
+        <div class="sim-col col-user">
+          <h4>1 · Amit a user kérdez</h4>
+          <div class="sim-q">Mennyi volt az elmúlt negyedévben a marketingköltség, és hogyan viszonyul a büdzséhez?</div>
+        </div>
+        <div class="sim-col col-bg">
+          <h4>2 · Mi történik a háttérben</h4>
+          <ul class="step-list">
+            <li><b>Adatforrás azonosítása</b>Pénzügyi nyilvántartás, költségkeret-terv, jóváhagyott számlák.</li>
+            <li><b>Szerepkör-szűrés</b>Csak azt a pénzügyi adatot kapja, amire a szerepköröd jogosít — más részlegek számai nem jelennek meg.</li>
+            <li><b>Számítás</b>Összesíti a negyedév költéseit, és összeveti a jóváhagyott büdzsével.</li>
+            <li><b>Ellenőrzés</b>Az eredményt a tényadat kíséri (nem a modell „számol fejből” — a rendszer a valódi rekordokat összegzi).</li>
+            <li><b>Összegzés</b>Szám + szöveges értelmezés + forrásmegjelölés.</li>
+          </ul>
+          <button class="sim-run" data-target="penzugy">▶ Futtatás</button>
+        </div>
+        <div class="sim-col col-out">
+          <h4>3 · Amit kap</h4>
+          <div class="sim-answer" id="ans-penzugy" hidden>
+            <p>A negyedév marketingköltsége <b>18,4 M Ft</b> volt, ami a jóváhagyott <b>20 M Ft</b> büdzsé <b>92%-a</b>. A legnagyobb tétel a rendezvényköltség (7,1 M Ft).</p>
+            <p><b>Megjegyzés:</b> a büdzsé 8%-a maradt a negyedév végére — a következő hónapban van mozgástér, de a terv szerint a tartalék célzott felhasználása javasolt.</p>
+            <span class="cite">Forrás: Pénzügyi nyilvántartás · Q3 költségkeret-terv · jóváhagyott számlák összesítője</span>
+          </div>
+          <div class="sim-answer" id="ph-penzugy"><p style="color:var(--dim2)">A válasz itt fog megjelenni a futtatás után…</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- JOGI -->
+    <div class="sim-panel" id="sim-jogi">
+      <div class="sim">
+        <div class="sim-col col-user">
+          <h4>1 · Amit a user kérdez</h4>
+          <div class="sim-q">Nézd át ezt a szerződéstervezetet: van-e benne kockázatos pont a korábbi szerződéseinkhez képest?</div>
+        </div>
+        <div class="sim-col col-bg">
+          <h4>2 · Mi történik a háttérben</h4>
+          <ul class="step-list">
+            <li><b>Ügynök kiválasztása</b>A „szerződés-ellenőrző” célügynök indul, amely csak a jogi tudásbázisra és sablonokra van szabva.</li>
+            <li><b>Referencia-keresés</b>Előkeresi a cég korábbi, hasonló szerződéseit és a jóváhagyott sablonokat.</li>
+            <li><b>Összehasonlítás</b>Pontról pontra veti össze: felelősség, felmondás, fizetési feltételek, adatvédelem.</li>
+            <li><b>Kockázat-jelölés</b>Megjelöli az eltéréseket és a hiányzó szakaszokat — nem dönt, csak jelez.</li>
+            <li><b>Emberi jóváhagyás</b>Az eredmény a jogi kollégához kerül; az aláírás emberi döntés marad.</li>
+          </ul>
+          <button class="sim-run" data-target="jogi">▶ Futtatás</button>
+        </div>
+        <div class="sim-col col-out">
+          <h4>3 · Amit kap</h4>
+          <div class="sim-answer" id="ans-jogi" hidden>
+            <p><b>3 jelölt kockázat:</b></p>
+            <p>1. A felelősségi pont a mi standardunknál <b>szélesebb</b> (a szokásos korlát helyett korlátlan).<br>
+            2. Hiányzik az <b>adatvédelmi melléklet</b>, amely a többi szerződésünkben szerepel.<br>
+            3. A felmondási idő <b>30 nap</b>, a szokásos 60 helyett.</p>
+            <p>Javaslat: a 2. pont javítása feltétlen, az 1. pont tárgyalásra érdemes.</p>
+            <span class="cite">Forrás: Szerződés-sablon v4.2 · 3 korábbi hasonló szerződés · Jogi kockázatkezelési irányelv</span>
+          </div>
+          <div class="sim-answer" id="ph-jogi"><p style="color:var(--dim2)">A válasz itt fog megjelenni a futtatás után…</p></div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -468,6 +496,66 @@
     <p>Az oldal nyilvános szolgáltatói dokumentációk és bejelentések alapján készült. A terméknevek és funkciók a szolgáltatók tulajdonát képezik; a részletek idővel változhatnak — éles döntés előtt érdemes a legfrissebb hivatalos dokumentációt ellenőrizni.</p>
   </div>
 </footer>
+<script>
+(function(){
+  // Tab váltás
+  var tabs = document.querySelectorAll('.sim-tab');
+  tabs.forEach(function(t){
+    t.addEventListener('click', function(){
+      tabs.forEach(function(x){x.classList.remove('active')});
+      t.classList.add('active');
+      document.querySelectorAll('.sim-panel').forEach(function(p){p.classList.remove('active')});
+      var panel = document.getElementById('sim-' + t.dataset.sim);
+      if(panel) panel.classList.add('active');
+    });
+  });
+
+  // Futtatás: lépések egymás után megjelennek, majd a válasz
+  document.querySelectorAll('.sim-run').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var key = btn.dataset.target;
+      var panel = document.getElementById('sim-' + key);
+      if(!panel) return;
+      var steps = panel.querySelectorAll('.step-list li');
+      var ans = document.getElementById('ans-' + key);
+      var ph = document.getElementById('ph-' + key);
+
+      // reset
+      steps.forEach(function(s){s.classList.remove('reveal')});
+      steps.forEach(function(s){s.style.visibility = 'hidden'});
+      if(ans){ans.hidden = true}
+      if(ph){ph.hidden = false}
+      btn.disabled = true;
+
+      var i = 0;
+      function next(){
+        if(i < steps.length){
+          var s = steps[i];
+          s.style.visibility = 'visible';
+          void s.offsetWidth;
+          s.classList.add('reveal');
+          i++;
+          setTimeout(next, 420);
+        } else {
+          if(ph){ph.hidden = true}
+          if(ans){ans.hidden = false}
+          btn.disabled = false;
+        }
+      }
+      // kezdetben minden lépés elrejtve
+      steps.forEach(function(s){s.style.visibility = 'hidden'});
+      next();
+    });
+  });
+
+  // Első betöltéskor a HR panel lépései legyenek rejtve, de nem törötten
+  document.querySelectorAll('.sim-panel .step-list li').forEach(function(s){
+    if(!s.closest('.sim-panel').classList.contains('active')){
+      // nem aktív panelen maradjon rejtve, amíg nem futtatják
+    }
+  });
+})();
+</script>
 
 </body>
 </html>
