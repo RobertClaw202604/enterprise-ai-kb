@@ -1,0 +1,14 @@
+<svg viewBox="0 0 340 300" role="img" aria-label="A modell és a céges tudás kapcsolata">
+  <circle cx="88" cy="150" r="54" fill="none" stroke="#3a4553" stroke-width="1.4"/>
+  <circle cx="88" cy="150" r="34" fill="rgba(255,81,0,.10)" stroke="#ff5100" stroke-width="1.6"/>
+  <text x="88" y="146" text-anchor="middle" fill="#f3f5f7" font-size="13" font-weight="700">AI modell</text>
+  <text x="88" y="163" text-anchor="middle" fill="#8b95a1" font-size="10">általános tudás</text>
+  <path d="M146 150 H204" stroke="#3a4553" stroke-width="1.5" class="flow"/>
+  <text x="175" y="140" text-anchor="middle" fill="#ff8585" font-size="9.5" font-weight="700">nincs kapcsolat</text>
+  <rect x="206" y="94" width="114" height="112" rx="10" fill="rgba(19,23,28,.9)" stroke="#3a4553" stroke-width="1.4" stroke-dasharray="5 5"/>
+  <text x="263" y="138" text-anchor="middle" fill="#8b95a1" font-size="11">céges tudás</text>
+  <text x="263" y="155" text-anchor="middle" fill="#8b95a1" font-size="10">dokumentum, CRM,</text>
+  <text x="263" y="169" text-anchor="middle" fill="#8b95a1" font-size="10">e-mail, wiki</text>
+  <circle cx="263" cy="118" r="3" fill="#ff8585" class="blink"/>
+  <text x="170" y="258" text-anchor="middle" fill="#8b95a1" font-size="10.5">A modell „vak” a cég belső világára</text>
+</svg>

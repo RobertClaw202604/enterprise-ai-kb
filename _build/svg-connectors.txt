@@ -1,0 +1,23 @@
+<svg viewBox="0 0 340 300" role="img" aria-label="Kész connectorok bekötése">
+  <circle cx="170" cy="148" r="40" fill="rgba(255,81,0,.10)" stroke="#ff5100" stroke-width="1.6"/>
+  <circle cx="170" cy="148" r="54" fill="none" stroke="#3a4553" stroke-width="1.2" stroke-dasharray="4 6" class="spin"/>
+  <text x="170" y="145" text-anchor="middle" fill="#ff8a4d" font-size="10.5" font-weight="700">AI</text>
+  <text x="170" y="159" text-anchor="middle" fill="#8b95a1" font-size="8.5">asszisztens</text>
+  <g stroke-width="1.6" fill="none">
+    <path d="M158 110 L84 62" stroke="#7ab7ff" class="flow"/>
+    <path d="M186 110 L262 62" stroke="#7ab7ff" class="flow"/>
+    <path d="M132 148 L58 148" stroke="#7ab7ff" class="flow"/>
+    <path d="M208 148 L288 148" stroke="#7ab7ff" class="flow"/>
+    <path d="M158 186 L84 234" stroke="#7ab7ff" class="flow"/>
+    <path d="M186 186 L262 234" stroke="#7ab7ff" class="flow"/>
+  </g>
+  <g font-size="8.6" font-weight="600" text-anchor="middle" fill="#aeb7c2">
+    <rect x="24" y="40" width="82" height="24" rx="7" fill="#12161b" stroke="#35577d"/><text x="65" y="56">Google Drive</text>
+    <rect x="234" y="40" width="82" height="24" rx="7" fill="#12161b" stroke="#35577d"/><text x="275" y="56">SharePoint</text>
+    <rect x="8" y="136" width="72" height="24" rx="7" fill="#12161b" stroke="#35577d"/><text x="44" y="152">Salesforce</text>
+    <rect x="266" y="136" width="66" height="24" rx="7" fill="#12161b" stroke="#35577d"/><text x="299" y="152">Slack</text>
+    <rect x="24" y="232" width="82" height="24" rx="7" fill="#12161b" stroke="#35577d"/><text x="65" y="248">Confluence</text>
+    <rect x="234" y="232" width="82" height="24" rx="7" fill="#12161b" stroke="#35577d"/><text x="275" y="248">GitHub</text>
+  </g>
+  <circle cx="170" cy="148" r="5" fill="#ff5100" class="pulse"/>
+</svg>

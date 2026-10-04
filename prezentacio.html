@@ -4,365 +4,622 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Prezentáció — Szervezeti AI bevezetés vezetői összefoglaló</title>
-<meta name="description" content="Tizenöt diás vezetői összefoglaló: mit jelent egy szervezeti AI bevezetés, hogyan épül fel, mennyibe kerül, mire kell figyelni. By DarwinAI (www.darwinai.hu).">
+<meta name="description" content="Tizenöt diás vezetői összefoglaló: mit jelent egy szervezeti AI bevezetés, hogyan épül fel, mennyibe kerül, mire kell figyelni. by DarwinAI (www.darwinai.hu).">
 <style>
 :root{
   --bg:#0b0d10; --bg2:#12161b; --bg3:#181e25;
   --line:#2a323d; --line2:#3a4553;
   --txt:#f3f5f7; --dim:#aeb7c2; --dim2:#8b95a1;
   --acc:#ff5100; --acc2:#ff8a4d;
+  --gold:#d6a54a; --gold2:#f3d27a;
   --good:#65d091; --warn:#f3c969; --bad:#ff8585; --blue:#7ab7ff; --purple:#b67be8;
   --radius:16px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
-body{
-  background:var(--bg);color:var(--txt);
-  font:16px/1.55 Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
-  overflow:hidden;
-}
+body{background:var(--bg);color:var(--txt);
+  font:16px/1.55 Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;overflow:hidden}
 .deck{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
-.slide{
-  position:absolute;inset:0;
-  display:none;
-  padding:5.2vh 6vw 9vh;
-  overflow-y:auto;
+.slide{position:absolute;inset:0;display:none;padding:4.6vh 4.2vw 10vh;overflow-y:auto;
   flex-direction:column;justify-content:center;
   background:radial-gradient(1100px 620px at 82% -8%,rgba(255,81,0,.10),transparent 62%),
-             radial-gradient(820px 520px at 4% 104%,rgba(122,183,255,.07),transparent 60%),
+             radial-gradient(820px 520px at 4% 104%,rgba(214,165,74,.06),transparent 60%),
              linear-gradient(180deg,#090b0e,#10151b 50%,#090b0e);
-  animation:fade .28s ease;
-}
+  animation:fade .28s ease}
 .slide.active{display:flex}
 .slide.center{text-align:center;align-items:center}
 @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-
-.slide-num{position:absolute;top:3.2vh;right:4vw;font-size:.72rem;letter-spacing:.18em;color:var(--dim2);font-weight:700}
-.slide-tag{font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--acc);font-weight:800;margin-bottom:1.4rem}
-h1.title{font-size:clamp(2.1rem,5.2vw,4.2rem);line-height:1.04;letter-spacing:-.03em;font-weight:800;max-width:20ch}
+.slide-num{position:absolute;top:2.8vh;right:3.6vw;font-size:.72rem;letter-spacing:.18em;color:var(--dim2);font-weight:700}
+.slide-tag{font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--acc);font-weight:800;margin-bottom:1rem}
+h1.title{font-size:clamp(1.9rem,4.6vw,3.6rem);line-height:1.05;letter-spacing:-.03em;font-weight:800;max-width:22ch}
 h1.title .hl{color:var(--acc)}
-h2.st{font-size:clamp(1.6rem,3.5vw,2.6rem);line-height:1.12;letter-spacing:-.025em;font-weight:800;margin-bottom:1.6rem;max-width:26ch}
-p.lead{font-size:clamp(1rem,1.5vw,1.28rem);color:var(--dim);max-width:62ch;line-height:1.6}
+h2.st{font-size:clamp(1.35rem,2.9vw,2.2rem);line-height:1.12;letter-spacing:-.025em;font-weight:800;margin-bottom:1.05rem;max-width:26ch}
+p.lead{font-size:clamp(.94rem,1.28vw,1.14rem);color:var(--dim);max-width:64ch;line-height:1.6}
 p.lead strong{color:var(--txt)}
-.subline{font-size:clamp(.92rem,1.15vw,1.05rem);color:var(--dim2);max-width:70ch;margin-top:1rem;line-height:1.6}
-
-.byline{margin-top:2.4rem;font-size:.9rem;color:var(--dim2)}
-.byline b{color:var(--acc2)}
-
-.grid{display:grid;gap:1.15rem;margin-top:.6rem}
+.subline{font-size:clamp(.84rem,1.05vw,.96rem);color:var(--dim2);max-width:76ch;margin-top:.85rem;line-height:1.55}
+.subline strong{color:var(--dim)}
+a.slink{color:var(--acc2);text-decoration:none;font-weight:700;border-bottom:1px solid rgba(255,138,77,.35)}
+a.slink:hover{border-bottom-color:var(--acc2);color:#fff}
+.split{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:2vw;align-items:center;width:100%}
+.split .fig{width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.split svg{width:100%;height:auto;max-height:58vh;display:block}
+.figcap{font-size:.72rem;color:var(--dim2);text-align:center;margin-top:.6rem;line-height:1.4}
+.byline{margin-top:1.8rem;font-size:.87rem;color:var(--dim2)}
+.byline b{color:var(--gold2)}
+.byline a{color:var(--gold2);text-decoration:none}
+.grid{display:grid;gap:.95rem;margin-top:.4rem}
 .g2{grid-template-columns:repeat(2,minmax(0,1fr))}
 .g3{grid-template-columns:repeat(3,minmax(0,1fr))}
 .g4{grid-template-columns:repeat(4,minmax(0,1fr))}
-.card{
-  background:rgba(19,23,28,.92);border:1px solid var(--line);border-radius:var(--radius);
-  padding:1.35rem 1.4rem;
-}
-.card h3{font-size:1.02rem;margin-bottom:.5rem;letter-spacing:-.01em}
-.card p,.card li{font-size:.9rem;color:var(--dim);line-height:1.5}
+.card{background:rgba(19,23,28,.92);border:1px solid var(--line);border-radius:var(--radius);padding:1.05rem 1.15rem}
+.card h3{font-size:.95rem;margin-bottom:.42rem;letter-spacing:-.01em}
+.card p,.card li{font-size:.83rem;color:var(--dim);line-height:1.48}
 .card.accented{border-color:#5a3a25;background:linear-gradient(160deg,rgba(255,81,0,.10),rgba(19,23,28,.95))}
-.num-badge{
-  display:inline-flex;align-items:center;justify-content:center;width:2rem;height:2rem;border-radius:50%;
-  background:var(--bg3);border:1px solid var(--line2);color:var(--acc);font-weight:800;font-size:.9rem;margin-bottom:.7rem;
-}
-.big{font-size:clamp(1.5rem,3vw,2.2rem);font-weight:850;letter-spacing:-.02em;color:var(--acc)}
-.big small{display:block;font-size:.85rem;font-weight:500;color:var(--dim);letter-spacing:0;margin-top:.35rem}
-
+.num-badge{display:inline-flex;align-items:center;justify-content:center;width:1.8rem;height:1.8rem;border-radius:50%;
+  background:var(--bg3);border:1px solid var(--line2);color:var(--acc);font-weight:800;font-size:.82rem;margin-bottom:.55rem}
+.big{font-size:clamp(1.3rem,2.5vw,1.95rem);font-weight:850;letter-spacing:-.02em;color:var(--acc)}
+.big small{display:block;font-size:.8rem;font-weight:500;color:var(--dim);letter-spacing:0;margin-top:.28rem}
 ul.clean{list-style:none}
-ul.clean li{position:relative;padding-left:1.35rem;margin:.55rem 0;font-size:.94rem;color:var(--dim);line-height:1.5}
+ul.clean li{position:relative;padding-left:1.25rem;margin:.44rem 0;font-size:.89rem;color:var(--dim);line-height:1.5}
 ul.clean li::before{content:"→";position:absolute;left:0;color:var(--acc);font-weight:800}
 ul.clean li strong{color:var(--txt)}
-
-.pill{display:inline-block;padding:.25rem .7rem;border:1px solid var(--line2);border-radius:999px;font-size:.76rem;color:var(--dim);margin:.2rem .3rem .2rem 0;font-weight:600}
+.pill{display:inline-block;padding:.22rem .64rem;border:1px solid var(--line2);border-radius:999px;font-size:.73rem;color:var(--dim);margin:.16rem .26rem .16rem 0;font-weight:600}
 .pill.good{border-color:#2d6f4b;color:#7ce0a5}
 .pill.warn{border-color:#7b642a;color:#f1cc72}
 .pill.bad{border-color:#7f3d3d;color:#ff9c9c}
 .pill.blue{border-color:#35577d;color:#9bc8ff}
-
-.quote{border-left:3px solid var(--acc);padding:.4rem 0 .4rem 1.2rem;font-size:clamp(1.05rem,1.9vw,1.5rem);color:var(--txt);max-width:56ch;line-height:1.45;font-weight:600}
-.quote small{display:block;margin-top:.7rem;font-size:.85rem;font-weight:400;color:var(--dim2)}
-
-table{border-collapse:collapse;width:100%;font-size:.86rem}
-th,td{text-align:left;padding:.62rem .7rem;border-bottom:1px solid #232b34;vertical-align:top}
-th{color:var(--dim2);font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;font-weight:700}
-td strong{color:var(--txt)}
-
-/* --- Vezérlősáv --- */
-.bar{
-  position:fixed;left:0;right:0;bottom:0;height:6.2vh;min-height:52px;
-  display:flex;align-items:center;justify-content:space-between;gap:1rem;
-  padding:0 3vw;background:rgba(9,11,14,.82);backdrop-filter:blur(10px);
-  border-top:1px solid var(--line);z-index:20;
-}
-.bar-left,.bar-right{display:flex;align-items:center;gap:.5rem}
-.bar button{
-  font:inherit;font-size:.85rem;font-weight:650;color:var(--txt);background:var(--bg3);
-  border:1px solid var(--line2);border-radius:9px;padding:.5rem .9rem;cursor:pointer;transition:.15s;
-}
+.pill.gold{border-color:#8c632a;color:var(--gold2)}
+.quote{border-left:3px solid var(--acc);padding:.32rem 0 .32rem 1.05rem;font-size:clamp(.98rem,1.6vw,1.32rem);color:var(--txt);max-width:56ch;line-height:1.45;font-weight:600}
+.quote small{display:block;margin-top:.55rem;font-size:.82rem;font-weight:400;color:var(--dim2)}
+.brand{position:absolute;bottom:11.5vh;right:4.2vw;display:flex;align-items:center;gap:.55rem;opacity:.92}
+.brand img{height:32px;width:auto;display:block}
+.brand span{font-size:.7rem;color:var(--dim2);letter-spacing:.04em}
+.bar{position:fixed;left:0;right:0;bottom:0;height:6.2vh;min-height:52px;display:flex;align-items:center;justify-content:space-between;
+  gap:1rem;padding:0 2.4vw;background:rgba(9,11,14,.85);backdrop-filter:blur(10px);border-top:1px solid var(--line);z-index:20}
+.bar-left,.bar-right{display:flex;align-items:center;gap:.42rem}
+.bar button{font:inherit;font-size:.82rem;font-weight:650;color:var(--txt);background:var(--bg3);border:1px solid var(--line2);
+  border-radius:9px;padding:.44rem .8rem;cursor:pointer;transition:.15s}
 .bar button:hover{border-color:var(--acc);color:#fff}
-.bar button:disabled{opacity:.35;cursor:default;border-color:var(--line)}
-.bar .home{color:var(--dim);text-decoration:none;font-size:.85rem;font-weight:600}
+.bar .home{color:var(--dim);text-decoration:none;font-size:.82rem;font-weight:600}
 .bar .home:hover{color:var(--acc2)}
-.progress{flex:1;height:4px;background:#1d242c;border-radius:99px;overflow:hidden;max-width:44vw}
-.progress span{display:block;height:100%;background:linear-gradient(90deg,var(--acc),var(--acc2));transition:width .25s}
-.counter{font-size:.8rem;color:var(--dim2);font-variant-numeric:tabular-nums;min-width:4.4rem;text-align:right}
-.hint{position:fixed;bottom:7.6vh;left:50%;transform:translateX(-50%);font-size:.76rem;color:var(--dim2);
-  background:rgba(9,11,14,.85);border:1px solid var(--line);padding:.4rem .9rem;border-radius:99px;z-index:19;
-  transition:opacity .5s;pointer-events:none}
+.progress{flex:1;height:4px;background:#1d242c;border-radius:99px;overflow:hidden;max-width:38vw}
+.progress span{display:block;height:100%;background:linear-gradient(90deg,var(--acc),var(--gold));transition:width .25s}
+.counter{font-size:.77rem;color:var(--dim2);font-variant-numeric:tabular-nums;min-width:4rem;text-align:right}
+.hint{position:fixed;bottom:7.5vh;left:50%;transform:translateX(-50%);font-size:.74rem;color:var(--dim2);
+  background:rgba(9,11,14,.88);border:1px solid var(--line);padding:.36rem .85rem;border-radius:99px;z-index:19;transition:opacity .5s;pointer-events:none}
 .hint.hide{opacity:0}
-.overview{position:fixed;inset:0;background:rgba(6,8,10,.94);z-index:30;padding:5vh 5vw;overflow-y:auto;display:none}
+.overview{position:fixed;inset:0;background:rgba(6,8,10,.95);z-index:30;padding:4.5vh 4.5vw;overflow-y:auto;display:none}
 .overview.show{display:block}
-.overview h3{font-size:1.1rem;margin-bottom:1.4rem;color:var(--dim)}
-.ov-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:.9rem}
-.ov-item{background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:.9rem 1rem;cursor:pointer;transition:.15s}
+.overview h3{font-size:1.02rem;margin-bottom:1.1rem;color:var(--dim)}
+.ov-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(178px,1fr));gap:.75rem}
+.ov-item{background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:.8rem .9rem;cursor:pointer;transition:.15s}
 .ov-item:hover{border-color:var(--acc);transform:translateY(-2px)}
-.ov-item .n{font-size:.72rem;color:var(--acc);font-weight:800;letter-spacing:.1em}
-.ov-item .t{font-size:.88rem;margin-top:.3rem;color:var(--dim);line-height:1.35}
-
-@media(max-width:900px){
+.ov-item .n{font-size:.68rem;color:var(--acc);font-weight:800;letter-spacing:.1em}
+.ov-item .t{font-size:.83rem;margin-top:.26rem;color:var(--dim);line-height:1.32}
+.flow{stroke-dasharray:9 7;animation:dash 1.5s linear infinite}
+@keyframes dash{to{stroke-dashoffset:-32}}
+.pulse{animation:pulse 2.1s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+@keyframes pulse{0%,100%{opacity:.5;transform:scale(1)}50%{opacity:1;transform:scale(1.16)}}
+.spin{animation:spin 16s linear infinite;transform-box:fill-box;transform-origin:center}
+@keyframes spin{to{transform:rotate(360deg)}}
+.spin-r{animation:spinr 11s linear infinite;transform-box:fill-box;transform-origin:center}
+@keyframes spinr{to{transform:rotate(-360deg)}}
+.blink{animation:blink 2.4s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+.bargrow{transform-box:fill-box;transform-origin:center bottom;animation:grow 2.8s ease-in-out infinite}
+@keyframes grow{0%,100%{transform:scaleY(.5)}50%{transform:scaleY(1)}}
+.shift{animation:shift 3.2s ease-in-out infinite}
+@keyframes shift{0%,100%{transform:translateX(0)}50%{transform:translateX(38px)}}
+@media(max-width:980px){
+  .split{grid-template-columns:1fr;gap:1.1rem}
+  .split svg{max-height:30vh}
   .g3,.g4{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .slide{padding:4.5vh 5vw 10vh}
+  .brand{display:none}
 }
-@media(max-width:640px){
-  .g2,.g3,.g4{grid-template-columns:1fr}
-  .bar-left button span.lbl{display:none}
-}
-/* --- Nyomtatás / PDF: minden dia egy A4 álló oldal --- */
-@page{size:A4 portrait;margin:10mm}
+@media(max-width:640px){.g2,.g3,.g4{grid-template-columns:1fr}.slide{padding:4vh 5vw 11vh}}
+@page{size:A4 landscape;margin:8mm}
 @media print{
   html,body{overflow:visible;height:auto}
   body{background:#fff;color:#111}
-  .bar,.hint,.slide-num,.overview{display:none!important}
+  .bar,.hint,.slide-num,.overview,.brand{display:none!important}
   .deck{position:static;display:block}
-  .slide{
-    display:flex!important;position:static;inset:auto;page-break-after:always;break-after:page;
-    min-height:267mm;padding:12mm 14mm;background:#fff;color:#111;animation:none;
-  }
+  .slide{display:flex!important;position:static;inset:auto;page-break-after:always;break-after:page;
+    min-height:192mm;padding:9mm 11mm;background:#fff;color:#111;animation:none}
   .slide:last-child{page-break-after:auto}
   h1.title,h2.st{color:#111}
   h1.title .hl,.slide-tag,.big,.num-badge{color:#c23d00}
-  p.lead,.subline,ul.clean li,.card p,.card li,td{color:#333}
-  p.lead strong,ul.clean li strong,td strong,.card h3{color:#111}
+  p.lead,.subline,ul.clean li,.card p,.card li{color:#333}
+  p.lead strong,ul.clean li strong,.card h3{color:#111}
   .card{background:#fafafa;border-color:#ccc}
   .card.accented{background:#fff4ec;border-color:#e0b294}
-  .num-badge{background:#f2f2f2;border-color:#ccc}
   .quote{color:#111}.quote small{color:#555}
   .pill{border-color:#bbb;color:#444}
-  table{font-size:11px}th{color:#555;border-color:#ddd}td{border-color:#eee}
-  .byline{color:#555}.byline b{color:#c23d00}
+  a.slink{color:#b35a00;border-bottom:0}
+  .split svg{max-height:none}
+  .byline{color:#555}.byline b,.byline a{color:#c23d00}
 }
 
-/* --- Prezentáció gomb és DarwinAI lábléc --- */
-.pres-bar{margin:0 auto;max-width:1180px;padding:0 24px}
-.pres-bar .wrap{display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding-top:18px}
-.pres-bar span{font-size:.85rem;color:var(--dim)}
-.pres-btn{
-  display:inline-block;text-decoration:none;font-weight:700;font-size:.92rem;
-  background:var(--acc);color:#fff;padding:.7rem 1.2rem;border-radius:10px;
-  border:1px solid var(--acc);transition:.15s;
-}
-.pres-btn:hover{background:#ff6a1f;border-color:#ff6a1f;transform:translateY(-1px)}
-.byline-foot{margin-top:14px;font-size:.88rem;color:var(--dim)}
-.byline-foot a{color:var(--acc);font-weight:700;text-decoration:none}
-.byline-foot a:hover{text-decoration:underline}
-
-.pres-footer{position:fixed;bottom:6.2vh;left:0;right:0;text-align:center;font-size:.75rem;color:var(--dim2);z-index:18;padding:.3rem}
-.pres-footer a{color:var(--acc2);font-weight:700;text-decoration:none}
 </style>
 </head>
 <body>
 
 <div class="deck" id="deck">
-
-  <!-- 1 -->
-  <section class="slide active center">
+  <section class="slide center">
     <span class="slide-num">01 / 15</span>
     <div class="slide-tag">Vezetői összefoglaló</div>
+    <div class="brand"><img src="assets/darwinai/darwin-ai-logo.png" alt="DarwinAI logo" onerror="this.style.display='none'"><span>DarwinAI</span></div>
     <h1 class="title">Mit jelent egy <span class="hl">szervezeti AI bevezetés?</span></h1>
-    <p class="lead" style="margin-top:1.6rem">Tizenöt dia, amely végigvezet a lényegen: hogyan köti össze az AI a cég saját tudását, mi történik a háttérben, mennyibe kerül, és mire kell figyelnie egy vezetőnek.</p>
-    <p class="byline">by <b>DarwinAI</b> · www.darwinai.hu</p>
+    <p class="lead" style="margin-top:1.4rem">Tizenöt dia, amely végigvezet a lényegen: hogyan köti össze az AI a cég saját tudását, mi történik a háttérben, mennyibe kerül, és mire kell figyelnie egy vezetőnek. Minden diáról tovább lehet lépni a részletes oldalakra.</p>
+    <p class="byline">by <a href="https://www.darwinai.hu" target="_blank" rel="noopener"><b>DarwinAI</b></a> · www.darwinai.hu</p>
   </section>
 
-  <!-- 2 -->
   <section class="slide">
     <span class="slide-num">02 / 15</span>
-    <div class="slide-tag">A kiindulópont</div>
-    <h2 class="st">A modell önmagában semmit sem tud a cégről</h2>
-    <p class="lead">A nagy nyelvi modellek általános tudással rendelkeznek az internetről — de a cég belső dokumentumairól, szerződéseiről, ticketjeiről és beszélgetéseiről <strong>semmit</strong>.</p>
-    <p class="subline">Ha egy munkatárs megkérdezi: „mi volt a feltétele a tavalyi szerződésnek?”, a modell csak akkor tud válaszolni, ha valaki <em>összekötötte</em> a céges tudással. Az üzleti érték pontosan itt kezdődik.</p>
+    <div class="split">
+      <div>
+        <div class="slide-tag">A kiindulópont</div>
+        <h2 class="st">A modell önmagában semmit sem tud a cégről</h2>
+        <p class="lead">A nagy nyelvi modellek általános tudással rendelkeznek az internetről — de a cég belső dokumentumairól, szerződéseiről, ticketjeiről és beszélgetéseiről <strong>semmit</strong>.</p>
+        <ul class="clean">
+          <li>Az <strong>alaptanítás</strong> (training) lezárult, a cég adatai soha nem kerültek bele.</li>
+          <li>A modell csak azt tudja, amit a kérdés pillanatában <strong>elé tesznek</strong>.</li>
+          <li>Ezért a válasz minősége attól függ, mi van <strong>összekötve</strong> a céges tudással.</li>
+          <li>Ez nem hiba, hanem a működés természete — és ez adja a szabályozhatóságot.</li>
+        </ul>
+        <p class="subline">Kapcsolódó rész az oldalon: <a class="slink" href="vallalati-ai-rendszer.html">Vállalati AI rendszer → Architektúra</a></p>
+      </div>
+      <div class="fig">
+        <svg viewBox="0 0 340 300" role="img" aria-label="A modell és a céges tudás kapcsolata">
+  <circle cx="88" cy="150" r="54" fill="none" stroke="#3a4553" stroke-width="1.4"/>
+  <circle cx="88" cy="150" r="34" fill="rgba(255,81,0,.10)" stroke="#ff5100" stroke-width="1.6"/>
+  <text x="88" y="146" text-anchor="middle" fill="#f3f5f7" font-size="13" font-weight="700">AI modell</text>
+  <text x="88" y="163" text-anchor="middle" fill="#8b95a1" font-size="10">általános tudás</text>
+  <path d="M146 150 H204" stroke="#3a4553" stroke-width="1.5" class="flow"/>
+  <text x="175" y="140" text-anchor="middle" fill="#ff8585" font-size="9.5" font-weight="700">nincs kapcsolat</text>
+  <rect x="206" y="94" width="114" height="112" rx="10" fill="rgba(19,23,28,.9)" stroke="#3a4553" stroke-width="1.4" stroke-dasharray="5 5"/>
+  <text x="263" y="138" text-anchor="middle" fill="#8b95a1" font-size="11">céges tudás</text>
+  <text x="263" y="155" text-anchor="middle" fill="#8b95a1" font-size="10">dokumentum, CRM,</text>
+  <text x="263" y="169" text-anchor="middle" fill="#8b95a1" font-size="10">e-mail, wiki</text>
+  <circle cx="263" cy="118" r="3" fill="#ff8585" class="blink"/>
+  <text x="170" y="258" text-anchor="middle" fill="#8b95a1" font-size="10.5">A modell „vak” a cég belső világára</text>
+</svg>
+        <div class="figcap"><b>Ábra:</b> a modell és a céges tudás között nincs automatikus kapcsolat</div>
+      </div>
+    </div>
   </section>
 
-  <!-- 3 -->
   <section class="slide">
     <span class="slide-num">03 / 15</span>
-    <div class="slide-tag">A központi gondolat</div>
-    <h2 class="st">Egyik szolgáltató sem „tanítja be” a céges tudást a modellbe</h2>
-    <div class="grid g2">
-      <div class="card"><div class="num-badge">1</div><h3>Helyette: visszakeresés</h3><p>A kérdés pillanatában a rendszer megkeresi a releváns céges dokumentumokat, és azokat adja oda a modellnek kontextusként.</p></div>
-      <div class="card"><div class="num-badge">2</div><h3>Jogosultság-tudatosan</h3><p>Csak azt látja, amit a munkatárs a forrásrendszerben is látna. A jogosultság öröklődik, nem másolódik.</p></div>
+    <div class="split">
+      <div>
+        <div class="slide-tag">A központi gondolat</div>
+        <h2 class="st">Egyik szolgáltató sem tanítja be a céges tudást a modellbe</h2>
+        <div class="grid g2">
+          <div class="card"><div class="num-badge">1</div><h3>Visszakeresés</h3><p>A rendszer a kérdés pillanatában megkeresi a releváns céges dokumentumokat, és azokat adja kontextusként a modellnek.</p></div>
+          <div class="card"><div class="num-badge">2</div><h3>Jogosultság-tudatosan</h3><p>Csak azt látja, amit a munkatárs a forrásrendszerben is látna. A jogosultság öröklődik, nem másolódik.</p></div>
+        </div>
+        <p class="quote" style="margin-top:1.1rem">Ez a <em>retrieval + grounding</em> modell: a tudás ott marad, ahol van — a modell csak „odanéz”.</p>
+        <p class="subline">Ugyanez a mögöttes logika az OpenAI, az Anthropic, a Microsoft és a Google esetében is. Kapcsolódó rész: <a class="slink" href="terminologia.html">Terminológia — RAG, grounding</a></p>
+      </div>
+      <div class="fig">
+        <svg viewBox="0 0 340 300" role="img" aria-label="Retrieval és grounding folyamata">
+  <rect x="16" y="38" width="92" height="44" rx="9" fill="rgba(19,23,28,.9)" stroke="#3a4553"/>
+  <text x="62" y="58" text-anchor="middle" fill="#f3f5f7" font-size="11" font-weight="700">Kérdés</text>
+  <text x="62" y="72" text-anchor="middle" fill="#8b95a1" font-size="8.5">„mi a szerződés?”</text>
+  <path d="M110 60 H150" stroke="#ff5100" stroke-width="2" class="flow"/>
+  <rect x="152" y="32" width="80" height="56" rx="9" fill="rgba(255,81,0,.10)" stroke="#ff5100"/>
+  <text x="192" y="54" text-anchor="middle" fill="#ff8a4d" font-size="10.5" font-weight="700">Keresés</text>
+  <text x="192" y="69" text-anchor="middle" fill="#8b95a1" font-size="8.5">releváns</text>
+  <text x="192" y="80" text-anchor="middle" fill="#8b95a1" font-size="8.5">dokumentumok</text>
+  <path d="M232 60 H262 V118" stroke="#ff5100" stroke-width="2" fill="none" class="flow"/>
+  <rect x="16" y="126" width="216" height="52" rx="9" fill="rgba(19,23,28,.9)" stroke="#3a4553"/>
+  <text x="124" y="148" text-anchor="middle" fill="#f3f5f7" font-size="10.5" font-weight="700">Kontextus + kérdés → modell</text>
+  <text x="124" y="164" text-anchor="middle" fill="#8b95a1" font-size="8.5">csak a jogosult részletekkel</text>
+  <path d="M232 152 H262" stroke="#65d091" stroke-width="2" class="flow"/>
+  <rect x="226" y="192" width="100" height="62" rx="10" fill="rgba(101,208,145,.08)" stroke="#65d091"/>
+  <text x="276" y="216" text-anchor="middle" fill="#7ce0a5" font-size="10.5" font-weight="700">Válasz</text>
+  <text x="276" y="232" text-anchor="middle" fill="#8b95a1" font-size="8.5">forrásmegjelöléssel</text>
+  <text x="276" y="244" text-anchor="middle" fill="#8b95a1" font-size="8.5">visszakövethetően</text>
+  <circle cx="232" cy="152" r="3.2" fill="#65d091" class="pulse"/>
+  <text x="170" y="286" text-anchor="middle" fill="#8b95a1" font-size="10.5">A tudás nem kerül a modellbe — csak elé</text>
+</svg>
+        <div class="figcap"><b>Ábra:</b> a kérdés → keresés → kontextus → válasz útvonala</div>
+      </div>
     </div>
-    <p class="quote" style="margin-top:1.6rem">Ez a <em>retrieval + grounding</em> modell: a tudás ott marad, ahol van — a modell csak „odanéz”.<small>Ez a négy nagy szolgáltató közös logikája: OpenAI, Anthropic, Microsoft, Google.</small></p>
   </section>
 
-  <!-- 4 -->
   <section class="slide">
     <span class="slide-num">04 / 15</span>
-    <div class="slide-tag">Architektúra</div>
-    <h2 class="st">Hogyan épül fel egy szervezeti AI rendszer?</h2>
-    <ul class="clean">
-      <li><strong>Felhasználók</strong> — a munkatársak, akik kérdeznek (chat, Office, Teams, Slack).</li>
-      <li><strong>AI réteg</strong> — a modell, amely megérti a kérdést és megfogalmazza a választ.</li>
-      <li><strong>Hozzáférési réteg</strong> — connectorok és MCP-szerverek, amelyek összekötik a céges rendszereket.</li>
-      <li><strong>Jogosultság és biztonság</strong> — ki mit láthat, naplózás, adatvédelem.</li>
-      <li><strong>Céges tudás</strong> — fájltárak, CRM, e-mail, wiki, adatbázisok.</li>
-      <li><strong>Kimenet</strong> — válasz forrásmegjelöléssel, visszakövethetően.</li>
-    </ul>
-    <p class="subline">A rétegek sorrendje dönt: ha a jogosultság nincs rendben, a legjobb modell is kockázatot jelent.</p>
+    <div class="split">
+      <div>
+        <div class="slide-tag">Architektúra</div>
+        <h2 class="st">Hogyan épül fel egy szervezeti AI rendszer?</h2>
+        <ul class="clean">
+          <li><strong>Felhasználók</strong> — a munkatársak, akik kérdeznek (chat, Office, Teams, Slack).</li>
+          <li><strong>AI réteg</strong> — a modell, amely megérti a kérdést és megfogalmazza a választ.</li>
+          <li><strong>Hozzáférési réteg</strong> — connectorok és MCP-szerverek a céges rendszerek felé.</li>
+          <li><strong>Jogosultság és biztonság</strong> — ki mit láthat, naplózás, adatvédelem.</li>
+          <li><strong>Céges tudás</strong> — fájltárak, CRM, e-mail, wiki, adatbázisok.</li>
+          <li><strong>Kimenet</strong> — válasz forrásmegjelöléssel, visszakövethetően.</li>
+        </ul>
+        <p class="subline">A teljes, részletes architektúra-ábra: <a class="slink" href="vallalati-ai-rendszer.html">Vállalati AI rendszer</a></p>
+      </div>
+      <div class="fig">
+        <svg viewBox="0 0 340 300" role="img" aria-label="Rétegek: felhasználó, AI, hozzáférés, jogosultság, tudás">
+  <rect x="40" y="14" width="260" height="34" rx="9" fill="rgba(122,183,255,.10)" stroke="#35577d"/>
+  <text x="170" y="36" text-anchor="middle" fill="#9bc8ff" font-size="11" font-weight="700">Felhasználók</text>
+  <path d="M170 50 V64" stroke="#3a4553" stroke-width="1.6" class="flow"/>
+  <rect x="40" y="66" width="260" height="34" rx="9" fill="rgba(255,81,0,.10)" stroke="#ff5100"/>
+  <text x="170" y="88" text-anchor="middle" fill="#ff8a4d" font-size="11" font-weight="700">AI réteg (modell)</text>
+  <path d="M170 102 V116" stroke="#3a4553" stroke-width="1.6" class="flow"/>
+  <rect x="40" y="118" width="260" height="34" rx="9" fill="rgba(214,165,74,.10)" stroke="#8c632a"/>
+  <text x="170" y="140" text-anchor="middle" fill="#f3d27a" font-size="11" font-weight="700">Hozzáférési réteg (connector, MCP)</text>
+  <path d="M170 154 V168" stroke="#3a4553" stroke-width="1.6" class="flow"/>
+  <rect x="40" y="170" width="260" height="34" rx="9" fill="rgba(243,201,105,.08)" stroke="#7b642a"/>
+  <text x="170" y="192" text-anchor="middle" fill="#f1cc72" font-size="11" font-weight="700">Jogosultság és biztonság</text>
+  <path d="M170 206 V220" stroke="#3a4553" stroke-width="1.6" class="flow"/>
+  <rect x="40" y="222" width="260" height="34" rx="9" fill="rgba(19,23,28,.9)" stroke="#3a4553"/>
+  <text x="170" y="244" text-anchor="middle" fill="#aeb7c2" font-size="11" font-weight="700">Céges tudás (adatok, fájlok)</text>
+  <circle cx="326" cy="31" r="3.2" fill="#7ab7ff" class="pulse"/>
+  <circle cx="326" cy="135" r="3.2" fill="#f3d27a" class="pulse"/>
+  <circle cx="326" cy="239" r="3.2" fill="#aeb7c2" class="pulse"/>
+  <text x="170" y="284" text-anchor="middle" fill="#8b95a1" font-size="10.5">A sorrend dönt: jogosultság nélkül minden kockázat</text>
+</svg>
+        <div class="figcap"><b>Ábra:</b> a hat réteg — felülről lefelé halad a kérés, felfelé a válasz</div>
+      </div>
+    </div>
   </section>
 
-  <!-- 5 -->
   <section class="slide">
     <span class="slide-num">05 / 15</span>
-    <div class="slide-tag">Négy szolgáltató</div>
-    <h2 class="st">Ugyanaz a logika, négy eltérő hangsúly</h2>
-    <div class="grid g4">
-      <div class="card"><h3>OpenAI</h3><p>Erős modell, széles connector- és API-ökoszisztéma. Friss céges tudásbázis-funkciók.</p></div>
-      <div class="card"><h3>Anthropic</h3><p>Kiemelt hangsúly a biztonságon, hosszú kontextuson és a dokumentum-alapú munkán.</p></div>
-      <div class="card"><h3>Microsoft</h3><p>A meglévő Microsoft 365 környezetbe épül be — Word, Excel, Teams, SharePoint.</p></div>
-      <div class="card"><h3>Google</h3><p>A Google Workspace tudására épít, erős kereséssel és saját felhőintegrációval.</p></div>
+    <div class="split">
+      <div>
+        <div class="slide-tag">Négy szolgáltató</div>
+        <h2 class="st">Ugyanaz a logika, négy eltérő hangsúly</h2>
+        <div class="grid g2">
+          <div class="card"><h3>OpenAI</h3><p>Erős modell, széles connector- és API-ökoszisztéma. Friss céges tudásbázis-funkciók, széles integrációs kör.</p></div>
+          <div class="card"><h3>Anthropic</h3><p>Kiemelt hangsúly a biztonságon, a hosszú kontextuson és a dokumentum-alapú munkán.</p></div>
+          <div class="card"><h3>Microsoft</h3><p>A meglévő Microsoft 365 környezetbe épül be — Word, Excel, Teams, SharePoint, Entra jogosultság.</p></div>
+          <div class="card"><h3>Google</h3><p>A Google Workspace tudására épít, erős kereséssel és saját felhőintegrációval.</p></div>
+        </div>
+        <p class="subline">A helyes kérdés nem az, hogy „melyik a legjobb modell”, hanem hogy <strong>melyik illeszkedik a cég meglévő rendszereihez és szabályaihoz</strong>. Részletek: <a class="slink" href="szallitok.html">Elérhető szállítók</a></p>
+      </div>
+      <div class="fig">
+        <svg viewBox="0 0 340 300" role="img" aria-label="Négy szolgáltató egy közös mag körül">
+  <circle cx="170" cy="150" r="150" fill="none" stroke="#2a323d" stroke-width="1" stroke-dasharray="3 7" class="spin"/>
+  <circle cx="170" cy="150" r="116" fill="none" stroke="#2a323d" stroke-width="1" stroke-dasharray="3 7" class="spin-r"/>
+  <circle cx="170" cy="150" r="30" fill="rgba(214,165,74,.12)" stroke="#d6a54a" stroke-width="1.6"/>
+  <text x="170" y="147" text-anchor="middle" fill="#f3d27a" font-size="10.5" font-weight="700">közös</text>
+  <text x="170" y="160" text-anchor="middle" fill="#f3d27a" font-size="10.5" font-weight="700">logika</text>
+  <g font-size="10" font-weight="700" text-anchor="middle">
+    <circle cx="170" cy="42" r="25" fill="#12161b" stroke="#ff5100" stroke-width="1.4"/><text x="170" y="46" fill="#ff8a4d">OpenAI</text>
+    <circle cx="278" cy="150" r="25" fill="#12161b" stroke="#b67be8" stroke-width="1.4"/><text x="278" y="154" fill="#cfa6f5" font-size="9">Anthropic</text>
+    <circle cx="170" cy="258" r="25" fill="#12161b" stroke="#7ab7ff" stroke-width="1.4"/><text x="170" y="262" fill="#9bc8ff" font-size="9">Microsoft</text>
+    <circle cx="62" cy="150" r="25" fill="#12161b" stroke="#65d091" stroke-width="1.4"/><text x="62" y="154" fill="#7ce0a5">Google</text>
+  </g>
+  <g stroke="#3a4553" stroke-width="1.3">
+    <path d="M170 67 V118" class="flow"/><path d="M253 150 H202" class="flow"/>
+    <path d="M170 233 V182" class="flow"/><path d="M87 150 H138" class="flow"/>
+  </g>
+  <circle cx="170" cy="150" r="6" fill="#d6a54a" class="pulse"/>
+</svg>
+        <div class="figcap"><b>Ábra:</b> négy szolgáltató, egy közös működési mag</div>
+      </div>
     </div>
-    <p class="subline">A helyes választás nem „melyik a legjobb modell”, hanem: <strong>melyik illeszkedik a cég meglévő rendszereihez és szabályaihoz</strong>.</p>
   </section>
 
-  <!-- 6 -->
   <section class="slide">
     <span class="slide-num">06 / 15</span>
-    <div class="slide-tag">Standard rendszerek</div>
-    <h2 class="st">A leggyorsabb út: kész connectorok</h2>
-    <p class="lead">A legtöbb cégnél a tudás kész, széles körben használt rendszerekben él. Ezekhez <strong>előre megírt integrációk</strong> vannak — nincs fejlesztés, csak adminisztrátori bekapcsolás.</p>
-    <div style="margin-top:1.4rem">
-      <span class="pill blue">Google Drive</span><span class="pill blue">SharePoint / OneDrive</span><span class="pill blue">Confluence / Notion</span><span class="pill blue">Salesforce</span><span class="pill blue">HubSpot</span><span class="pill blue">Jira / Asana</span><span class="pill blue">Microsoft Teams</span><span class="pill blue">Slack</span><span class="pill blue">Gmail / Outlook</span><span class="pill blue">GitHub</span><span class="pill blue">Snowflake / BigQuery</span>
+    <div class="split">
+      <div>
+        <div class="slide-tag">Standard rendszerek</div>
+        <h2 class="st">A leggyorsabb út: kész connectorok</h2>
+        <p class="lead">A legtöbb cégnél a tudás kész, széles körben használt rendszerekben él. Ezekhez <strong>előre megírt integrációk</strong> vannak — nincs fejlesztés, csak adminisztrátori bekapcsolás.</p>
+        <div style="margin-top:.9rem">
+          <span class="pill blue">Google Drive</span><span class="pill blue">SharePoint / OneDrive</span><span class="pill blue">Confluence / Notion</span><span class="pill blue">Salesforce</span><span class="pill blue">HubSpot</span><span class="pill blue">Jira / Asana</span><span class="pill blue">Microsoft Teams</span><span class="pill blue">Slack</span><span class="pill blue">Gmail / Outlook</span><span class="pill blue">GitHub</span><span class="pill blue">Snowflake / BigQuery</span>
+        </div>
+        <p class="subline"><strong>Ökölszabály a sorrendhez:</strong> először a kész connectorokkal kösd be a fő rendszereket — csak utána foglalkozz az egyedi fejlesztésűekkel. Kapcsolódó rész: <a class="slink" href="mukodesi-pontok.html">Fő működési pontok</a></p>
+      </div>
+      <div class="fig">
+        <svg viewBox="0 0 340 300" role="img" aria-label="Kész connectorok bekötése">
+  <circle cx="170" cy="148" r="40" fill="rgba(255,81,0,.10)" stroke="#ff5100" stroke-width="1.6"/>
+  <circle cx="170" cy="148" r="54" fill="none" stroke="#3a4553" stroke-width="1.2" stroke-dasharray="4 6" class="spin"/>
+  <text x="170" y="145" text-anchor="middle" fill="#ff8a4d" font-size="10.5" font-weight="700">AI</text>
+  <text x="170" y="159" text-anchor="middle" fill="#8b95a1" font-size="8.5">asszisztens</text>
+  <g stroke-width="1.6" fill="none">
+    <path d="M158 110 L84 62" stroke="#7ab7ff" class="flow"/>
+    <path d="M186 110 L262 62" stroke="#7ab7ff" class="flow"/>
+    <path d="M132 148 L58 148" stroke="#7ab7ff" class="flow"/>
+    <path d="M208 148 L288 148" stroke="#7ab7ff" class="flow"/>
+    <path d="M158 186 L84 234" stroke="#7ab7ff" class="flow"/>
+    <path d="M186 186 L262 234" stroke="#7ab7ff" class="flow"/>
+  </g>
+  <g font-size="8.6" font-weight="600" text-anchor="middle" fill="#aeb7c2">
+    <rect x="24" y="40" width="82" height="24" rx="7" fill="#12161b" stroke="#35577d"/><text x="65" y="56">Google Drive</text>
+    <rect x="234" y="40" width="82" height="24" rx="7" fill="#12161b" stroke="#35577d"/><text x="275" y="56">SharePoint</text>
+    <rect x="8" y="136" width="72" height="24" rx="7" fill="#12161b" stroke="#35577d"/><text x="44" y="152">Salesforce</text>
+    <rect x="266" y="136" width="66" height="24" rx="7" fill="#12161b" stroke="#35577d"/><text x="299" y="152">Slack</text>
+    <rect x="24" y="232" width="82" height="24" rx="7" fill="#12161b" stroke="#35577d"/><text x="65" y="248">Confluence</text>
+    <rect x="234" y="232" width="82" height="24" rx="7" fill="#12161b" stroke="#35577d"/><text x="275" y="248">GitHub</text>
+  </g>
+  <circle cx="170" cy="148" r="5" fill="#ff5100" class="pulse"/>
+</svg>
+        <div class="figcap"><b>Ábra:</b> egy asszisztens, sok kész rendszer-összekötés</div>
+      </div>
     </div>
-    <p class="subline"><strong>Ökölszabály a sorrendhez:</strong> először a kész connectorokkal kösd be a fő rendszereket — csak utána foglalkozz az egyedi fejlesztésűekkel.</p>
   </section>
 
-  <!-- 7 -->
   <section class="slide">
     <span class="slide-num">07 / 15</span>
-    <div class="slide-tag">Egyedi rendszerek</div>
-    <h2 class="st">Mi van, ha a tudás saját fejlesztésű rendszerben él?</h2>
-    <p class="lead">A belső ügyviteli programhoz, szerződésadatbázishoz vagy egyedi nyilvántartáshoz nincs kész connector. Ilyenkor <strong>MCP-szerver</strong> készül: egy szabványos „híd” a céges rendszer és az AI között.</p>
-    <div class="grid g3" style="margin-top:1.6rem">
-      <div class="card"><h3>Mit tud?</h3><p>Meghatározott műveleteket tesz elérhetővé: keresés, adatlekérés, összegzés.</p></div>
-      <div class="card"><h3>Mennyi munka?</h3><p>Egyszeri fejlesztés. Utána a rendszer több AI-asszisztensből is használható.</p></div>
-      <div class="card"><h3>Mi a kockázat?</h3><p>A hozzáférés körét szigorúan meg kell határozni — mit olvashat, mit írhat.</p></div>
+    <div class="split">
+      <div>
+        <div class="slide-tag">Egyedi rendszerek</div>
+        <h2 class="st">Mi van, ha a tudás saját fejlesztésű rendszerben él?</h2>
+        <p class="lead">A belső ügyviteli programhoz, szerződésadatbázishoz vagy egyedi nyilvántartáshoz nincs kész connector. Ilyenkor <strong>MCP-szerver</strong> készül: egy szabványos „híd” a céges rendszer és az AI között.</p>
+        <ul class="clean">
+          <li><strong>Mit tud?</strong> Meghatározott műveleteket tesz elérhetővé: keresés, adatlekérés, összegzés.</li>
+          <li><strong>Mennyi munka?</strong> Egyszeri fejlesztés, utána több asszisztensből is használható.</li>
+          <li><strong>Mi a kockázat?</strong> A hozzáférés körét szigorúan meg kell határozni — mit olvashat, mit írhat.</li>
+        </ul>
+        <p class="subline">Részletesen: <a class="slink" href="mukodesi-pontok.html">Fő működési pontok — MCP</a> · <a class="slink" href="terminologia.html">Terminológia — MCP</a></p>
+      </div>
+      <div class="fig">
+        <svg viewBox="0 0 340 300" role="img" aria-label="MCP híd a céges rendszer és az AI között">
+  <rect x="14" y="108" width="92" height="84" rx="10" fill="#12161b" stroke="#3a4553" stroke-width="1.4"/>
+  <text x="60" y="143" text-anchor="middle" fill="#aeb7c2" font-size="10" font-weight="700">egyedi céges</text>
+  <text x="60" y="157" text-anchor="middle" fill="#aeb7c2" font-size="10" font-weight="700">rendszer</text>
+  <text x="60" y="174" text-anchor="middle" fill="#8b95a1" font-size="8.5">adatbázis, ügyvitel</text>
+  <path d="M108 150 H138" stroke="#3a4553" stroke-width="1.6" class="flow"/>
+  <rect x="140" y="96" width="62" height="108" rx="10" fill="rgba(214,165,74,.12)" stroke="#d6a54a" stroke-width="1.8"/>
+  <text x="171" y="140" text-anchor="middle" fill="#f3d27a" font-size="11" font-weight="800">MCP</text>
+  <text x="171" y="155" text-anchor="middle" fill="#f3d27a" font-size="9">szerver</text>
+  <text x="171" y="172" text-anchor="middle" fill="#8b95a1" font-size="8">szabványos</text>
+  <text x="171" y="183" text-anchor="middle" fill="#8b95a1" font-size="8">„híd”</text>
+  <path d="M204 150 H232" stroke="#3a4553" stroke-width="1.6" class="flow"/>
+  <circle cx="272" cy="150" r="38" fill="rgba(255,81,0,.10)" stroke="#ff5100" stroke-width="1.6"/>
+  <text x="272" y="147" text-anchor="middle" fill="#ff8a4d" font-size="10.5" font-weight="700">AI</text>
+  <text x="272" y="161" text-anchor="middle" fill="#8b95a1" font-size="8.5">asszisztens</text>
+  <circle cx="140" cy="150" r="3" fill="#d6a54a" class="pulse"/>
+  <circle cx="204" cy="150" r="3" fill="#d6a54a" class="pulse"/>
+  <text x="170" y="250" text-anchor="middle" fill="#8b95a1" font-size="10.5">Az MCP egyszer megírt híd — minden</text>
+  <text x="170" y="265" text-anchor="middle" fill="#8b95a1" font-size="10.5">asszisztensből újrahasznosítható</text>
+</svg>
+        <div class="figcap"><b>Ábra:</b> az MCP egyszer megírt, újrahasznosítható híd</div>
+      </div>
     </div>
   </section>
 
-  <!-- 8 -->
   <section class="slide">
     <span class="slide-num">08 / 15</span>
-    <div class="slide-tag">Előfizetések</div>
-    <h2 class="st">Mennyibe kerül mindez?</h2>
-    <p class="lead">A költség két részből áll: <strong>seat-alapú előfizetések</strong> (havi/fő) és <strong>API-fogyasztás</strong> (token-alapú). A legtöbb cégnél az előfizetés a meghatározó tétel.</p>
-    <div class="grid g3" style="margin-top:1.4rem">
-      <div class="card"><div class="big">$20–25<small>ChatGPT Business, fő/hó</small></div></div>
-      <div class="card"><div class="big">$20–25<small>Claude Team, fő/hó</small></div></div>
-      <div class="card"><div class="big">€15,60–18,20<small>Copilot Business add-on, fő/hó</small></div></div>
+    <div class="split">
+      <div>
+        <div class="slide-tag">Előfizetések</div>
+        <h2 class="st">Mennyibe kerül mindez?</h2>
+        <p class="lead">A költség két részből áll: <strong>seat-alapú előfizetések</strong> (havi/fő) és <strong>API-fogyasztás</strong> (token-alapú). A legtöbb cégnél az előfizetés a meghatározó tétel.</p>
+        <div class="grid g3" style="margin-top:.9rem">
+          <div class="card"><div class="big">$20–25<small>ChatGPT Business<br>fő / hó</small></div></div>
+          <div class="card"><div class="big">$20–25<small>Claude Team<br>fő / hó</small></div></div>
+          <div class="card"><div class="big">€15,60–18,20<small>Copilot Business<br>fő / hó</small></div></div>
+        </div>
+        <p class="subline">Az <a class="slink" href="elofizetesek.html">Előfizetések</a> oldalon interaktív kalkulátor segít kiszámolni a saját konfigurációt — létszámmal, csoportokkal és szerkeszthető árfolyammal. Minden nettó, ÁFA nélkül. <strong>Az árak a 2026. szeptember 15-i állapotot tükrözik.</strong></p>
+      </div>
+      <div class="fig">
+        <svg viewBox="0 0 340 300" role="img" aria-label="Költségszintek: a hozzáférés szinttel nő">
+  <g stroke="#2a323d" stroke-width="1"><path d="M40 40 H312"/><path d="M40 92 H312"/><path d="M40 144 H312"/><path d="M40 196 H312"/></g>
+  <path d="M40 248 H312" stroke="#3a4553" stroke-width="1.4"/>
+  <rect x="58" y="120" width="38" height="128" rx="4" fill="rgba(255,81,0,.32)" stroke="#ff5100" class="bargrow"/>
+  <rect x="118" y="96" width="38" height="152" rx="4" fill="rgba(255,81,0,.48)" stroke="#ff5100" class="bargrow" style="animation-delay:.25s"/>
+  <rect x="178" y="70" width="38" height="178" rx="4" fill="rgba(255,81,0,.66)" stroke="#ff5100" class="bargrow" style="animation-delay:.5s"/>
+  <rect x="238" y="44" width="38" height="204" rx="4" fill="rgba(255,81,0,.9)" stroke="#ff5100" class="bargrow" style="animation-delay:.75s"/>
+  <g font-size="8.4" fill="#8b95a1" text-anchor="middle">
+    <text x="77" y="264">Alap</text><text x="137" y="264">Irodai</text><text x="197" y="264">Szakértői</text><text x="257" y="264">Mgmt</text>
+  </g>
+  <circle cx="296" cy="70" r="16" fill="rgba(214,165,74,.14)" stroke="#d6a54a" stroke-width="1.2"/>
+  <text x="296" y="75" text-anchor="middle" fill="#f3d27a" font-size="12" font-weight="800">€</text>
+  <text x="176" y="288" text-anchor="middle" fill="#8b95a1" font-size="10.5">A hozzáférés szinttel együtt nő a költség</text>
+</svg>
+        <div class="figcap"><b>Ábra:</b> a hozzáférési szint emelkedésével nő a költség</div>
+      </div>
     </div>
-    <p class="subline">Az oldalon interaktív kalkulátor segít kiszámolni a saját konfigurációt — létszámmal, csoportokkal és árfolyammal. Minden nettó, ÁFA nélkül.</p>
   </section>
 
-  <!-- 9 -->
   <section class="slide">
     <span class="slide-num">09 / 15</span>
-    <div class="slide-tag">Döntési logika</div>
-    <h2 class="st">Egymásra épülő hozzáférési szintek</h2>
-    <ul class="clean">
-      <li><strong>Alap — mindenkinek:</strong> biztonságos céges AI-chat, jellemzően plusz díj nélkül.</li>
-      <li><strong>Irodai — a napi felhasználóknak:</strong> mély integráció a dokumentumokba és a levelezésbe.</li>
-      <li><strong>Szakértői — a kiemelt felhasználóknak:</strong> további modellek, fejlettebb munkafolyamatok.</li>
-      <li><strong>Management:</strong> többmodellű kutatás és natív hozzáférés a döntés-előkészítéshez.</li>
-    </ul>
-    <p class="subline">A szintek egymás részhalmazai: nem mindenki kap mindent, hanem a <strong>valódi igény</strong> szerint osztjuk el a hozzáférést.</p>
+    <div class="split">
+      <div>
+        <div class="slide-tag">Döntési logika</div>
+        <h2 class="st">Egymásra épülő hozzáférési szintek</h2>
+        <ul class="clean">
+          <li><strong>Alap — mindenkinek:</strong> biztonságos céges AI-chat, jellemzően plusz díj nélkül.</li>
+          <li><strong>Irodai — a napi felhasználóknak:</strong> mély integráció a dokumentumokba és a levelezésbe.</li>
+          <li><strong>Szakértői — a kiemelt felhasználóknak:</strong> további modellek, fejlettebb munkafolyamatok.</li>
+          <li><strong>Management:</strong> többmodellű kutatás és natív hozzáférés a döntés-előkészítéshez.</li>
+        </ul>
+        <p class="subline">A szintek egymás részhalmazai: nem mindenki kap mindent, hanem a <strong>valódi igény</strong> szerint osztjuk el a hozzáférést. Így a költség is arányos marad. Kalkulátor: <a class="slink" href="elofizetesek.html">Előfizetések</a></p>
+      </div>
+      <div class="fig">
+        <svg viewBox="0 0 340 300" role="img" aria-label="Egymásra épülő hozzáférési szintek">
+  <rect x="40" y="150" width="260" height="46" rx="9" fill="rgba(122,183,255,.08)" stroke="#35577d"/>
+  <text x="170" y="172" text-anchor="middle" fill="#9bc8ff" font-size="10.5" font-weight="700">Alap — mindenkinek</text>
+  <text x="170" y="187" text-anchor="middle" fill="#8b95a1" font-size="8.6">biztonságos céges AI-chat</text>
+  <rect x="62" y="100" width="216" height="46" rx="9" fill="rgba(255,81,0,.10)" stroke="#ff5100"/>
+  <text x="170" y="122" text-anchor="middle" fill="#ff8a4d" font-size="10.5" font-weight="700">Irodai — napi felhasználók</text>
+  <text x="170" y="137" text-anchor="middle" fill="#8b95a1" font-size="8.6">mély dokumentum- és levelezés-integráció</text>
+  <rect x="84" y="50" width="172" height="46" rx="9" fill="rgba(214,165,74,.10)" stroke="#8c632a"/>
+  <text x="170" y="72" text-anchor="middle" fill="#f3d27a" font-size="10.5" font-weight="700">Szakértői — kiemelt kör</text>
+  <text x="170" y="87" text-anchor="middle" fill="#8b95a1" font-size="8.6">plusz modellek, fejlettebb workflow</text>
+  <rect x="106" y="6" width="128" height="40" rx="9" fill="rgba(182,123,232,.12)" stroke="#765097"/>
+  <text x="170" y="31" text-anchor="middle" fill="#d5a9fa" font-size="10.5" font-weight="700">Management</text>
+  <g stroke="#3a4553" stroke-width="1.3"><path d="M170 100 V96" class="flow"/><path d="M170 50 V46" class="flow"/></g>
+  <rect x="40" y="222" width="260" height="26" rx="8" fill="rgba(19,23,28,.9)" stroke="#3a4553"/>
+  <text x="170" y="239" text-anchor="middle" fill="#aeb7c2" font-size="9.6">Nem mindenki kap mindent — igény szerint</text>
+  <text x="170" y="278" text-anchor="middle" fill="#8b95a1" font-size="10.5">A szintek egymás részhalmazai</text>
+</svg>
+        <div class="figcap"><b>Ábra:</b> a szintek egymásba ágyazódnak, nem külön világok</div>
+      </div>
+    </div>
   </section>
 
-  <!-- 10 -->
   <section class="slide">
     <span class="slide-num">10 / 15</span>
-    <div class="slide-tag">Jogosultság</div>
-    <h2 class="st">A legfontosabb governance-kérdés</h2>
-    <p class="quote">Mit láthat az AI — és mit nem?</p>
-    <div class="grid g2" style="margin-top:1.6rem">
-      <div class="card"><h3>Jogosultság öröklődik</h3><p>A modell ugyanazt látja, amit a munkatárs a forrásrendszerben. Nincs külön „AI-nézet”, amely kikerülné a szabályokat.</p></div>
-      <div class="card"><h3>Ez nem technikai, hanem vezetői döntés</h3><p>Az AI bevezetés nem projekt, hanem folyamatos szabályozás: ki mit érhet el, mi naplózódik, mi tilos.</p></div>
+    <div class="split">
+      <div>
+        <div class="slide-tag">Jogosultság</div>
+        <h2 class="st">A legfontosabb governance-kérdés</h2>
+        <p class="quote">Mit láthat az AI — és mit nem?</p>
+        <div class="grid g2" style="margin-top:1.1rem">
+          <div class="card"><h3>Jogosultság öröklődik</h3><p>A modell ugyanazt látja, amit a munkatárs a forrásrendszerben. Nincs külön „AI-nézet”, amely kikerülné a szabályokat.</p></div>
+          <div class="card"><h3>Vezetői döntés, nem technikai</h3><p>Az AI bevezetés nem egyszeri projekt, hanem folyamatos szabályozás: ki mit érhet el, mi naplózódik, mi tilos.</p></div>
+        </div>
+        <p class="subline">Ha ezt a kérdést nem válaszolja meg a vezetés, a bevezetés nem kockázatmentes — bármilyen jó is a modell. Kapcsolódó rész: <a class="slink" href="vallalati-ai-rendszer.html#kockazatok">Vállalati AI rendszer → Kockázatok</a></p>
+      </div>
+      <div class="fig">
+        <svg viewBox="0 0 340 300" role="img" aria-label="Jogosultság-ellenőrzés: a kérés és a válasz szűrőn megy át">
+  <rect x="14" y="120" width="66" height="60" rx="9" fill="#12161b" stroke="#3a4553"/>
+  <text x="47" y="146" text-anchor="middle" fill="#aeb7c2" font-size="9.4" font-weight="700">munkatárs</text>
+  <text x="47" y="160" text-anchor="middle" fill="#8b95a1" font-size="8.2">jogosultsága</text>
+  <circle cx="47" cy="150" r="0" fill="none"/>
+  <path d="M82 150 H128" stroke="#ff5100" stroke-width="1.8" class="flow"/>
+  <polygon points="150,96 196,150 150,204 104,150" fill="rgba(243,201,105,.10)" stroke="#f3c969" stroke-width="1.7"/>
+  <text x="150" y="146" text-anchor="middle" fill="#f1cc72" font-size="9.6" font-weight="800">jogosultság</text>
+  <text x="150" y="159" text-anchor="middle" fill="#f1cc72" font-size="9.6" font-weight="800">szűrő</text>
+  <path d="M196 150 H236" stroke="#65d091" stroke-width="1.8" class="flow"/>
+  <circle cx="282" cy="150" r="38" fill="rgba(101,208,145,.08)" stroke="#65d091" stroke-width="1.6"/>
+  <text x="282" y="147" text-anchor="middle" fill="#7ce0a5" font-size="10" font-weight="700">csak a</text>
+  <text x="282" y="159" text-anchor="middle" fill="#7ce0a5" font-size="10" font-weight="700">megengedett</text>
+  <g fill="#ff8585" font-size="8.4">
+    <text x="150" y="232" text-anchor="middle">blokkolt kérés ↺</text>
+  </g>
+  <path d="M150 204 V222" stroke="#ff8585" stroke-width="1.4" stroke-dasharray="4 4" class="flow"/>
+  <circle cx="104" cy="150" r="3.2" fill="#ff5100" class="pulse"/>
+  <circle cx="196" cy="150" r="3.2" fill="#65d091" class="pulse"/>
+  <text x="170" y="272" text-anchor="middle" fill="#8b95a1" font-size="10.5">A jogosultság nem másolódik — minden</text>
+  <text x="170" y="286" text-anchor="middle" fill="#8b95a1" font-size="10.5">kérésnél újra ellenőrződik</text>
+</svg>
+        <div class="figcap"><b>Ábra:</b> minden kérés jogosultság-szűrőn megy át</div>
+      </div>
     </div>
-    <p class="subline">Ha ezt a kérdést nem válaszolja meg a vezetés, a bevezetés nem kockázatmentes — bármilyen jó a modell.</p>
   </section>
 
-  <!-- 11 -->
   <section class="slide">
     <span class="slide-num">11 / 15</span>
-    <div class="slide-tag">Kockázatok</div>
-    <h2 class="st">Amire minden bevezetésnél figyelni kell</h2>
-    <div class="grid g3">
-      <div class="card"><h3>Túl széles hozzáférés</h3><p>Ha az AI mindent lát, egy rossz kérdés érzékeny adatot hozhat ki. A kör legyen a lehető legszűkebb.</p></div>
-      <div class="card"><h3>Prompt injection</h3><p>Rosszindulatú tartalom a dokumentumban próbálja átvenni az irányítást. Védekezés: szigorú olvasási/írási határok.</p></div>
-      <div class="card"><h3>Adatkezelés és megfelelés</h3><p>Hol tárolódik az adat, melyik régióban, milyen naplózással — ez szerződéses kérdés is.</p></div>
+    <div class="split">
+      <div>
+        <div class="slide-tag">Kockázatok</div>
+        <h2 class="st">Amire minden bevezetésnél figyelni kell</h2>
+        <div class="grid g3">
+          <div class="card"><h3>Túl széles hozzáférés</h3><p>Ha az AI mindent lát, egy rossz kérdés érzékeny adatot hozhat ki. A kör legyen a lehető legszűkebb.</p></div>
+          <div class="card"><h3>Prompt injection</h3><p>Rosszindulatú tartalom a dokumentumban megpróbálja átvenni az irányítást. Védekezés: szigorú olvasási és írási határok.</p></div>
+          <div class="card"><h3>Adatkezelés és megfelelés</h3><p>Hol tárolódik az adat, melyik régióban, milyen naplózással — ez szerződéses kérdés is.</p></div>
+        </div>
+        <p class="subline">A kockázatokat nem a modell, hanem a <strong>hozzáférési szabályok</strong> kezelik. Ezért a governance nem utólagos, hanem első lépés.</p>
+      </div>
+      <div class="fig">
+        <svg viewBox="0 0 340 300" role="img" aria-label="Kockázatok és védelem">
+  <g font-size="9" font-weight="700" text-anchor="middle">
+    <path d="M74 46 L112 66 L112 106 Q112 132 74 146 Q36 132 36 106 L36 66 Z" fill="rgba(255,133,133,.10)" stroke="#ff8585" stroke-width="1.4"/>
+    <text x="74" y="92" fill="#ff9c9c">széles</text><text x="74" y="104" fill="#ff9c9c">hozzáférés</text>
+    <path d="M170 46 L208 66 L208 106 Q208 132 170 146 Q132 132 132 106 L132 66 Z" fill="rgba(243,201,105,.10)" stroke="#f3c969" stroke-width="1.4"/>
+    <text x="170" y="92" fill="#f1cc72">prompt</text><text x="170" y="104" fill="#f1cc72">injection</text>
+    <path d="M266 46 L304 66 L304 106 Q304 132 266 146 Q228 132 228 106 L228 66 Z" fill="rgba(122,183,255,.10)" stroke="#7ab7ff" stroke-width="1.4"/>
+    <text x="266" y="92" fill="#9bc8ff">adatkezelés</text><text x="266" y="104" fill="#9bc8ff">megfelelés</text>
+  </g>
+  <path d="M170 158 V186" stroke="#3a4553" stroke-width="1.6" class="flow"/>
+  <rect x="40" y="188" width="260" height="52" rx="10" fill="rgba(101,208,145,.08)" stroke="#65d091" stroke-width="1.5"/>
+  <text x="170" y="210" text-anchor="middle" fill="#7ce0a5" font-size="10.6" font-weight="800">Hozzáférési szabályok, naplózás,</text>
+  <text x="170" y="226" text-anchor="middle" fill="#7ce0a5" font-size="10.6" font-weight="800">szigorú olvasási / írási határok</text>
+  <circle cx="170" cy="188" r="3.6" fill="#65d091" class="pulse"/>
+  <text x="170" y="272" text-anchor="middle" fill="#8b95a1" font-size="10.5">A kockázatot nem a modell, hanem a</text>
+  <text x="170" y="286" text-anchor="middle" fill="#8b95a1" font-size="10.5">hozzáférési szabályok kezelik</text>
+</svg>
+        <div class="figcap"><b>Ábra:</b> a kockázatok a hozzáférési szabályokkal kezelhetők</div>
+      </div>
     </div>
-    <p class="subline">A kockázatokat nem a modell, hanem a <strong>hozzáférési szabályok</strong> kezelik. Ezért a governance nem utólagos, hanem első lépés.</p>
   </section>
 
-  <!-- 12 -->
   <section class="slide">
     <span class="slide-num">12 / 15</span>
-    <div class="slide-tag">A lényeg</div>
-    <h2 class="st">Három gondolat, amit érdemes megjegyezni</h2>
-    <div class="grid g3" style="margin-top:.6rem">
-      <div class="card accented"><div class="num-badge">1</div><h3>A tudás a cégé marad</h3><p>Nem kerül be „tanításra” a modellbe; ott marad, ahol van, és csak a kérdés pillanatában kerül elő.</p></div>
-      <div class="card accented"><div class="num-badge">2</div><h3>Az integráció a lényeg</h3><p>Nem a modell a szűk keresztmetszet, hanem az, hogyan kötjük össze a céges rendszerekkel.</p></div>
-      <div class="card accented"><div class="num-badge">3</div><h3>A governance vezetői feladat</h3><p>Ki mit láthat, mi naplózódik — ezt nem lehet a technikára bízni.</p></div>
+    <div class="split">
+      <div>
+        <div class="slide-tag">A lényeg</div>
+        <h2 class="st">Három gondolat, amit érdemes megjegyezni</h2>
+        <div class="grid g3">
+          <div class="card accented"><div class="num-badge">1</div><h3>A tudás a cégé marad</h3><p>Nem kerül be „tanításra” a modellbe; ott marad, ahol van, és csak a kérdés pillanatában kerül elő.</p></div>
+          <div class="card accented"><div class="num-badge">2</div><h3>Az integráció a lényeg</h3><p>Nem a modell a szűk keresztmetszet, hanem az, hogyan kötjük össze a céges rendszerekkel.</p></div>
+          <div class="card accented"><div class="num-badge">3</div><h3>A governance vezetői feladat</h3><p>Ki mit láthat, mi naplózódik — ezt nem lehet a technikára bízni.</p></div>
+        </div>
+        <p class="subline">Ez a három gondolat adja a keretet minden további döntéshez.</p>
+      </div>
+      <div class="fig">
+        <svg viewBox="0 0 340 300" role="img" aria-label="A tudás végig a cégnél marad">
+  <rect x="18" y="120" width="96" height="66" rx="10" fill="rgba(214,165,74,.10)" stroke="#d6a54a" stroke-width="1.6"/>
+  <text x="66" y="146" text-anchor="middle" fill="#f3d27a" font-size="10.4" font-weight="800">céges tudás</text>
+  <text x="66" y="162" text-anchor="middle" fill="#8b95a1" font-size="8.4">a cég tulajdona</text>
+  <text x="66" y="175" text-anchor="middle" fill="#8b95a1" font-size="8.4">marad</text>
+  <path d="M116 153 H150" stroke="#ff5100" stroke-width="1.8" class="flow"/>
+  <circle cx="196" cy="153" r="42" fill="rgba(255,81,0,.10)" stroke="#ff5100" stroke-width="1.6"/>
+  <text x="196" y="150" text-anchor="middle" fill="#ff8a4d" font-size="10.4" font-weight="700">AI réteg</text>
+  <text x="196" y="163" text-anchor="middle" fill="#8b95a1" font-size="8.4">csak „odanéz”</text>
+  <path d="M240 153 H274" stroke="#65d091" stroke-width="1.8" class="flow"/>
+  <rect x="276" y="122" width="52" height="62" rx="10" fill="rgba(101,208,145,.08)" stroke="#65d091" stroke-width="1.5"/>
+  <text x="302" y="149" text-anchor="middle" fill="#7ce0a5" font-size="9.4" font-weight="700">válasz</text>
+  <text x="302" y="162" text-anchor="middle" fill="#8b95a1" font-size="8">forrással</text>
+  <circle cx="196" cy="153" r="5" fill="#ff5100" class="pulse"/>
+  <text x="170" y="60" text-anchor="middle" fill="#aeb7c2" font-size="10.6" font-weight="700">A tudás nem kerül be a modellbe</text>
+  <text x="170" y="78" text-anchor="middle" fill="#8b95a1" font-size="9.4">— nincs „betanítás”, nincs másolat</text>
+  <text x="170" y="228" text-anchor="middle" fill="#8b95a1" font-size="10.5">1. Nem kerül be tanításra</text>
+  <text x="170" y="246" text-anchor="middle" fill="#8b95a1" font-size="10.5">2. Az integráció a lényeg</text>
+  <text x="170" y="264" text-anchor="middle" fill="#8b95a1" font-size="10.5">3. A governance vezetői feladat</text>
+</svg>
+        <div class="figcap"><b>Ábra:</b> a tudás útja — nem befelé a modellbe, hanem körbe</div>
+      </div>
     </div>
   </section>
 
-  <!-- 13 -->
   <section class="slide">
     <span class="slide-num">13 / 15</span>
-    <div class="slide-tag">Következő lépés</div>
-    <h2 class="st">Az oldal hét része</h2>
-    <div class="grid g2">
-      <div class="card"><h3>Vállalati AI rendszer</h3><p>Architektúra és kockázatok — a teljes kép.</p></div>
-      <div class="card"><h3>Elérhető szállítók</h3><p>OpenAI, Anthropic, Microsoft, Google összehasonlítva.</p></div>
-      <div class="card"><h3>Előfizetések</h3><p>Csomagok, API-árak és interaktív költségkalkulátor.</p></div>
-      <div class="card"><h3>Use case szimulátor</h3><p>Lépésről lépésre: mit kérdez a felhasználó, mit ad vissza a rendszer.</p></div>
-      <div class="card"><h3>Fő működési pontok</h3><p>Egyedi rendszerek, MCP, fájlok sorsa, ügynökök.</p></div>
-      <div class="card"><h3>Terminológia</h3><p>A kulcsfogalmak laikus nyelven, hasonlatokkal.</p></div>
+    <div>
+      <div class="slide-tag">Következő lépés</div>
+      <h2 class="st">Az oldal hét része — innen lehet mélyebbre menni</h2>
+      <div class="grid g3">
+        <a class="card" href="index.html" style="text-decoration:none"><h3>Kezdőlap</h3><p>A teljes átjáró, a témák térképe — ide tér vissza minden.</p></a>
+        <a class="card" href="vallalati-ai-rendszer.html" style="text-decoration:none"><h3>Vállalati AI rendszer</h3><p>Architektúra és kockázatok — a teljes kép ábrával.</p></a>
+        <a class="card" href="szallitok.html" style="text-decoration:none"><h3>Elérhető szállítók</h3><p>OpenAI, Anthropic, Microsoft, Google összehasonlítva.</p></a>
+        <a class="card" href="elofizetesek.html" style="text-decoration:none"><h3>Előfizetések</h3><p>Csomagok, API-árak és interaktív költségkalkulátor.</p></a>
+        <a class="card" href="szimulator.html" style="text-decoration:none"><h3>Use case szimulátor</h3><p>Lépésről lépésre: mit kérdez a felhasználó, mit ad vissza a rendszer.</p></a>
+        <a class="card" href="mukodesi-pontok.html" style="text-decoration:none"><h3>Fő működési pontok</h3><p>Egyedi rendszerek, MCP, fájlok sorsa, ügynökök.</p></a>
+        <a class="card" href="terminologia.html" style="text-decoration:none"><h3>Terminológia</h3><p>A kulcsfogalmak laikus nyelven, hasonlatokkal.</p></a>
+      </div>
+      <p class="subline">Minden aloldal a felső menüből is elérhető. A lényeg megvan — a részletek ott vannak, ahol kellenek.</p>
     </div>
   </section>
 
-  <!-- 14 -->
   <section class="slide center">
     <span class="slide-num">14 / 15</span>
+    <div class="brand"><img src="assets/darwinai/darwin-ai-logo.png" alt="DarwinAI logo" onerror="this.style.display='none'"><span>DarwinAI</span></div>
     <div class="slide-tag">Összegzés</div>
-    <h2 class="st" style="max-width:32ch">A szervezeti AI nem egy modell bevezetése — hanem a cég tudásának összekötése a modellel.</h2>
-    <p class="lead" style="margin-top:1.2rem">Aki ezt megérti, az már a jó kérdéseket teszi fel: mit láthat az AI, melyik rendszereket kötjük be először, és ki szabályozza a hozzáférést.</p>
-    <p class="byline">by <b>DarwinAI</b> · www.darwinai.hu</p>
+    <h2 class="st" style="max-width:34ch">A szervezeti AI nem egy modell bevezetése — hanem a cég tudásának összekötése a modellel.</h2>
+    <p class="lead" style="margin-top:1rem">Aki ezt megérti, az már a jó kérdéseket teszi fel: mit láthat az AI, melyik rendszereket kötjük be először, és ki szabályozza a hozzáférést.</p>
+    <p class="byline">by <a href="https://www.darwinai.hu" target="_blank" rel="noopener"><b>DarwinAI</b></a> · www.darwinai.hu</p>
   </section>
 
-  <!-- 15 -->
   <section class="slide center">
     <span class="slide-num">15 / 15</span>
+    <div class="brand"><img src="assets/darwinai/darwin-ai-logo.png" alt="DarwinAI logo" onerror="this.style.display='none'"><span>DarwinAI</span></div>
     <div class="slide-tag">Részletek</div>
     <h2 class="st">Nézd meg a teljes oldalt</h2>
-    <p class="lead" style="margin-bottom:1.8rem">Ez a prezentáció a lényeget foglalta össze. A részletes, forrásolt elemzés a weboldalon olvasható — szolgáltatónként, szimulátorral és költségkalkulátorral.</p>
-    <div style="display:flex;gap:.8rem;flex-wrap:wrap;justify-content:center">
-      <a class="pill blue" style="text-decoration:none;padding:.6rem 1.1rem" href="index.html">← Vissza a kezdőlapra</a>
+    <p class="lead" style="margin-bottom:1.4rem">Ez a prezentáció a lényeget foglalta össze tizenöt dián. A részletes, forrásolt elemzés a weboldalon olvasható — szolgáltatónként, szimulátorral és költségkalkulátorral, valamint letölthető prezentációval és PDF-fel.</p>
+    <div style="display:flex;gap:.7rem;flex-wrap:wrap;justify-content:center">
+      <a class="pill blue" style="text-decoration:none;padding:.6rem 1.1rem" href="index.html">← Kezdőlap</a>
+      <a class="pill blue" style="text-decoration:none;padding:.6rem 1.1rem" href="vallalati-ai-rendszer.html">Vállalati AI rendszer</a>
       <a class="pill blue" style="text-decoration:none;padding:.6rem 1.1rem" href="szallitok.html">Elérhető szállítók</a>
       <a class="pill blue" style="text-decoration:none;padding:.6rem 1.1rem" href="elofizetesek.html">Előfizetések</a>
+      <a class="pill blue" style="text-decoration:none;padding:.6rem 1.1rem" href="szimulator.html">Szimulátor</a>
       <a class="pill blue" style="text-decoration:none;padding:.6rem 1.1rem" href="mukodesi-pontok.html">Fő működési pontok</a>
+      <a class="pill blue" style="text-decoration:none;padding:.6rem 1.1rem" href="terminologia.html">Terminológia</a>
     </div>
-    <p class="byline">by <b>DarwinAI</b> · www.darwinai.hu</p>
+    <p class="byline">by <a href="https://www.darwinai.hu" target="_blank" rel="noopener"><b>DarwinAI</b></a> · www.darwinai.hu</p>
   </section>
-
 </div>
 
 <div class="hint" id="hint">← → a léptetéshez · O: áttekintés · F: teljes képernyő</div>
@@ -372,7 +629,6 @@ td strong{color:var(--txt)}
   <div class="ov-grid" id="ovGrid"></div>
 </div>
 
-<footer class="pres-footer">by <a href="https://www.darwinai.hu" target="_blank" rel="noopener">DarwinAI</a> · www.darwinai.hu</footer>
 <div class="bar">
   <div class="bar-left">
     <a class="home" href="index.html" title="Vissza a kezdőlapra">← Kezdőlap</a>
@@ -389,6 +645,7 @@ td strong{color:var(--txt)}
 </div>
 
 <script>
+window.__SLIDES = [{"n":"01","tag":"Vezetői összefoglaló","title":"Mit jelent egy szervezeti AI bevezetés?"},{"n":"02","tag":"A kiindulópont","title":"A modell önmagában semmit sem tud a cégről"},{"n":"03","tag":"A központi gondolat","title":"Egyik szolgáltató sem tanítja be a céges tudást a modellbe"},{"n":"04","tag":"Architektúra","title":"Hogyan épül fel egy szervezeti AI rendszer?"},{"n":"05","tag":"Négy szolgáltató","title":"Ugyanaz a logika, négy eltérő hangsúly"},{"n":"06","tag":"Standard rendszerek","title":"A leggyorsabb út: kész connectorok"},{"n":"07","tag":"Egyedi rendszerek","title":"Mi van, ha a tudás saját fejlesztésű rendszerben él?"},{"n":"08","tag":"Előfizetések","title":"Mennyibe kerül mindez?"},{"n":"09","tag":"Döntési logika","title":"Egymásra épülő hozzáférési szintek"},{"n":"10","tag":"Jogosultság","title":"A legfontosabb governance-kérdés"},{"n":"11","tag":"Kockázatok","title":"Amire minden bevezetésnél figyelni kell"},{"n":"12","tag":"A lényeg","title":"Három gondolat, amit érdemes megjegyezni"},{"n":"13","tag":"Következő lépés","title":"Az oldal hét része — innen lehet mélyebbre menni"},{"n":"14","tag":"Összegzés","title":"A szervezeti AI nem egy modell bevezetése — hanem a cég tudásának összekötése a modellel."},{"n":"15","tag":"Részletek","title":"Nézd meg a teljes oldalt"}];
 (function(){
   const slides=[...document.querySelectorAll('.slide')];
   const total=slides.length;
@@ -399,14 +656,12 @@ td strong{color:var(--txt)}
   const ovGrid=document.getElementById('ovGrid');
   const overview=document.getElementById('overview');
   const hint=document.getElementById('hint');
+  const meta=window.__SLIDES||[];
 
-  // Áttekintés rács felépítése a diák címéből
-  slides.forEach((s,idx)=>{
-    const title=(s.querySelector('h1.title,h2.st')?.textContent||'Dia').trim().replace(/\s+/g,' ');
-    const tag=(s.querySelector('.slide-tag')?.textContent||'').trim();
+  meta.forEach((m,idx)=>{
     const item=document.createElement('div');
     item.className='ov-item';
-    item.innerHTML='<div class="n">'+String(idx+1).padStart(2,'0')+'</div><div class="t">'+(tag?tag+' — ':'')+title+'</div>';
+    item.innerHTML='<div class="n">'+m.n+'</div><div class="t">'+(m.tag?m.tag+' — ':'')+m.title+'</div>';
     item.addEventListener('click',()=>{go(idx);toggleOverview(false);});
     ovGrid.appendChild(item);
   });
@@ -445,7 +700,6 @@ td strong{color:var(--txt)}
     else if(e.key==='Escape'){toggleOverview(false);}
   });
 
-  // Érintés / swipe
   let x0=null;
   document.addEventListener('touchstart',e=>{x0=e.touches[0].clientX;},{passive:true});
   document.addEventListener('touchend',e=>{
@@ -460,6 +714,7 @@ td strong{color:var(--txt)}
 
   go(0);
 })();
+
 </script>
 </body>
 </html>

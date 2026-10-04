@@ -1,0 +1,18 @@
+<svg viewBox="0 0 340 300" role="img" aria-label="Négy szolgáltató egy közös mag körül">
+  <circle cx="170" cy="150" r="150" fill="none" stroke="#2a323d" stroke-width="1" stroke-dasharray="3 7" class="spin"/>
+  <circle cx="170" cy="150" r="116" fill="none" stroke="#2a323d" stroke-width="1" stroke-dasharray="3 7" class="spin-r"/>
+  <circle cx="170" cy="150" r="30" fill="rgba(214,165,74,.12)" stroke="#d6a54a" stroke-width="1.6"/>
+  <text x="170" y="147" text-anchor="middle" fill="#f3d27a" font-size="10.5" font-weight="700">közös</text>
+  <text x="170" y="160" text-anchor="middle" fill="#f3d27a" font-size="10.5" font-weight="700">logika</text>
+  <g font-size="10" font-weight="700" text-anchor="middle">
+    <circle cx="170" cy="42" r="25" fill="#12161b" stroke="#ff5100" stroke-width="1.4"/><text x="170" y="46" fill="#ff8a4d">OpenAI</text>
+    <circle cx="278" cy="150" r="25" fill="#12161b" stroke="#b67be8" stroke-width="1.4"/><text x="278" y="154" fill="#cfa6f5" font-size="9">Anthropic</text>
+    <circle cx="170" cy="258" r="25" fill="#12161b" stroke="#7ab7ff" stroke-width="1.4"/><text x="170" y="262" fill="#9bc8ff" font-size="9">Microsoft</text>
+    <circle cx="62" cy="150" r="25" fill="#12161b" stroke="#65d091" stroke-width="1.4"/><text x="62" y="154" fill="#7ce0a5">Google</text>
+  </g>
+  <g stroke="#3a4553" stroke-width="1.3">
+    <path d="M170 67 V118" class="flow"/><path d="M253 150 H202" class="flow"/>
+    <path d="M170 233 V182" class="flow"/><path d="M87 150 H138" class="flow"/>
+  </g>
+  <circle cx="170" cy="150" r="6" fill="#d6a54a" class="pulse"/>
+</svg>

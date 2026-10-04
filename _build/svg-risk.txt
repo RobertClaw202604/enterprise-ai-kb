@@ -1,0 +1,17 @@
+<svg viewBox="0 0 340 300" role="img" aria-label="Kockázatok és védelem">
+  <g font-size="9" font-weight="700" text-anchor="middle">
+    <path d="M74 46 L112 66 L112 106 Q112 132 74 146 Q36 132 36 106 L36 66 Z" fill="rgba(255,133,133,.10)" stroke="#ff8585" stroke-width="1.4"/>
+    <text x="74" y="92" fill="#ff9c9c">széles</text><text x="74" y="104" fill="#ff9c9c">hozzáférés</text>
+    <path d="M170 46 L208 66 L208 106 Q208 132 170 146 Q132 132 132 106 L132 66 Z" fill="rgba(243,201,105,.10)" stroke="#f3c969" stroke-width="1.4"/>
+    <text x="170" y="92" fill="#f1cc72">prompt</text><text x="170" y="104" fill="#f1cc72">injection</text>
+    <path d="M266 46 L304 66 L304 106 Q304 132 266 146 Q228 132 228 106 L228 66 Z" fill="rgba(122,183,255,.10)" stroke="#7ab7ff" stroke-width="1.4"/>
+    <text x="266" y="92" fill="#9bc8ff">adatkezelés</text><text x="266" y="104" fill="#9bc8ff">megfelelés</text>
+  </g>
+  <path d="M170 158 V186" stroke="#3a4553" stroke-width="1.6" class="flow"/>
+  <rect x="40" y="188" width="260" height="52" rx="10" fill="rgba(101,208,145,.08)" stroke="#65d091" stroke-width="1.5"/>
+  <text x="170" y="210" text-anchor="middle" fill="#7ce0a5" font-size="10.6" font-weight="800">Hozzáférési szabályok, naplózás,</text>
+  <text x="170" y="226" text-anchor="middle" fill="#7ce0a5" font-size="10.6" font-weight="800">szigorú olvasási / írási határok</text>
+  <circle cx="170" cy="188" r="3.6" fill="#65d091" class="pulse"/>
+  <text x="170" y="272" text-anchor="middle" fill="#8b95a1" font-size="10.5">A kockázatot nem a modell, hanem a</text>
+  <text x="170" y="286" text-anchor="middle" fill="#8b95a1" font-size="10.5">hozzáférési szabályok kezelik</text>
+</svg>

@@ -1,0 +1,20 @@
+<svg viewBox="0 0 340 300" role="img" aria-label="A tudás végig a cégnél marad">
+  <rect x="18" y="120" width="96" height="66" rx="10" fill="rgba(214,165,74,.10)" stroke="#d6a54a" stroke-width="1.6"/>
+  <text x="66" y="146" text-anchor="middle" fill="#f3d27a" font-size="10.4" font-weight="800">céges tudás</text>
+  <text x="66" y="162" text-anchor="middle" fill="#8b95a1" font-size="8.4">a cég tulajdona</text>
+  <text x="66" y="175" text-anchor="middle" fill="#8b95a1" font-size="8.4">marad</text>
+  <path d="M116 153 H150" stroke="#ff5100" stroke-width="1.8" class="flow"/>
+  <circle cx="196" cy="153" r="42" fill="rgba(255,81,0,.10)" stroke="#ff5100" stroke-width="1.6"/>
+  <text x="196" y="150" text-anchor="middle" fill="#ff8a4d" font-size="10.4" font-weight="700">AI réteg</text>
+  <text x="196" y="163" text-anchor="middle" fill="#8b95a1" font-size="8.4">csak „odanéz”</text>
+  <path d="M240 153 H274" stroke="#65d091" stroke-width="1.8" class="flow"/>
+  <rect x="276" y="122" width="52" height="62" rx="10" fill="rgba(101,208,145,.08)" stroke="#65d091" stroke-width="1.5"/>
+  <text x="302" y="149" text-anchor="middle" fill="#7ce0a5" font-size="9.4" font-weight="700">válasz</text>
+  <text x="302" y="162" text-anchor="middle" fill="#8b95a1" font-size="8">forrással</text>
+  <circle cx="196" cy="153" r="5" fill="#ff5100" class="pulse"/>
+  <text x="170" y="60" text-anchor="middle" fill="#aeb7c2" font-size="10.6" font-weight="700">A tudás nem kerül be a modellbe</text>
+  <text x="170" y="78" text-anchor="middle" fill="#8b95a1" font-size="9.4">— nincs „betanítás”, nincs másolat</text>
+  <text x="170" y="228" text-anchor="middle" fill="#8b95a1" font-size="10.5">1. Nem kerül be tanításra</text>
+  <text x="170" y="246" text-anchor="middle" fill="#8b95a1" font-size="10.5">2. Az integráció a lényeg</text>
+  <text x="170" y="264" text-anchor="middle" fill="#8b95a1" font-size="10.5">3. A governance vezetői feladat</text>
+</svg>

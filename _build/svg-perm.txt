@@ -1,0 +1,22 @@
+<svg viewBox="0 0 340 300" role="img" aria-label="Jogosultság-ellenőrzés: a kérés és a válasz szűrőn megy át">
+  <rect x="14" y="120" width="66" height="60" rx="9" fill="#12161b" stroke="#3a4553"/>
+  <text x="47" y="146" text-anchor="middle" fill="#aeb7c2" font-size="9.4" font-weight="700">munkatárs</text>
+  <text x="47" y="160" text-anchor="middle" fill="#8b95a1" font-size="8.2">jogosultsága</text>
+  <circle cx="47" cy="150" r="0" fill="none"/>
+  <path d="M82 150 H128" stroke="#ff5100" stroke-width="1.8" class="flow"/>
+  <polygon points="150,96 196,150 150,204 104,150" fill="rgba(243,201,105,.10)" stroke="#f3c969" stroke-width="1.7"/>
+  <text x="150" y="146" text-anchor="middle" fill="#f1cc72" font-size="9.6" font-weight="800">jogosultság</text>
+  <text x="150" y="159" text-anchor="middle" fill="#f1cc72" font-size="9.6" font-weight="800">szűrő</text>
+  <path d="M196 150 H236" stroke="#65d091" stroke-width="1.8" class="flow"/>
+  <circle cx="282" cy="150" r="38" fill="rgba(101,208,145,.08)" stroke="#65d091" stroke-width="1.6"/>
+  <text x="282" y="147" text-anchor="middle" fill="#7ce0a5" font-size="10" font-weight="700">csak a</text>
+  <text x="282" y="159" text-anchor="middle" fill="#7ce0a5" font-size="10" font-weight="700">megengedett</text>
+  <g fill="#ff8585" font-size="8.4">
+    <text x="150" y="232" text-anchor="middle">blokkolt kérés ↺</text>
+  </g>
+  <path d="M150 204 V222" stroke="#ff8585" stroke-width="1.4" stroke-dasharray="4 4" class="flow"/>
+  <circle cx="104" cy="150" r="3.2" fill="#ff5100" class="pulse"/>
+  <circle cx="196" cy="150" r="3.2" fill="#65d091" class="pulse"/>
+  <text x="170" y="272" text-anchor="middle" fill="#8b95a1" font-size="10.5">A jogosultság nem másolódik — minden</text>
+  <text x="170" y="286" text-anchor="middle" fill="#8b95a1" font-size="10.5">kérésnél újra ellenőrződik</text>
+</svg>
