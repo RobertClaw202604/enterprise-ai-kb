@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Céges tudásbázis a nagy AI platformokon — OpenAI · Anthropic · Microsoft · Google</title>
+<meta name="description" content="Hogyan oldja meg az OpenAI, az Anthropic, a Microsoft és a Google a vállalati tudásbázis beépítését az enterprise AI rendszerükbe? Összehasonlító elemzés 2026.">
+<style>
+  :root{
+    --bg:#0d1117; --bg2:#161b22; --bg3:#1c2330; --line:#2a3340;
+    --txt:#e6edf3; --dim:#9aa7b4; --dim2:#6e7c8c;
+    --oai:#10a37f; --ant:#d97757; --ms:#58a6ff; --goo:#f2b93b;
+    --acc:#ff5100;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; background:var(--bg); color:var(--txt);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.65; font-size:16px;
+  }
+  a{color:var(--ms)}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 22px}
+
+  /* ---- header ---- */
+  header{
+    background:linear-gradient(150deg,#0d1117 0%,#141b2b 55%,#1b1526 100%);
+    border-bottom:1px solid var(--line); padding:64px 0 52px; position:relative; overflow:hidden;
+  }
+  header::after{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background:radial-gradient(600px 300px at 85% 10%,rgba(255,81,0,.13),transparent 70%);
+  }
+  .kicker{
+    display:inline-block;font-size:12px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--acc);border:1px solid rgba(255,81,0,.35);border-radius:100px;
+    padding:5px 14px;margin-bottom:22px;font-weight:600;
+  }
+  h1{font-size:clamp(1.9rem,4.4vw,3rem);line-height:1.15;margin:0 0 18px;letter-spacing:-.02em;font-weight:750}
+  h1 span{color:var(--dim);display:block;font-size:.55em;font-weight:400;letter-spacing:0;margin-top:14px}
+  .lede{font-size:1.13rem;color:var(--dim);max-width:760px;margin:0}
+  .meta{margin-top:26px;font-size:.85rem;color:var(--dim2)}
+  .meta b{color:var(--dim)}
+
+  /* ---- nav ---- */
+  nav.toc{
+    position:sticky;top:0;z-index:50;background:rgba(13,17,23,.92);
+    backdrop-filter:blur(10px);border-bottom:1px solid var(--line);
+  }
+  nav.toc ul{display:flex;gap:4px;list-style:none;margin:0;padding:10px 22px;overflow-x:auto;max-width:1120px;margin:0 auto}
+  nav.toc a{
+    color:var(--dim);text-decoration:none;font-size:.84rem;white-space:nowrap;
+    padding:6px 12px;border-radius:7px;font-weight:500;transition:.15s;
+  }
+  nav.toc a:hover{background:var(--bg3);color:var(--txt)}
+
+  section{padding:56px 0;border-bottom:1px solid var(--line)}
+  section:last-of-type{border-bottom:none}
+
+  h2{font-size:clamp(1.4rem,2.6vw,1.95rem);margin:0 0 8px;letter-spacing:-.015em}
+  h3{font-size:1.12rem;margin:34px 0 12px;color:#fff}
+  h4{font-size:.95rem;margin:22px 0 8px;color:var(--dim);text-transform:uppercase;letter-spacing:.08em;font-weight:600}
+  .sub{color:var(--dim2);font-size:.9rem;margin:0 0 26px}
+  p{margin:0 0 15px}
+  ul,ol{margin:0 0 16px;padding-left:22px}
+  li{margin-bottom:7px}
+  li::marker{color:var(--dim2)}
+  strong{color:#fff;font-weight:640}
+  code{
+    background:var(--bg3);padding:2px 7px;border-radius:5px;font-size:.86em;
+    font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:#a5d6ff;border:1px solid var(--line);
+  }
+
+  /* ---- cards ---- */
+  .grid{display:grid;gap:18px}
+  .g2{grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
+  .g4{grid-template-columns:repeat(auto-fit,minmax(238px,1fr))}
+
+  .card{
+    background:var(--bg2);border:1px solid var(--line);border-radius:14px;
+    padding:22px;position:relative;overflow:hidden;
+  }
+  .card p:last-child{margin-bottom:0}
+  .card h3{margin-top:0}
+
+  .vendor{border-top:3px solid var(--line)}
+  .vendor.openai{border-top-color:var(--oai)}
+  .vendor.anthropic{border-top-color:var(--ant)}
+  .vendor.microsoft{border-top-color:var(--ms)}
+  .vendor.google{border-top-color:var(--goo)}
+
+  .vhead{display:flex;align-items:center;gap:12px;margin-bottom:4px}
+  .dot{width:11px;height:11px;border-radius:50%;flex:none}
+  .dot.openai{background:var(--oai)}
+  .dot.anthropic{background:var(--ant)}
+  .dot.microsoft{background:var(--ms)}
+  .dot.google{background:var(--goo)}
+  .vhead h3{margin:0;font-size:1.15rem}
+  .vpromise{color:var(--dim);font-size:.9rem;margin:10px 0 18px;font-style:italic}
+
+  dl.kv{margin:0;font-size:.9rem}
+  dl.kv dt{color:var(--dim2);font-size:.72rem;text-transform:uppercase;letter-spacing:.09em;font-weight:600;margin:14px 0 4px}
+  dl.kv dd{margin:0;color:var(--txt)}
+
+  .tag{
+    display:inline-block;font-size:.72rem;padding:3px 9px;border-radius:6px;
+    background:var(--bg3);border:1px solid var(--line);color:var(--dim);margin:2px 3px 2px 0;
+  }
+
+  /* ---- vendor sections ---- */
+  .hero-vendor{
+    display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:6px;
+  }
+  .logo-mark{
+    width:46px;height:46px;border-radius:11px;display:grid;place-items:center;
+    font-weight:800;font-size:1.2rem;flex:none;color:#0d1117;
+  }
+  .lm-oai{background:var(--oai)} .lm-ant{background:var(--ant)}
+  .lm-ms{background:var(--ms)}   .lm-goo{background:var(--goo)}
+
+  .stack{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));margin:18px 0}
+  .layer{
+    background:var(--bg2);border:1px solid var(--line);border-left:3px solid var(--acc);
+    border-radius:10px;padding:14px 16px;
+  }
+  .layer h4{margin:0 0 6px;color:#fff;text-transform:none;letter-spacing:0;font-size:.94rem}
+  .layer p{margin:0;font-size:.87rem;color:var(--dim)}
+
+  /* ---- table ---- */
+  .tscroll{overflow-x:auto;border:1px solid var(--line);border-radius:12px;margin:22px 0}
+  table{border-collapse:collapse;width:100%;font-size:.86rem;min-width:720px}
+  th,td{padding:12px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+  th{background:var(--bg3);color:#fff;font-weight:640;font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;position:sticky;top:0}
+  tbody tr:nth-child(even){background:rgba(255,255,255,.018)}
+  tbody tr:last-child td{border-bottom:none}
+  td:first-child{color:var(--dim);font-weight:600}
+  .c-oai{color:var(--oai)} .c-ant{color:var(--ant)} .c-ms{color:var(--ms)} .c-goo{color:var(--goo)}
+
+  /* ---- callout ---- */
+  .callout{
+    background:linear-gradient(135deg,rgba(255,81,0,.09),rgba(255,81,0,.02));
+    border:1px solid rgba(255,81,0,.28);border-radius:12px;padding:20px 22px;margin:26px 0;
+  }
+  .callout p:last-child{margin-bottom:0}
+  .callout strong{color:var(--acc)}
+
+  .note{
+    background:var(--bg2);border:1px solid var(--line);border-radius:12px;
+    padding:18px 20px;margin:22px 0;font-size:.92rem;color:var(--dim);
+  }
+  .note b{color:#fff}
+
+  /* ---- patterns ---- */
+  .pattern{counter-reset:pc}
+  .pattern .card{display:flex;gap:16px;align-items:flex-start}
+  .pattern .card::before{
+    counter-increment:pc;content:counter(pc);
+    font-size:1.5rem;font-weight:800;color:var(--acc);opacity:.55;line-height:1;flex:none;min-width:30px;
+  }
+
+  /* ---- checklist ---- */
+  .check{list-style:none;padding:0}
+  .check li{padding-left:30px;position:relative;margin-bottom:11px}
+  .check li::before{
+    content:"✓";position:absolute;left:0;top:0;color:var(--oai);font-weight:700;
+  }
+
+  footer{padding:44px 0 60px;color:var(--dim2);font-size:.84rem}
+  footer a{color:var(--dim)}
+  .srcline{font-size:.78rem;color:var(--dim2);margin-top:8px}
+  .srcline a{color:var(--dim2);text-decoration:none;border-bottom:1px dotted var(--line)}
+  .srcline a:hover{color:var(--ms)}
+
+  @media(max-width:640px){
+    header{padding:48px 0 38px}
+    section{padding:42px 0}
+    .lede{font-size:1.03rem}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <span class="kicker">Enterprise AI · Tudásbázis-integráció</span>
+    <h1>A céges tudás beépítése a nagy AI platformokba
+      <span>OpenAI · Anthropic · Microsoft · Google — hogyan oldják meg a vállalati tudás elérését az enterprise ügyfeleknél (2026)</span>
+    </h1>
+    <p class="lede">
+      A nagy nyelvi modellek önmagukban nem ismerik a cég belső dokumentumait, szerződéseit, ticketjeit vagy
+      Slack-beszélgetéseit. Az igazi üzleti érték ott kezdődik, amikor a modell a <strong>hivatalos céges tudásbázissal
+      összekötve</strong> válaszol — jogosultság-tudatosan, forrásmegjelöléssel. Ez az oldal azt mutatja be, hogy a négy
+      vezető szolgáltató milyen technológiával, milyen termékkel és milyen irányba haladva oldja meg ezt a problémát.
+    </p>
+    <p class="meta">Készítette: <b>Rob</b> (ARworks) · Összeállítva: <b>2026. október 4.</b> · Források: hivatalos szolgáltatói dokumentációk és bejelentések</p>
+  </div>
+</header>
+
+<nav class="toc">
+  <ul>
+    <li><a href="#osszefoglalo">Összefoglaló</a></li>
+    <li><a href="#minta">Közös minta</a></li>
+    <li><a href="#openai">OpenAI</a></li>
+    <li><a href="#anthropic">Anthropic</a></li>
+    <li><a href="#microsoft">Microsoft</a></li>
+    <li><a href="#google">Google</a></li>
+    <li><a href="#tabla">Összehasonlítás</a></li>
+    <li><a href="#kockazatok">Kockázatok</a></li>
+    <li><a href="#vallalati">Mit válasszon a cég?</a></li>
+  </ul>
+</nav>
+
+<!-- ============ ÖSSZEFOGLALÓ ============ -->
+<section id="osszefoglalo">
+  <div class="wrap">
+    <h2>Összefoglaló — miről is van szó</h2>
+    <p class="sub">A probléma és a négyféle megoldás egy képernyőn.</p>
+
+    <p>
+      Az enterprise AI bevezetésének legfontosabb kérdése 2026-ra nem az, hogy <em>melyik modell okosabb</em>, hanem az,
+      hogy <strong>hogyan kerül a cég saját tudása a modell elé</strong> úgy, hogy közben a jogosultságok, az adatvédelem és a
+      megfelelőség ne sérüljön. A szolgáltatók erre négy eltérő filozófiával válaszolnak — de a megoldás szerkezete
+      mindegyiküknél ugyanaz: <strong>connectorok → index vagy valós idejű lekérés → jogosultság-tudatos retrieval → válasz forrásmegjelöléssel</strong>.
+    </p>
+
+    <div class="grid g4" style="margin-top:26px">
+      <div class="card vendor openai">
+        <div class="vhead"><span class="dot openai"></span><h3>OpenAI</h3></div>
+        <p class="vpromise">„Company knowledge" — a ChatGPT összekötött appokból dolgozik.</p>
+        <p style="font-size:.88rem;color:var(--dim)">Több forráson átívelő, GPT-5-alapú keresés; adminisztrátor által kezelt sync-connectorok; minden válaszban idézetek.</p>
+      </div>
+      <div class="card vendor anthropic">
+        <div class="vhead"><span class="dot anthropic"></span><h3>Anthropic</h3></div>
+        <p class="vpromise">„Enterprise Search" — dedikált „Ask Your Org" projekt.</p>
+        <p style="font-size:.88rem;color:var(--dim)">MCP-n alapuló connectorok, Anthropic által hangolt keresési system prompt, jogosultság-tudatos találatok.</p>
+      </div>
+      <div class="card vendor microsoft">
+        <div class="vhead"><span class="dot microsoft"></span><h3>Microsoft</h3></div>
+        <p class="vpromise">„Work IQ" + Copilot connectors + Graph.</p>
+        <p style="font-size:.88rem;color:var(--dim)">Beindexelt és valós idejű (federated, MCP) connectorok; szemantikus index a Microsoft Graphban; beépített, permission-aware governance.</p>
+      </div>
+      <div class="card vendor google">
+        <div class="vhead"><span class="dot google"></span><h3>Google</h3></div>
+        <p class="vpromise">„Gemini Enterprise" — connectorok és data store-ok.</p>
+        <p style="font-size:.88rem;color:var(--dim)">Entitás-szintű data store-ok, indexing vagy federation választással; grounding API; régió- és CMEK-vezérelt adatelhelyezés.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ KÖZÖS MINTA ============ -->
+<section id="minta">
+  <div class="wrap">
+    <h2>A közös minta — mind a négyen ugyanazt a hat lépést járják</h2>
+    <p class="sub">Ha ezt a vázat érti, a konkrét terméknevek már csak részletek.</p>
+
+    <div class="stack">
+      <div class="layer"><h4>1. Connectorok</h4><p>Előre megépített csatlakozók a tipikus forrásokhoz: SharePoint, Google Drive, Slack, Teams, Jira, Confluence, ServiceNow, GitHub, Salesforce stb.</p></div>
+      <div class="layer"><h4>2. Betöltés: index vagy valós idő</h4><p>Vagy beindexelik a tartalmat (jobb keresési minőség, több tároló), vagy valós időben, federáltan kérik le (friss adat, nincs tárolás).</p></div>
+      <div class="layer"><h4>3. Feldolgozás és indexelés</h4><p>Chunkolás, vektorizálás, szemantikus index, metaadatok és — kritikus módon — a forrás jogosultsági adatainak együtt tárolása.</p></div>
+      <div class="layer"><h4>4. Jogosultság-tudatos retrieval</h4><p>A keresés a felhasználó identitásához kötött: csak azt hozza vissza, amit az adott munkatárs a forrásrendszerben is látna.</p></div>
+      <div class="layer"><h4>5. Grounding</h4><p>A visszakapott részletek bekerülnek a modell kontextusába, és a modell kizárólag ezekre (plusz a saját tudására) támaszkodva válaszol.</p></div>
+      <div class="layer"><h4>6. Válasz forrásmegjelöléssel</h4><p>Minden állítás mellett idézet és link a forrásdokumentumra — ez teszi ellenőrizhetővé és bizalmassá a választ.</p></div>
+    </div>
+
+    <div class="callout">
+      <p><strong>Miért ez a lényeg:</strong> a szolgáltatók nem „megtanítják" a modellt a cég adataira (az nem is skálázódna és adatvédelmileg sem működne).
+      Helyette <strong>minden kérésnél a helyes részleteket keresik ki, és a modell elé teszik</strong> — ez a RAG (Retrieval-Augmented Generation) enterprise szintű,
+      jogosultság- és megfelelőség-tudatos változata. A verseny a connectorok szélességében, a jogosultságkezelés mélységében és a retrieval minőségében dől el.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ OPENAI ============ -->
+<section id="openai">
+  <div class="wrap">
+    <div class="hero-vendor">
+      <div class="logo-mark lm-oai">AI</div>
+      <div>
+        <h2 style="margin:0">OpenAI — „Company knowledge" a ChatGPT-ben</h2>
+        <p class="sub" style="margin:4px 0 0">Business, Enterprise és Edu csomagokon</p>
+      </div>
+    </div>
+
+    <p>
+      Az OpenAI 2025 októberében vezette be a <strong>Company knowledge</strong> funkciót, amely a ChatGPT-n belül egyesíti a
+      csatlakoztatott appokból származó kontextust. A megoldás lényege, hogy egy <strong>GPT-5-re épülő változat</strong> több
+      forráson átívelően keres, és az így összegyűjtött részletekből ad cégspecifikus választ — minden válaszhoz
+      forrásmegjelöléssel.
+    </p>
+
+    <h3>Hogyan működik a gyakorlatban</h3>
+    <ul>
+      <li>A felhasználó a <code>@Company Knowledge</code> említéssel vagy a <em>+ tools</em> menüből indítja a funkciót (pluginként viselkedik).</li>
+      <li>ChatGPT végigkövethetően, oldalsávban mutatja, éppen mit vizsgál, majd idézetekkel és kattintható forráslinkekkel zárja a választ.</li>
+      <li>Több keresést is futtathat, hogy <strong>feloldja az egymásnak ellentmondó információkat</strong> — kifejezetten jól kezeli a bizonytalan, „még nincs döntés" típusú kérdéseket.</li>
+      <li>Dátumkezeléssel és időbeli szűréssel is dolgozik (pl. „Q1-es teljesítmény áttekintése").</li>
+    </ul>
+
+    <h3>Technológiai építőelemek</h3>
+    <div class="stack">
+      <div class="layer"><h4>Connected apps</h4><p>Slack, SharePoint, Google Drive, GitHub, Teams és mások — egyéni hitelesítéssel vagy adminisztrátor által kezelt kapcsolattal.</p></div>
+      <div class="layer"><h4>MCP-alapú custom apps</h4><p>Vállalatok saját, MCP-vel épített appokat köthetnek be; ezek lehetnek kereső, interaktív felületű vagy író (write) képességű appok is.</p></div>
+      <div class="layer"><h4>Adminisztrátor-kezelt sync</h4><p>Google Drive, SharePoint és Microsoft Teams esetén az admin workspace-szintű kapcsolatot hoz létre — a munkatársaknak nem kell külön bejelentkezniük.</p></div>
+      <div class="layer"><h4>RBAC és csoport-szintű jogosultságok</h4><p>Enterprise/Edu adminok szabályozzák, mely appok érhetők el, és a jogosultságok a forrásrendszerrel összhangban érvényesülnek.</p></div>
+    </div>
+
+    <h3>Adatvédelem és megfelelőség</h3>
+    <ul>
+      <li>A rendszer tiszteletben tartja a forrás meglévő jogosultságait — a felhasználó <strong>csak azt látja, amit a forrásban is láthatna</strong>.</li>
+      <li>Az OpenAI alapértelmezésben <strong>nem tanít</strong> az ügyfél adatain.</li>
+      <li>SSO + SCIM a hozzáférés-kezeléshez, IP allowlisting, iparági szabványú titkosítás.</li>
+      <li>Enterprise Compliance API a beszélgetésnaplókhoz és a szabályozási megfeleléshez.</li>
+      <li><strong>Adatrezidencia:</strong> az admin-kezelt sync kapcsolatok konkrét régiókra korlátozottak (Google Drive és SharePoint: EEA + Svájc, Japán, USA — országonként eltérően).</li>
+    </ul>
+
+    <div class="note">
+      <b>Fejlesztői oldal — Knowledge Retrieval blueprint.</b> Azoknak, akik nem a ChatGPT-t, hanem saját alkalmazást építenek,
+      az OpenAI külön <em>Knowledge Retrieval</em> blueprintet kínál: ez a saját adatra épülő, idézetekkel ellátott válaszok
+      megbízható mintája az API-n keresztül (vector store + file search).
+    </div>
+
+    <p class="srcline">Források:
+      <a href="https://openai.com/index/introducing-company-knowledge/" target="_blank" rel="noopener">openai.com — Introducing company knowledge</a> ·
+      <a href="https://help.openai.com/en/articles/12628342-company-knowledge-in-chatgpt-business-enterprise-and-edu" target="_blank" rel="noopener">OpenAI Help — Company knowledge</a> ·
+      <a href="https://help.openai.com/en/articles/10847137-chatgpt-synced-connectors-faq" target="_blank" rel="noopener">Admin-managed apps with sync</a> ·
+      <a href="https://openai.com/solutions/blueprints/knowledge-retrieval/" target="_blank" rel="noopener">Knowledge Retrieval blueprint</a>
+    </p>
+  </div>
+</section>
+
+<!-- ============ ANTHROPIC ============ -->
+<section id="anthropic">
+  <div class="wrap">
+    <div class="hero-vendor">
+      <div class="logo-mark lm-ant">A</div>
+      <div>
+        <h2 style="margin:0">Anthropic — „Enterprise Search" és MCP connectorok</h2>
+        <p class="sub" style="margin:4px 0 0">Team és Enterprise csomagokon</p>
+      </div>
+    </div>
+
+    <p>
+      Az Anthropic megoldása az <strong>Enterprise Search</strong>: egy előre konfigurált, <em>„Ask Your Org"</em> nevű projekt,
+      amely a Claude oldalsávjában jelenik meg, és amelyet kifejezetten a szervezet teljes tudásbázisán való keresésre
+      hangoltak. Ez a projekt <strong>Anthropic által kezelt és folyamatosan finomított system prompttal</strong> dolgozik —
+      szemben a normál projektekkel, ahol a promptot a felhasználó írja.
+    </p>
+
+    <h3>Hogyan működik a gyakorlatban</h3>
+    <ul>
+      <li>A projekt első használat előtt <strong>tulajdonosi (Owner) beállítást</strong> igényel; utána a szervezet minden tagjának oldalsávjában megjelenik, csillagozva.</li>
+      <li>A felhasználó egy kérdésre a Claude <strong>valamennyi csatlakoztatott forráson</strong> végigkeres, és egységes, jól hivatkozott választ ad.</li>
+      <li>Példaforrások: SharePoint-dokumentumok, Slack-beszélgetések, Gmail-szálak, Google Drive-fájlok.</li>
+      <li>Ajánlott használat: konkrét forrás megjelölése, dátumtartományok, több forrás kombinálása, lépésekre bontott kutatás.</li>
+    </ul>
+
+    <h3>Technológiai építőelemek — az MCP a gerinc</h3>
+    <div class="stack">
+      <div class="layer"><h4>Model Context Protocol (MCP)</h4><p>Az Anthropic nyílt szabványa, amellyel a Claude külső eszközökhöz, adatokhoz és felületekhez kapcsolódik — ez a connectorok alapja.</p></div>
+      <div class="layer"><h4>Remote MCP connectorok</h4><p>Előre megépített és egyéni connectorok köthetők be a Settings &gt; Connectors alatt, a szervezet engedélyezésétől függően.</p></div>
+      <div class="layer"><h4>Messages API + MCP connector</h4><p>Fejlesztők a Messages API-ból közvetlenül, külön MCP-kliens nélkül csatlakozhatnak távoli MCP-szerverekhez.</p></div>
+      <div class="layer"><h4>Guided onboarding</h4><p>Az enterprise search projekt ajánlott connectorokkal, vezetett beállítással indul — nem kell mindent kézzel konfigurálni.</p></div>
+    </div>
+
+    <h3>Adatvédelem és megfelelőség</h3>
+    <ul>
+      <li><strong>Jogosultság-tudatos keresés:</strong> mindenki csak azt látja, amire az adott rendszerben jogosultsága van. Kivétel: a megosztott hitelesítő adatot (pl. API-kulcsot) használó egyéni connector — ott mindenki azt látja, ami a kulcsnak elérhető.</li>
+      <li>A beszélgetések privátak, hacsak a felhasználó nem osztja meg őket; Enterprise csomagon a szervezet adatmegőrzési szabályai érvényesek.</li>
+      <li>A keresési eredmények a beszélgetéssel együtt tárolódnak és azzal törölhetők.</li>
+    </ul>
+
+    <div class="note">
+      <b>Fejlesztői oldal.</b> Az Anthropic külön kínál <em>knowledge graph</em> építési mintát (Claude Cookbook):
+      entitás- és relációkinyerés strukturálatlan szövegből, deduplikáció, többugrásos gráf-lekérdezés — ez a „tudásbázis"
+      fogalmát a dokumentumkeresésnél mélyebb, összefüggés-alapú szintre emeli.
+    </div>
+
+    <p class="srcline">Források:
+      <a href="https://support.claude.com/en/articles/12489464-use-enterprise-search" target="_blank" rel="noopener">Claude Help — Use enterprise search</a> ·
+      <a href="https://support.claude.com/en/articles/14503689-mcp-connectors" target="_blank" rel="noopener">MCP connectors</a> ·
+      <a href="https://platform.claude.com/docs/en/agents-and-tools/mcp-connector" target="_blank" rel="noopener">Platform — MCP connector</a> ·
+      <a href="https://claude.com/docs/connectors/overview" target="_blank" rel="noopener">Connectors overview</a>
+    </p>
+  </div>
+</section>
+
+<!-- ============ MICROSOFT ============ -->
+<section id="microsoft">
+  <div class="wrap">
+    <div class="hero-vendor">
+      <div class="logo-mark lm-ms">MS</div>
+      <div>
+        <h2 style="margin:0">Microsoft — Work IQ, Copilot connectors és Microsoft Graph</h2>
+        <p class="sub" style="margin:4px 0 0">Microsoft 365 Copilot + Power Platform + Dynamics 365</p>
+      </div>
+    </div>
+
+    <p>
+      A Microsoft a legmélyebb, leginkább „platformos" megoldást kínálja, mert a céges tudás nagy része eleve náluk él
+      (SharePoint, OneDrive, Exchange, Teams, Dynamics, Power Platform). Erre épül a <strong>Work IQ</strong>: egy munkahelyi
+      intelligencia-réteg, amely agents-ek számára teszi elérhetővé a szervezeti és üzleti adatokat, kontextust és
+      eszközöket — <strong>beépített, jogosultság-tudatos governance-nel</strong>.
+    </p>
+
+    <h3>Hogyan működik a gyakorlatban</h3>
+    <ul>
+      <li>A Work IQ <strong>folyamatosan szemantikus megértést épít</strong> a Microsoft 365 és külső rendszerek fölött.</li>
+      <li>Négy összetevője: <strong>chat</strong> (társalgás), <strong>context</strong> (kontextus-összeállítás), <strong>tools</strong> (eszközök), <strong>workspaces</strong>.</li>
+      <li>A kontextust <strong>belül, orchestration-overhead nélkül</strong> állítja össze: az agent kész, „agent-ready" inputot kap, nem kell nyers jelzéseket összefűznie.</li>
+      <li>Elérése szabványos protokollokon át: <strong>A2A</strong> (agent-to-agent), <strong>remote MCP server</strong> és <strong>REST API</strong> — használatalapú elszámolással, függetlenül a Copilot-licenctől.</li>
+      <li>A <strong>Work IQ MCP</strong> több száz műveletet sűrít <strong>10 általános eszközbe</strong> (fetch, create, update stb.) az e-mail, naptár, fájlok, emberek, chat és site-ok eléréséhez.</li>
+      <li>Az agentek <strong>futásidőben fedezik fel az adatok szerkezetét</strong>, nem előre definiált modellek alapján.</li>
+    </ul>
+
+    <h3>A tudásbázis bekötése — Copilot connectors</h3>
+    <p>A Microsoft két alapvető mechanizmust kínál, és a kettő kombinálható:</p>
+    <div class="tscroll">
+      <table>
+        <thead>
+          <tr><th>Jellemző</th><th>Synced — tenant szintű</th><th>Synced — self-serve</th><th>Federated (MCP)</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Adatkezelés</td><td>Beindexelve a Microsoft 365-be</td><td>Beindexelve a Microsoft 365-be</td><td>Valós idejű lekérés, indexelés nélkül</td></tr>
+          <tr><td>Hozzáférési modell</td><td>Szervezeti szintű</td><td>Felhasználói szintű</td><td>Felhasználói szintű</td></tr>
+          <tr><td>Beállítás</td><td>Admin konfigurálja</td><td>Admin engedélyezi, felhasználó hitelesít</td><td>Admin engedélyezi, felhasználó hitelesít</td></tr>
+          <tr><td>Jellemző eset</td><td>Széles körű indexelés</td><td>Személyesen releváns tartalom</td><td>Érzékeny, dinamikus, élő adatok</td></tr>
+          <tr><td>Egyéni connector</td><td>Igen</td><td>Nem</td><td>Nem</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <ul>
+      <li>A <strong>synced connectorok</strong> a Microsoft Graphba indexelnek, és a Copilot + Microsoft Search is használja őket.</li>
+      <li>A <strong>federated connectorok</strong> MCP-modell szerint, valós időben kérnek le adatot — ideális érzékeny vagy gyorsan változó forrásokhoz.</li>
+      <li>A <strong>Copilot Retrieval API</strong> lehetővé teszi, hogy saját (custom engine) agentek is a Copilot retrieval-képességeit használják.</li>
+      <li><strong>Dataverse</strong> bekötése üzleti „értelem” réteggel gazdagítja a Copilotot — az üzleti alkalmazásokban rejlő adat válik kereshetővé.</li>
+      <li>Adminisztrátori oldalról a Copilot Studio-ban <strong>knowledge source-ként</strong> adható hozzá SharePoint, Dataverse, weboldal, feltöltött dokumentum és Power Platform connector.</li>
+    </ul>
+
+    <div class="callout">
+      <p><strong>A Microsoft előnye:</strong> a céges tudás jelentős része már eleve a saját ökoszisztémájukban él, és a <strong>jogosultsági modell (Entra ID, csoportok, címkék) egyetlen, egységes rendszerben</strong> érvényesül. A „tudásbázis” itt nem más, mint a Microsoft Graph szemantikus indexe kiegészítve a külső forrásokkal. Az ára a platformfüggés.</p>
+    </div>
+
+    <p class="srcline">Források:
+      <a href="https://learn.microsoft.com/en-us/microsoft-365/copilot/extensibility/work-iq/" target="_blank" rel="noopener">Learn — Work IQ overview</a> ·
+      <a href="https://learn.microsoft.com/en-us/microsoft-365/copilot/connectors/overview" target="_blank" rel="noopener">Copilot connectors overview</a> ·
+      <a href="https://learn.microsoft.com/en-us/microsoft-copilot-studio/knowledge-copilot-studio" target="_blank" rel="noopener">Knowledge sources summary</a> ·
+      <a href="https://learn.microsoft.com/en-us/microsoft-365-copilot/extensibility/api/ai-services/retrieval/overview" target="_blank" rel="noopener">Copilot Retrieval API</a>
+    </p>
+  </div>
+</section>
+
+<!-- ============ GOOGLE ============ -->
+<section id="google">
+  <div class="wrap">
+    <div class="hero-vendor">
+      <div class="logo-mark lm-goo">G</div>
+      <div>
+        <h2 style="margin:0">Google — Gemini Enterprise connectorok és data store-ok</h2>
+        <p class="sub" style="margin:4px 0 0">Google Cloud, Enterprise verziók</p>
+      </div>
+    </div>
+
+    <p>
+      A Google megoldása a <strong>Gemini Enterprise</strong>, amelynek közepén az úgynevezett <strong>connectorok és data
+      store-ok</strong> állnak. A connectorok a Google és harmadik féltől származó forrásokból gyűjtik az adatot, és
+      dedikált <em>data store-okban</em> tárolják. A megoldás technikailag a leg-granulárisabb: az adatforrásokat
+      <strong>entitástípusonként</strong> bontja szét (pl. egy Jira-adatforrás külön store-t kap az issue-knak, csatolmányoknak,
+      kommenteknek és worklogoknak).
+    </p>
+
+    <h3>Hogyan működik a gyakorlatban</h3>
+    <ul>
+      <li>A connectorok a Google Workspace és harmadik féltől forrásokat (Microsoft 365, Jira, Salesforce, HubSpot stb.) kötik be pár kattintással.</li>
+      <li>Minden entitástípus külön data store-ba kerül — ez tisztább keresést és finomabb szabályozást tesz lehetővé.</li>
+      <li>A strukturálatlan tartalom (PDF, HTML, DOCX, PPTX, XLSX) <strong>unstructured data store-ba</strong> kerül, a strukturált adat külön séma szerint.</li>
+      <li>A séma automatikusan felismerhető, vagy API-ból megadható.</li>
+    </ul>
+
+    <h3>A két betöltési mód — a fő döntés</h3>
+    <div class="stack">
+      <div class="layer"><h4>Data federation</h4><p>Valós időben kéri le az adatot a forrásból; nem másolódik a Gemini indexébe. Előnye: nincs plusz tárolás. Hátránya: gyengébb keresési minőség.</p></div>
+      <div class="layer"><h4>Data ingestion (indexing)</h4><p>Bemásolja az adatot a Gemini indexébe. Előnye: jobb keresési minőség. Hátránya: több tároló és idő. Ahol a connector mindkettőt támogatja, szabadon választható.</p></div>
+      <div class="layer"><h4>Data sync-ek</h4><p>Full sync (teljes állapot, beleértve törléseket) és inkrementális sync. Külön szinkronizálható az entitás-adat és az identitás-adat (szerepek, jogosultságok, felhasználók).</p></div>
+      <div class="layer"><h4>Grounding API</h4><p>A modell kimenetét ellenőrizhető forrásokhoz köti; agent search-tel a saját adatra lehet groundolni a válaszokat.</p></div>
+    </div>
+
+    <h3>Adatvédelem és megfelelőség</h3>
+    <ul>
+      <li><strong>Adatrezidencia-választás:</strong> betöltéskor megadható a régió (global, US, EU).</li>
+      <li><strong>Titkosítás:</strong> a US/EU régiókban kötelező; alapból Google-kezelt kulcsok, de támogatott a <strong>customer-managed encryption key (CMEK)</strong>.</li>
+      <li>Az identitás-sync biztosítja, hogy a keresés a szervezet szerep- és jogosultságrendjét kövesse.</li>
+      <li>A Gemini Enterprise a Google saját agent-építő platformjával (Agent Platform, korábban Vertex AI) integráltan működik.</li>
+    </ul>
+
+    <p class="srcline">Források:
+      <a href="https://docs.cloud.google.com/gemini/enterprise/docs/connectors/introduction-to-connectors-and-data-stores" target="_blank" rel="noopener">Gemini Enterprise — Connectors and data stores</a> ·
+      <a href="https://cloud.google.com/gemini-enterprise/connectors" target="_blank" rel="noopener">Connectors for Gemini Enterprise app</a> ·
+      <a href="https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/grounding/overview" target="_blank" rel="noopener">Grounding overview</a>
+    </p>
+  </div>
+</section>
+
+<!-- ============ ÖSSZEHASONLÍTÁS ============ -->
+<section id="tabla">
+  <div class="wrap">
+    <h2>Összehasonlítás — a négy megoldás egymás mellett</h2>
+    <p class="sub">Ahol a szolgáltatók „tanulásról” beszélnek, a háttérben mindenhol retrieval + grounding áll.</p>
+
+    <div class="tscroll">
+      <table>
+        <thead>
+          <tr>
+            <th>Szempont</th>
+            <th class="c-oai">OpenAI</th>
+            <th class="c-ant">Anthropic</th>
+            <th class="c-ms">Microsoft</th>
+            <th class="c-goo">Google</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Termék / funkció</td>
+            <td>Company knowledge (ChatGPT)</td>
+            <td>Enterprise Search („Ask Your Org”)</td>
+            <td>Work IQ + Copilot connectors</td>
+            <td>Gemini Enterprise connectors</td>
+          </tr>
+          <tr>
+            <td>Elsődleges felület</td>
+            <td>ChatGPT web + appok, @említés</td>
+            <td>Claude dedikált projekt</td>
+            <td>Microsoft 365 Copilot, Copilot Studio, agentek</td>
+            <td>Gemini Enterprise app + Agent Platform</td>
+          </tr>
+          <tr>
+            <td>Connector-protokoll</td>
+            <td>Connected apps + MCP custom apps</td>
+            <td>MCP (remote), egyéni connectorok</td>
+            <td>Synced + federated (MCP) connectorok</td>
+            <td>Saját connectorok + data store-ok</td>
+          </tr>
+          <tr>
+            <td>Index vagy valós idő?</td>
+            <td>Indexelt (admin-sync) + élő app-kapcsolat</td>
+            <td>Connector-tól függő, jellemzően élő</td>
+            <td>Mindkettő választható</td>
+            <td>Mindkettő választható (federation vs ingestion)</td>
+          </tr>
+          <tr>
+            <td>Jogosultságkezelés</td>
+            <td>Forrás-jogosultság + RBAC, csoportok</td>
+            <td>Permission-aware, connector-szinten</td>
+            <td>Entra ID, egységes Graph governance</td>
+            <td>Identitás-sync, szerep- és jogosultságkövetés</td>
+          </tr>
+          <tr>
+            <td>Forrásmegjelölés</td>
+            <td>Idézetek + kattintható linkek</td>
+            <td>Idézetek, forráslinkek</td>
+            <td>Hivatkozások, Graph-alapú források</td>
+            <td>Grounding-források visszaadása</td>
+          </tr>
+          <tr>
+            <td>Adatrezidencia / CMEK</td>
+            <td>Régióhoz kötött admin-sync</td>
+            <td>Szervezeti adatmegőrzés</td>
+            <td>Microsoft 365 adatrezidencia</td>
+            <td>Régióválasztás + CMEK</td>
+          </tr>
+          <tr>
+            <td>Fejlesztői út</td>
+            <td>Knowledge Retrieval blueprint, MCP appok</td>
+            <td>Messages API + MCP connector</td>
+            <td>Work IQ API (A2A/MCP/REST), Retrieval API</td>
+            <td>Agent Platform, Grounding API</td>
+          </tr>
+          <tr>
+            <td>Erőssége</td>
+            <td>Egyszerűség, többforrásos szintézis</td>
+            <td>Nyílt szabvány (MCP), tiszta modell</td>
+            <td>Legmélyebb integráció, kész vállalati ökoszisztéma</td>
+            <td>Granularitás, régió- és kulcskezelés</td>
+          </tr>
+          <tr>
+            <td>Figyelendő</td>
+            <td>Funkció érettsége, plugin-függés</td>
+            <td>Connector-fedés, mobil-korlát</td>
+            <td>Platformfüggés, licencelés</td>
+            <td>Beállítási komplexitás</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============ KOCKÁZATOK ============ -->
+<section id="kockazatok">
+  <div class="wrap">
+    <h2>Amit minden bevezetésnél át kell gondolni</h2>
+    <p class="sub">A technológia készen van — a buktatók a szervezeti és megfelelőségi oldalon vannak.</p>
+
+    <div class="grid g2">
+      <div class="card">
+        <h3>Jogosultsági öröklődés</h3>
+        <p>A retrieval csak akkor biztonságos, ha a forrásrendszer jogosultságai pontosan átkerülnek az indexbe. Rossz mappamegosztás a forrásban <em>automatikusan</em> rossz AI-választ eredményez — az AI nem javítja, hanem felnagyítja a meglévő hibát.</p>
+      </div>
+      <div class="card">
+        <h3>Megosztott hitelesítő adatok</h3>
+        <p>Ha egy egyéni connector egyetlen API-kulccsal működik, mindenki azt látja, amit az a kulcs lát. Ez a leggyakoribb adatszivárgási pont.</p>
+      </div>
+      <div class="card">
+        <h3>Prompt injection az adatban</h3>
+        <p>A behúzott céges dokumentum maga is tartalmazhat rosszindulatú utasítást. A „csak megbízható forrás” elv és a forrás-korlátozás csökkenti a kockázatot.</p>
+      </div>
+      <div class="card">
+        <h3>Adatrezidencia és CMEK</h3>
+        <p>EU-s cégeknél nem mindegy, hol tárolódik az index. Az előírásoknak megfelelő régiót (EU) és saját kulcskezelési módot előre rögzíteni kell.</p>
+      </div>
+      <div class="card">
+        <h3>Frissesség vs. minőség</h3>
+        <p>Az indexelt tudás jobb keresést ad, de elavulhat; a federált mindig friss, de gyengébb találatokat hozhat. A helyes választás forrásonként eltérő lehet.</p>
+      </div>
+      <div class="card">
+        <h3>Konfliktusok és duplikációk</h3>
+        <p>Ugyanaz az információ több helyen, eltérő változatban. Az OpenAI kifejezetten erre épített többkereséses feloldást — de a rendezett tudásbázis hosszú távon mindenhol alapkövetelmény.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MIT VÁLASSZON A CÉG ============ -->
+<section id="vallalati">
+  <div class="wrap">
+    <h2>Mit válasszon a cég?</h2>
+    <p class="sub">Rövid döntési támpont a négy irány közül.</p>
+
+    <div class="grid g2">
+      <div class="card vendor microsoft">
+        <h3>Microsoft 365 központú cég</h3>
+        <p style="color:var(--dim);font-size:.9rem;margin-bottom:10px">Ha a tudás SharePointban, Teams-ben, Outlookban és Dynamics-ban él.</p>
+        <p>A Work IQ + Copilot a legkevesebb integrációs munkát igényli, mert a jogosultsági modell már egységes. Ez a legérettebb, legmélyebb vállalati megoldás.</p>
+      </div>
+      <div class="card vendor google">
+        <h3>Google Workspace központú cég</h3>
+        <p style="color:var(--dim);font-size:.9rem;margin-bottom:10px">Ha Drive, Gmail és Google Cloud a gerinc.</p>
+        <p>A Gemini Enterprise connectorjai natívan illeszkednek, és ha EU-s adatrezidencia vagy saját kulcskezelés kell, ez adja a legtöbb szabályozási fogantyút.</p>
+      </div>
+      <div class="card vendor openai">
+        <h3>Vegyes ökoszisztéma, gyors indulás</h3>
+        <p style="color:var(--dim);font-size:.9rem;margin-bottom:10px">Ha több rendszer van, és gyorsan kell működő megoldás.</p>
+        <p>A ChatGPT Company knowledge a legkevesebb súrlódással indul, és erős a többforrásos szintézisben. Fejlesztéshez ott a Knowledge Retrieval blueprint.</p>
+      </div>
+      <div class="card vendor anthropic">
+        <h3>Nyílt szabványra építő, fejlesztőbarát cég</h3>
+        <p style="color:var(--dim);font-size:.9rem;margin-bottom:10px">Ha saját agenteket/rendszereket épít, és nem akar egyetlen platformhoz láncolódni.</p>
+        <p>Az MCP nyílt ökoszisztémája és az Anthropic fejlesztői eszközei (Messages API, knowledge graph minta) ezt támogatják leginkább.</p>
+      </div>
+    </div>
+
+    <h3 style="margin-top:38px">Bevezetési ellenőrzőlista</h3>
+    <ul class="check">
+      <li>Feltérképezve: hol él a valódi céges tudás (dokumentumok, chat, ticketek, CRM, belső wiki)?</li>
+      <li>Tisztázva: mely források jogosultsági modellje megbízható és naprakész?</li>
+      <li>Döntés: indexelés vagy federáció forrásonként (frissesség vs. keresési minőség)?</li>
+      <li>Rögzítve: adatrezidencia és titkosítási követelmények (EU, CMEK)?</li>
+      <li>Kijelölve: ki az admin, aki a connectorokat és jogosultságokat kezeli?</li>
+      <li>Tervezve: hogyan mérik a válaszok pontosságát és a megtérülést?</li>
+    </ul>
+
+    <div class="callout">
+      <p><strong>A lényeg egy mondatban:</strong> 2026-ban nem az a kérdés, hogy <em>melyik AI a legokosabb</em>, hanem az, hogy
+      <strong>melyik szolgáltató tudja a legpontosabban, jogosultság-tudatosan és ellenőrizhetően behúzni a cég saját tudását</strong>.
+      A modell már mindegyiküknél elég jó — a különbség a tudásbázis-integráció mélységében és a governance-ben van.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p><strong>Céges tudásbázis a nagy AI platformokon</strong> — összehasonlító elemzés. Készítette: Rob (ARworks), 2026. október 4.</p>
+    <p>Az oldal nyilvános szolgáltatói dokumentációk és bejelentések alapján készült. A terméknevek és funkciók a szolgáltatók tulajdonát képezik; a részletek idővel változhatnak — éles döntés előtt érdemes a legfrissebb hivatalos dokumentációt ellenőrizni.</p>
+  </div>
+</footer>
+
+</body>
+</html>
