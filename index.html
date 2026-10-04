@@ -288,6 +288,50 @@
     section{padding:42px 0}
     .lede{font-size:1.03rem}
   }
+
+  /* ---- MCP mélymerítés ---- */
+  .mcp-pipe{margin:22px 0}
+  .mcp-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;align-items:stretch}
+  .mcp-box{
+    background:var(--bg2);border:1px solid var(--line);border-radius:12px;
+    padding:16px 18px;position:relative;
+  }
+  .mcp-box.side{border-top:3px solid var(--dim2)}
+  .mcp-box.mid{border-top:3px solid var(--acc);box-shadow:0 0 0 1px rgba(255,81,0,.14)}
+  .mcp-box.win{border-top:3px solid var(--oai)}
+  .mcp-box h4{margin:0 0 8px;color:#fff;font-size:.95rem;text-transform:none;letter-spacing:0}
+  .mcp-box .who{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--dim2);font-weight:600;margin-bottom:8px}
+  .mcp-box p,.mcp-box ul{margin:0;font-size:.86rem;color:var(--dim);line-height:1.6}
+  .mcp-box ul{padding-left:16px}
+  .mcp-box li{margin-bottom:5px}
+  .mcp-arrowline{
+    text-align:center;color:var(--acc);font-size:1.15rem;font-weight:800;letter-spacing:1px;margin:6px 0 2px
+  }
+  .mcp-caption{font-size:.78rem;color:var(--dim2);text-align:center;margin:0 0 20px}
+
+  .tools{
+    background:var(--bg2);border:1px solid var(--line);border-radius:12px;
+    overflow:hidden;margin:18px 0;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.82rem
+  }
+  .tools .trow{padding:11px 16px;border-bottom:1px solid var(--line);display:grid;grid-template-columns:auto 1fr;gap:14px}
+  .tools .trow:last-child{border-bottom:none}
+  .tools .tname{color:var(--oai);font-weight:700;white-space:nowrap}
+  .tools .tdesc{color:var(--dim)}
+  .tools .tname.mut{color:var(--dim2)}
+  .tools .tname.ok{color:#3fb950}
+
+  .askgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;margin:18px 0}
+  .askcard{background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:15px 17px}
+  .askcard h4{margin:0 0 6px;color:#fff;font-size:.92rem;text-transform:none;letter-spacing:0}
+  .askcard p{margin:0;font-size:.85rem;color:var(--dim)}
+  .askcard .q{color:var(--acc);font-style:italic;margin-bottom:8px;font-size:.86rem}
+
+  .mgmt{background:linear-gradient(180deg,rgba(255,81,0,.06),rgba(255,81,0,0));border:1px solid var(--line);border-left:4px solid var(--acc);border-radius:12px;padding:20px 22px;margin:22px 0}
+  .mgmt h3{margin:0 0 10px;color:#fff;text-transform:none;letter-spacing:0}
+  .mgmt ul{margin:0;padding-left:20px;font-size:.9rem;color:var(--dim)}
+  .mgmt li{margin-bottom:8px}
+
+  @media(max-width:820px){.mcp-row{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -319,6 +363,7 @@
     <li><a href="#tabla">Összehasonlítás</a></li>
     <li><a href="#glosszarium">Szótár</a></li>
     <li><a href="#sajat-rendszerek">Saját rendszerek</a></li>
+    <li><a href="#mcp">MCP mélymerítés</a></li>
     <li><a href="#fajlok">Fájlok sorsa</a></li>
     <li><a href="#ugynokok">Ügynökök</a></li>
     <li><a href="#szimulator">Szimulátor</a></li>
@@ -865,6 +910,121 @@
 
     <div class="note">
       <b>Gyakorlati tanács.</b> A legtöbb cégnél a helyes út a <b>hibrid</b>: a kritikus, bizonyított rendszereket (pénzügy, szerződések, HR) meghagyni és API-n/MCP-n bekötni, az új, kísérleti vagy kellemetlen régi eszközöket pedig AI-segítséggel újratervezni — de szigorúan elkülönítve a kritikus adattól, amíg bizonyítottan stabil.
+    </div>
+  </div>
+</section>
+
+<!-- ============ MCP MÉLYMERÍTÉS ============ -->
+<section id="mcp">
+  <div class="wrap">
+    <h2>Az MCP a gyakorlatban — döntéshozói szemmel</h2>
+    <p class="sub">Mi az, hol van, mit szabályoz — és mit kell kérdezni attól, aki MCP-alapú megoldást ajánl. Végig egy szerződésadatbázis példáján.</p>
+
+    <p>
+      Az <strong>MCP (Model Context Protocol)</strong> egy szabvány, amely leírja, hogyan kérdezhet egy AI egy külső rendszert.
+      A lényeg döntéshozóknak: <strong>az AI felé egységes, kiszámítható felületet ad, a cég rendszere felé viszont egyedi hidat kell építeni.</strong>
+      Az MCP nem termék, hanem csatlakozási szabály — olyan, mint a konnektorok szabványa: az áramforrás és a gép közti csatlakozás mindenkinél ugyanúgy néz ki, de a gép belseje minden cégnél más.
+    </p>
+
+    <h3>Mi hova kerül? — a három szereplő</h3>
+    <div class="mcp-pipe">
+      <div class="mcp-row">
+        <div class="mcp-box win">
+          <div class="who">1 · Az AI oldala</div>
+          <h4>AI asszisztens / ügynök</h4>
+          <p>Claude, ChatGPT, Copilot, saját ügynök. Ez indítja a kérést. Az AI <strong>nem tudja magától</strong>, hogy létezik az MCP — ezt neki <strong>meg kell adni, be kell állítani</strong> (a kliensben hozzárendeljük a szervert). Ezután az AI már a szabványos „dugón” keresztül kérdez.</p>
+        </div>
+        <div class="mcp-box mid">
+          <div class="who">2 · A középső réteg</div>
+          <h4>MCP-szerver (a te programod)</h4>
+          <p>Egy külön kis szolgáltatás, amely <strong>a meglévő rendszered mellé kerül</strong> — nem az adatbázis belsejébe, nem a frontend kódjába. Ő a tolmács: felfelé szabványos nyelven beszél, lefelé a te rendszeredhez szól. Ez az a rész, amit <strong>meg kell építeni</strong> (vagy megépíttetni az ajánlattevővel).</p>
+        </div>
+        <div class="mcp-box side">
+          <div class="who">3 · A céges valóság</div>
+          <h4>Adatbázis / frontend / weboldal</h4>
+          <p>Ahol az adat valójában él: Postgres, MySQL, Supabase, a meglévő webes felület, a referencia-lista, a fotótár. <strong>Itt nem kell semmit átépíteni</strong> — az MCP-szerver ugyanazt az adatot kérdezi, amit az emberek is használnak.</p>
+        </div>
+      </div>
+      <p class="mcp-caption">Felfelé szabvány · lefelé egyedi — ezt a két végét köti össze az MCP-szerver.</p>
+    </div>
+
+    <div class="callout">
+      <p><strong>Amit ez jelent döntéshozóként:</strong> nem kell sem a Postgres adatbázist, sem a frontend kódját átírni, hogy az AI hozzáférjen. Nem kell API-t beépíteni a meglévő rendszerbe. Az MCP-szerver <strong>elé</strong> kerül, és a szabályokat egy helyen, benne tartod. Az MCP lényegében az AI világának USB-C csatlakozója: egy szabványos dugó, sokféle rendszerhez.</p>
+    </div>
+
+    <h3>A tool-lista — a legfontosabb szabályozási pont</h3>
+    <p>
+      Az MCP-szerver <strong>nem fogad el bármit</strong>. Induláskor meghirdeti a saját <strong>tool-listáját (eszközkatalógusát)</strong>: milyen mûveleteket tud egyáltalán elvégezni, milyen névvel, milyen bemeneti adatokat vár. Az AI kizárólag ebből a listából választhat — mást nem tud kérni.
+    </p>
+
+    <p class="sub" style="margin-bottom:4px"><b>1. példa — adatbázis (szerződésadatbázis):</b> itt a tool-lista azt szabja meg, milyen lekérdezéseket futtathat az AI, és mit állíthat be.</p>
+    <div class="tools">
+      <div class="trow"><span class="tname">kereses_szerzodesre</span><span class="tdesc">Keresés ügyfél, dátum vagy státusz szerint → <b>csak olvasás</b></span></div>
+      <div class="trow"><span class="tname">szerzodes_reszletei</span><span class="tdesc">Egy szerződés teljes szövege és metaadatai → <b>csak olvasás</b></span></div>
+      <div class="trow"><span class="tname">lejarat_kozeledik</span><span class="tdesc">Közelgő lejáratok listája → <b>csak olvasás, vezetői nézet</b></span></div>
+      <div class="trow"><span class="tname mut">statusz_modositas</span><span class="tdesc">Szerződés állapotának átírása → <b>írás, emberi jóváhagyással</b></span></div>
+      <div class="trow"><span class="tname mut">nyers_sql</span><span class="tdesc">⚠️ Ha ezt felveszed, gyakorlatilag az egész adatbázist megnyitod — tipikusan <b>nem javasolt</b></span></div>
+    </div>
+
+    <p class="sub" style="margin-bottom:4px"><b>2. példa — weboldal (referencialista + fotótár):</b> itt a tool-lista azt szabja meg, mit módosíthat az AI, és <b>milyen adatokat kell küldenie</b> hozzá.</p>
+    <div class="tools">
+      <div class="trow"><span class="tname">projekt_hozzaadas</span><span class="tdesc">Új projekt a referencialistába → kötelező: <code>cim</code>, <code>leiras</code>, <code>ev</code>; opcionális: <code>fotok[]</code>, <code>ugyfel</code>, <code>cimkek[]</code></span></div>
+      <div class="trow"><span class="tname">foto_csere</span><span class="tdesc">Meglévő projekt fotójának cseréje → kötelező: <code>projekt_id</code>, <code>kep</code>; opcionális: <code>sorrend</code>, <code>alt_szoveg</code></span></div>
+      <div class="trow"><span class="tname">foto_torles</span><span class="tdesc">Fotó törlése → <b>csak megerősítéssel</b>, naplózva</span></div>
+      <div class="trow"><span class="tname ok">projekt_lista</span><span class="tdesc">Referencialisták olvasása → <b>csak olvasás</b></span></div>
+    </div>
+
+    <div class="note">
+      <b>Ez a lényeg, amit menedzsmentként érteni kell.</b> A tool-lista az a hely, ahol eldől, mihez nyúlhat az AI. Ugyanaz a technológia tud <b>csak olvasni</b> és tud <b>írni/módosítani is</b> — a különbség nem a technológiában van, hanem abban, <b>mit veszel fel a listára</b>. Ezért az MCP-szerver tervezése valójában <b>üzleti és jogosultsági döntés</b>, nem csak technikai.
+    </div>
+
+    <h3>Mi történik egy kérésnél? — lépésről lépésre</h3>
+    <p class="sub" style="margin-bottom:8px">Példa: a munkatárs az AI-tól kéri: „Vegyél fel egy új projektet a referencialistába.”</p>
+    <div class="steps">
+      <div class="layer"><h4>1. Az AI felismeri a szándékot</h4><p>Az AI megérti, hogy ez egy projekthozzáadás. Megnézi, van-e erre eszköz a tool-listán — van: <code>projekt_hozzaadas</code>.</p></div>
+      <div class="layer"><h4>2. Bekéri a kötelező adatokat</h4><p>A tool sémája megmondja, mi kell: cím, leírás, év. Ha a felhasználó nem adta meg mindet, az AI <strong>visszakérdez</strong> — nem taksál.</p></div>
+      <div class="layer"><h4>3. Meghívja az eszközt a megadott adatokkal</h4><p>Az AI elküldi: <code>{cim: „...”, leiras: „...”, ev: 2026, fotok: [...]}</code>. Ez már szabványos MCP-hívás.</p></div>
+      <div class="layer"><h4>4. Az MCP-szerver ellenőrzi és végrehajtja</h4><p>A szerver <strong>a te kódod</strong>: ellenőrzi a jogosultságot, megnézi, hogy minden kötelező mező megvan-e, majd <strong>elvégzi a mûveletet</strong> — pl. beilleszt egy sort az adatbázisba, és elmenti a fotókat a megfelelő helyre.</p></div>
+      <div class="layer"><h4>5. Visszajelzés és naplózás</h4><p>A szerver visszaadja az eredményt („sikeres, projekt ID: 41”). A mûvelet naplóba kerül: ki, mikor, mit módosított. Ez az, ami utólag visszakereshetővé teszi.</p></div>
+      <div class="layer"><h4>6. Az AI összegzi a felhasználónak</h4><p>„Felvettem a projektet a listára. Ha szeretnéd, hozzáadhatok fotókat is.” — a felhasználó látja, mi történt.</p></div>
+    </div>
+
+    <h3>Honnan tudja az MCP-szerver, mit kell csinálni?</h3>
+    <p>
+      Ezt nem találja ki: <strong>azt a fejlesztő írja meg, aki az MCP-szervert készíti</strong>. Minden egyes toolhoz tartozik egy konkrét programkód, amely leírja, mi történik a beérkező adattal. Tehát:
+    </p>
+    <div class="askgrid">
+      <div class="askcard">
+        <h4>Ha a tool <code>projekt_hozzaadas</code>…</h4>
+        <div class="q">Az AI ezt küldi: cím, leírás, év, fotók</div>
+        <p>…akkor a kód: új sor a projekt-táblába, a fotók feltöltése a tárhelyre, a kapcsolatok beállítása. <b>Ezt a lépést a fejlesztő programozza meg.</b></p>
+      </div>
+      <div class="askcard">
+        <h4>Ha az AI hibás adatot küld…</h4>
+        <div class="q">Pl. hiányzik a cím, vagy rossz a fotó formátuma</div>
+        <p>…akkor a szerver <b>elutasítja</b> és hibaüzenetet ad vissza. Az AI ezt megkapja, és vagy javítja, vagy jelzi a felhasználónak. <b>A szabályt a szerver kódja érvényesíti.</b></p>
+      </div>
+      <div class="askcard">
+        <h4>Ha jogosultság kell…</h4>
+        <div class="q">Pl. csak bizonyos kollégák módosíthatják a listát</div>
+        <p>…akkor a szerver <b>a hívó személye alapján</b> dönt: engedi vagy elutasítja. Nem az AI dönt erről. <b>Ez a legfontosabb biztonsági pont.</b></p>
+      </div>
+    </div>
+
+    <div class="mgmt">
+      <h3>Mit kérdezz attól, aki MCP-alapú megoldást ajánl?</h3>
+      <ul>
+        <li><b>Milyen eszközök kerülnek a tool-listára?</b> Kérj írásos listát. Ha bármelyik eszköz <em>írni</em> tud (módosít, töröl, feltölt), az külön indoklást és jóváhagyást igényel.</li>
+        <li><b>Ki szabja meg a jogosultságot?</b> A válasznak az kell legyen, hogy a szerver a <em>hívó munkatárs</em> nevében dönt — nem egy közös, mindenható fiókkal mûködik.</li>
+        <li><b>Mi történik, ha az AI hibás adatot küld?</b> Legyen világos: a szerver elutasítja, nem próbálja kitalálni. A hibás bemenet nem kerülhet be az adatbázisba.</li>
+        <li><b>Naplózva lesz minden mûvelet?</b> Kérd, hogy igen: ki, mikor, melyik rendszerben mit módosított az AI. Ez a megfelelőség és az audit alapja.</li>
+        <li><b>Mi van, ha később új rendszert akarunk bekötni?</b> Az MCP elõnye éppen ez: <em>egy új rendszerhez új szervert írunk, de az AI oldalán semmit nem kell változtatni</em>. Kérdezd meg, mennyi munka egy új csatlakozás.</li>
+        <li><b>Ki felelõs, ha az AI rosszat tesz?</b> A válasz sosem az, hogy „a modell” — hanem a cég, mert a szabályokat a saját MCP-szerverében õ szabja meg.</li>
+      </ul>
+    </div>
+
+    <div class="note">
+      <b>Egy mondatban menedzsmentnek:</b> az MCP egy szabvány, amelynek köszönhetően az AI <b>nem a rendszereid belsejébe nyúl be</b>, hanem egy <b>általad meghatározott, szûk eszközlistán</b> keresztül — és hogy ez a lista mit enged meg, az <b>üzleti döntés</b>, amit neked kell jóváhagynod.
     </div>
   </div>
 </section>
