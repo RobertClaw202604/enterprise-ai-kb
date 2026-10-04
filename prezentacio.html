@@ -1,0 +1,465 @@
+<!doctype html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Prezentáció — Szervezeti AI bevezetés vezetői összefoglaló</title>
+<meta name="description" content="Tizenöt diás vezetői összefoglaló: mit jelent egy szervezeti AI bevezetés, hogyan épül fel, mennyibe kerül, mire kell figyelni. By DarwinAI (www.darwinai.hu).">
+<style>
+:root{
+  --bg:#0b0d10; --bg2:#12161b; --bg3:#181e25;
+  --line:#2a323d; --line2:#3a4553;
+  --txt:#f3f5f7; --dim:#aeb7c2; --dim2:#8b95a1;
+  --acc:#ff5100; --acc2:#ff8a4d;
+  --good:#65d091; --warn:#f3c969; --bad:#ff8585; --blue:#7ab7ff; --purple:#b67be8;
+  --radius:16px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  background:var(--bg);color:var(--txt);
+  font:16px/1.55 Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  overflow:hidden;
+}
+.deck{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
+.slide{
+  position:absolute;inset:0;
+  display:none;
+  padding:5.2vh 6vw 9vh;
+  overflow-y:auto;
+  flex-direction:column;justify-content:center;
+  background:radial-gradient(1100px 620px at 82% -8%,rgba(255,81,0,.10),transparent 62%),
+             radial-gradient(820px 520px at 4% 104%,rgba(122,183,255,.07),transparent 60%),
+             linear-gradient(180deg,#090b0e,#10151b 50%,#090b0e);
+  animation:fade .28s ease;
+}
+.slide.active{display:flex}
+.slide.center{text-align:center;align-items:center}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+.slide-num{position:absolute;top:3.2vh;right:4vw;font-size:.72rem;letter-spacing:.18em;color:var(--dim2);font-weight:700}
+.slide-tag{font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--acc);font-weight:800;margin-bottom:1.4rem}
+h1.title{font-size:clamp(2.1rem,5.2vw,4.2rem);line-height:1.04;letter-spacing:-.03em;font-weight:800;max-width:20ch}
+h1.title .hl{color:var(--acc)}
+h2.st{font-size:clamp(1.6rem,3.5vw,2.6rem);line-height:1.12;letter-spacing:-.025em;font-weight:800;margin-bottom:1.6rem;max-width:26ch}
+p.lead{font-size:clamp(1rem,1.5vw,1.28rem);color:var(--dim);max-width:62ch;line-height:1.6}
+p.lead strong{color:var(--txt)}
+.subline{font-size:clamp(.92rem,1.15vw,1.05rem);color:var(--dim2);max-width:70ch;margin-top:1rem;line-height:1.6}
+
+.byline{margin-top:2.4rem;font-size:.9rem;color:var(--dim2)}
+.byline b{color:var(--acc2)}
+
+.grid{display:grid;gap:1.15rem;margin-top:.6rem}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.card{
+  background:rgba(19,23,28,.92);border:1px solid var(--line);border-radius:var(--radius);
+  padding:1.35rem 1.4rem;
+}
+.card h3{font-size:1.02rem;margin-bottom:.5rem;letter-spacing:-.01em}
+.card p,.card li{font-size:.9rem;color:var(--dim);line-height:1.5}
+.card.accented{border-color:#5a3a25;background:linear-gradient(160deg,rgba(255,81,0,.10),rgba(19,23,28,.95))}
+.num-badge{
+  display:inline-flex;align-items:center;justify-content:center;width:2rem;height:2rem;border-radius:50%;
+  background:var(--bg3);border:1px solid var(--line2);color:var(--acc);font-weight:800;font-size:.9rem;margin-bottom:.7rem;
+}
+.big{font-size:clamp(1.5rem,3vw,2.2rem);font-weight:850;letter-spacing:-.02em;color:var(--acc)}
+.big small{display:block;font-size:.85rem;font-weight:500;color:var(--dim);letter-spacing:0;margin-top:.35rem}
+
+ul.clean{list-style:none}
+ul.clean li{position:relative;padding-left:1.35rem;margin:.55rem 0;font-size:.94rem;color:var(--dim);line-height:1.5}
+ul.clean li::before{content:"→";position:absolute;left:0;color:var(--acc);font-weight:800}
+ul.clean li strong{color:var(--txt)}
+
+.pill{display:inline-block;padding:.25rem .7rem;border:1px solid var(--line2);border-radius:999px;font-size:.76rem;color:var(--dim);margin:.2rem .3rem .2rem 0;font-weight:600}
+.pill.good{border-color:#2d6f4b;color:#7ce0a5}
+.pill.warn{border-color:#7b642a;color:#f1cc72}
+.pill.bad{border-color:#7f3d3d;color:#ff9c9c}
+.pill.blue{border-color:#35577d;color:#9bc8ff}
+
+.quote{border-left:3px solid var(--acc);padding:.4rem 0 .4rem 1.2rem;font-size:clamp(1.05rem,1.9vw,1.5rem);color:var(--txt);max-width:56ch;line-height:1.45;font-weight:600}
+.quote small{display:block;margin-top:.7rem;font-size:.85rem;font-weight:400;color:var(--dim2)}
+
+table{border-collapse:collapse;width:100%;font-size:.86rem}
+th,td{text-align:left;padding:.62rem .7rem;border-bottom:1px solid #232b34;vertical-align:top}
+th{color:var(--dim2);font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;font-weight:700}
+td strong{color:var(--txt)}
+
+/* --- Vezérlősáv --- */
+.bar{
+  position:fixed;left:0;right:0;bottom:0;height:6.2vh;min-height:52px;
+  display:flex;align-items:center;justify-content:space-between;gap:1rem;
+  padding:0 3vw;background:rgba(9,11,14,.82);backdrop-filter:blur(10px);
+  border-top:1px solid var(--line);z-index:20;
+}
+.bar-left,.bar-right{display:flex;align-items:center;gap:.5rem}
+.bar button{
+  font:inherit;font-size:.85rem;font-weight:650;color:var(--txt);background:var(--bg3);
+  border:1px solid var(--line2);border-radius:9px;padding:.5rem .9rem;cursor:pointer;transition:.15s;
+}
+.bar button:hover{border-color:var(--acc);color:#fff}
+.bar button:disabled{opacity:.35;cursor:default;border-color:var(--line)}
+.bar .home{color:var(--dim);text-decoration:none;font-size:.85rem;font-weight:600}
+.bar .home:hover{color:var(--acc2)}
+.progress{flex:1;height:4px;background:#1d242c;border-radius:99px;overflow:hidden;max-width:44vw}
+.progress span{display:block;height:100%;background:linear-gradient(90deg,var(--acc),var(--acc2));transition:width .25s}
+.counter{font-size:.8rem;color:var(--dim2);font-variant-numeric:tabular-nums;min-width:4.4rem;text-align:right}
+.hint{position:fixed;bottom:7.6vh;left:50%;transform:translateX(-50%);font-size:.76rem;color:var(--dim2);
+  background:rgba(9,11,14,.85);border:1px solid var(--line);padding:.4rem .9rem;border-radius:99px;z-index:19;
+  transition:opacity .5s;pointer-events:none}
+.hint.hide{opacity:0}
+.overview{position:fixed;inset:0;background:rgba(6,8,10,.94);z-index:30;padding:5vh 5vw;overflow-y:auto;display:none}
+.overview.show{display:block}
+.overview h3{font-size:1.1rem;margin-bottom:1.4rem;color:var(--dim)}
+.ov-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:.9rem}
+.ov-item{background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:.9rem 1rem;cursor:pointer;transition:.15s}
+.ov-item:hover{border-color:var(--acc);transform:translateY(-2px)}
+.ov-item .n{font-size:.72rem;color:var(--acc);font-weight:800;letter-spacing:.1em}
+.ov-item .t{font-size:.88rem;margin-top:.3rem;color:var(--dim);line-height:1.35}
+
+@media(max-width:900px){
+  .g3,.g4{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .slide{padding:4.5vh 5vw 10vh}
+}
+@media(max-width:640px){
+  .g2,.g3,.g4{grid-template-columns:1fr}
+  .bar-left button span.lbl{display:none}
+}
+/* --- Nyomtatás / PDF: minden dia egy A4 álló oldal --- */
+@page{size:A4 portrait;margin:10mm}
+@media print{
+  html,body{overflow:visible;height:auto}
+  body{background:#fff;color:#111}
+  .bar,.hint,.slide-num,.overview{display:none!important}
+  .deck{position:static;display:block}
+  .slide{
+    display:flex!important;position:static;inset:auto;page-break-after:always;break-after:page;
+    min-height:267mm;padding:12mm 14mm;background:#fff;color:#111;animation:none;
+  }
+  .slide:last-child{page-break-after:auto}
+  h1.title,h2.st{color:#111}
+  h1.title .hl,.slide-tag,.big,.num-badge{color:#c23d00}
+  p.lead,.subline,ul.clean li,.card p,.card li,td{color:#333}
+  p.lead strong,ul.clean li strong,td strong,.card h3{color:#111}
+  .card{background:#fafafa;border-color:#ccc}
+  .card.accented{background:#fff4ec;border-color:#e0b294}
+  .num-badge{background:#f2f2f2;border-color:#ccc}
+  .quote{color:#111}.quote small{color:#555}
+  .pill{border-color:#bbb;color:#444}
+  table{font-size:11px}th{color:#555;border-color:#ddd}td{border-color:#eee}
+  .byline{color:#555}.byline b{color:#c23d00}
+}
+
+/* --- Prezentáció gomb és DarwinAI lábléc --- */
+.pres-bar{margin:0 auto;max-width:1180px;padding:0 24px}
+.pres-bar .wrap{display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding-top:18px}
+.pres-bar span{font-size:.85rem;color:var(--dim)}
+.pres-btn{
+  display:inline-block;text-decoration:none;font-weight:700;font-size:.92rem;
+  background:var(--acc);color:#fff;padding:.7rem 1.2rem;border-radius:10px;
+  border:1px solid var(--acc);transition:.15s;
+}
+.pres-btn:hover{background:#ff6a1f;border-color:#ff6a1f;transform:translateY(-1px)}
+.byline-foot{margin-top:14px;font-size:.88rem;color:var(--dim)}
+.byline-foot a{color:var(--acc);font-weight:700;text-decoration:none}
+.byline-foot a:hover{text-decoration:underline}
+
+.pres-footer{position:fixed;bottom:6.2vh;left:0;right:0;text-align:center;font-size:.75rem;color:var(--dim2);z-index:18;padding:.3rem}
+.pres-footer a{color:var(--acc2);font-weight:700;text-decoration:none}
+</style>
+</head>
+<body>
+
+<div class="deck" id="deck">
+
+  <!-- 1 -->
+  <section class="slide active center">
+    <span class="slide-num">01 / 15</span>
+    <div class="slide-tag">Vezetői összefoglaló</div>
+    <h1 class="title">Mit jelent egy <span class="hl">szervezeti AI bevezetés?</span></h1>
+    <p class="lead" style="margin-top:1.6rem">Tizenöt dia, amely végigvezet a lényegen: hogyan köti össze az AI a cég saját tudását, mi történik a háttérben, mennyibe kerül, és mire kell figyelnie egy vezetőnek.</p>
+    <p class="byline">by <b>DarwinAI</b> · www.darwinai.hu</p>
+  </section>
+
+  <!-- 2 -->
+  <section class="slide">
+    <span class="slide-num">02 / 15</span>
+    <div class="slide-tag">A kiindulópont</div>
+    <h2 class="st">A modell önmagában semmit sem tud a cégről</h2>
+    <p class="lead">A nagy nyelvi modellek általános tudással rendelkeznek az internetről — de a cég belső dokumentumairól, szerződéseiről, ticketjeiről és beszélgetéseiről <strong>semmit</strong>.</p>
+    <p class="subline">Ha egy munkatárs megkérdezi: „mi volt a feltétele a tavalyi szerződésnek?”, a modell csak akkor tud válaszolni, ha valaki <em>összekötötte</em> a céges tudással. Az üzleti érték pontosan itt kezdődik.</p>
+  </section>
+
+  <!-- 3 -->
+  <section class="slide">
+    <span class="slide-num">03 / 15</span>
+    <div class="slide-tag">A központi gondolat</div>
+    <h2 class="st">Egyik szolgáltató sem „tanítja be” a céges tudást a modellbe</h2>
+    <div class="grid g2">
+      <div class="card"><div class="num-badge">1</div><h3>Helyette: visszakeresés</h3><p>A kérdés pillanatában a rendszer megkeresi a releváns céges dokumentumokat, és azokat adja oda a modellnek kontextusként.</p></div>
+      <div class="card"><div class="num-badge">2</div><h3>Jogosultság-tudatosan</h3><p>Csak azt látja, amit a munkatárs a forrásrendszerben is látna. A jogosultság öröklődik, nem másolódik.</p></div>
+    </div>
+    <p class="quote" style="margin-top:1.6rem">Ez a <em>retrieval + grounding</em> modell: a tudás ott marad, ahol van — a modell csak „odanéz”.<small>Ez a négy nagy szolgáltató közös logikája: OpenAI, Anthropic, Microsoft, Google.</small></p>
+  </section>
+
+  <!-- 4 -->
+  <section class="slide">
+    <span class="slide-num">04 / 15</span>
+    <div class="slide-tag">Architektúra</div>
+    <h2 class="st">Hogyan épül fel egy szervezeti AI rendszer?</h2>
+    <ul class="clean">
+      <li><strong>Felhasználók</strong> — a munkatársak, akik kérdeznek (chat, Office, Teams, Slack).</li>
+      <li><strong>AI réteg</strong> — a modell, amely megérti a kérdést és megfogalmazza a választ.</li>
+      <li><strong>Hozzáférési réteg</strong> — connectorok és MCP-szerverek, amelyek összekötik a céges rendszereket.</li>
+      <li><strong>Jogosultság és biztonság</strong> — ki mit láthat, naplózás, adatvédelem.</li>
+      <li><strong>Céges tudás</strong> — fájltárak, CRM, e-mail, wiki, adatbázisok.</li>
+      <li><strong>Kimenet</strong> — válasz forrásmegjelöléssel, visszakövethetően.</li>
+    </ul>
+    <p class="subline">A rétegek sorrendje dönt: ha a jogosultság nincs rendben, a legjobb modell is kockázatot jelent.</p>
+  </section>
+
+  <!-- 5 -->
+  <section class="slide">
+    <span class="slide-num">05 / 15</span>
+    <div class="slide-tag">Négy szolgáltató</div>
+    <h2 class="st">Ugyanaz a logika, négy eltérő hangsúly</h2>
+    <div class="grid g4">
+      <div class="card"><h3>OpenAI</h3><p>Erős modell, széles connector- és API-ökoszisztéma. Friss céges tudásbázis-funkciók.</p></div>
+      <div class="card"><h3>Anthropic</h3><p>Kiemelt hangsúly a biztonságon, hosszú kontextuson és a dokumentum-alapú munkán.</p></div>
+      <div class="card"><h3>Microsoft</h3><p>A meglévő Microsoft 365 környezetbe épül be — Word, Excel, Teams, SharePoint.</p></div>
+      <div class="card"><h3>Google</h3><p>A Google Workspace tudására épít, erős kereséssel és saját felhőintegrációval.</p></div>
+    </div>
+    <p class="subline">A helyes választás nem „melyik a legjobb modell”, hanem: <strong>melyik illeszkedik a cég meglévő rendszereihez és szabályaihoz</strong>.</p>
+  </section>
+
+  <!-- 6 -->
+  <section class="slide">
+    <span class="slide-num">06 / 15</span>
+    <div class="slide-tag">Standard rendszerek</div>
+    <h2 class="st">A leggyorsabb út: kész connectorok</h2>
+    <p class="lead">A legtöbb cégnél a tudás kész, széles körben használt rendszerekben él. Ezekhez <strong>előre megírt integrációk</strong> vannak — nincs fejlesztés, csak adminisztrátori bekapcsolás.</p>
+    <div style="margin-top:1.4rem">
+      <span class="pill blue">Google Drive</span><span class="pill blue">SharePoint / OneDrive</span><span class="pill blue">Confluence / Notion</span><span class="pill blue">Salesforce</span><span class="pill blue">HubSpot</span><span class="pill blue">Jira / Asana</span><span class="pill blue">Microsoft Teams</span><span class="pill blue">Slack</span><span class="pill blue">Gmail / Outlook</span><span class="pill blue">GitHub</span><span class="pill blue">Snowflake / BigQuery</span>
+    </div>
+    <p class="subline"><strong>Ökölszabály a sorrendhez:</strong> először a kész connectorokkal kösd be a fő rendszereket — csak utána foglalkozz az egyedi fejlesztésűekkel.</p>
+  </section>
+
+  <!-- 7 -->
+  <section class="slide">
+    <span class="slide-num">07 / 15</span>
+    <div class="slide-tag">Egyedi rendszerek</div>
+    <h2 class="st">Mi van, ha a tudás saját fejlesztésű rendszerben él?</h2>
+    <p class="lead">A belső ügyviteli programhoz, szerződésadatbázishoz vagy egyedi nyilvántartáshoz nincs kész connector. Ilyenkor <strong>MCP-szerver</strong> készül: egy szabványos „híd” a céges rendszer és az AI között.</p>
+    <div class="grid g3" style="margin-top:1.6rem">
+      <div class="card"><h3>Mit tud?</h3><p>Meghatározott műveleteket tesz elérhetővé: keresés, adatlekérés, összegzés.</p></div>
+      <div class="card"><h3>Mennyi munka?</h3><p>Egyszeri fejlesztés. Utána a rendszer több AI-asszisztensből is használható.</p></div>
+      <div class="card"><h3>Mi a kockázat?</h3><p>A hozzáférés körét szigorúan meg kell határozni — mit olvashat, mit írhat.</p></div>
+    </div>
+  </section>
+
+  <!-- 8 -->
+  <section class="slide">
+    <span class="slide-num">08 / 15</span>
+    <div class="slide-tag">Előfizetések</div>
+    <h2 class="st">Mennyibe kerül mindez?</h2>
+    <p class="lead">A költség két részből áll: <strong>seat-alapú előfizetések</strong> (havi/fő) és <strong>API-fogyasztás</strong> (token-alapú). A legtöbb cégnél az előfizetés a meghatározó tétel.</p>
+    <div class="grid g3" style="margin-top:1.4rem">
+      <div class="card"><div class="big">$20–25<small>ChatGPT Business, fő/hó</small></div></div>
+      <div class="card"><div class="big">$20–25<small>Claude Team, fő/hó</small></div></div>
+      <div class="card"><div class="big">€15,60–18,20<small>Copilot Business add-on, fő/hó</small></div></div>
+    </div>
+    <p class="subline">Az oldalon interaktív kalkulátor segít kiszámolni a saját konfigurációt — létszámmal, csoportokkal és árfolyammal. Minden nettó, ÁFA nélkül.</p>
+  </section>
+
+  <!-- 9 -->
+  <section class="slide">
+    <span class="slide-num">09 / 15</span>
+    <div class="slide-tag">Döntési logika</div>
+    <h2 class="st">Egymásra épülő hozzáférési szintek</h2>
+    <ul class="clean">
+      <li><strong>Alap — mindenkinek:</strong> biztonságos céges AI-chat, jellemzően plusz díj nélkül.</li>
+      <li><strong>Irodai — a napi felhasználóknak:</strong> mély integráció a dokumentumokba és a levelezésbe.</li>
+      <li><strong>Szakértői — a kiemelt felhasználóknak:</strong> további modellek, fejlettebb munkafolyamatok.</li>
+      <li><strong>Management:</strong> többmodellű kutatás és natív hozzáférés a döntés-előkészítéshez.</li>
+    </ul>
+    <p class="subline">A szintek egymás részhalmazai: nem mindenki kap mindent, hanem a <strong>valódi igény</strong> szerint osztjuk el a hozzáférést.</p>
+  </section>
+
+  <!-- 10 -->
+  <section class="slide">
+    <span class="slide-num">10 / 15</span>
+    <div class="slide-tag">Jogosultság</div>
+    <h2 class="st">A legfontosabb governance-kérdés</h2>
+    <p class="quote">Mit láthat az AI — és mit nem?</p>
+    <div class="grid g2" style="margin-top:1.6rem">
+      <div class="card"><h3>Jogosultság öröklődik</h3><p>A modell ugyanazt látja, amit a munkatárs a forrásrendszerben. Nincs külön „AI-nézet”, amely kikerülné a szabályokat.</p></div>
+      <div class="card"><h3>Ez nem technikai, hanem vezetői döntés</h3><p>Az AI bevezetés nem projekt, hanem folyamatos szabályozás: ki mit érhet el, mi naplózódik, mi tilos.</p></div>
+    </div>
+    <p class="subline">Ha ezt a kérdést nem válaszolja meg a vezetés, a bevezetés nem kockázatmentes — bármilyen jó a modell.</p>
+  </section>
+
+  <!-- 11 -->
+  <section class="slide">
+    <span class="slide-num">11 / 15</span>
+    <div class="slide-tag">Kockázatok</div>
+    <h2 class="st">Amire minden bevezetésnél figyelni kell</h2>
+    <div class="grid g3">
+      <div class="card"><h3>Túl széles hozzáférés</h3><p>Ha az AI mindent lát, egy rossz kérdés érzékeny adatot hozhat ki. A kör legyen a lehető legszűkebb.</p></div>
+      <div class="card"><h3>Prompt injection</h3><p>Rosszindulatú tartalom a dokumentumban próbálja átvenni az irányítást. Védekezés: szigorú olvasási/írási határok.</p></div>
+      <div class="card"><h3>Adatkezelés és megfelelés</h3><p>Hol tárolódik az adat, melyik régióban, milyen naplózással — ez szerződéses kérdés is.</p></div>
+    </div>
+    <p class="subline">A kockázatokat nem a modell, hanem a <strong>hozzáférési szabályok</strong> kezelik. Ezért a governance nem utólagos, hanem első lépés.</p>
+  </section>
+
+  <!-- 12 -->
+  <section class="slide">
+    <span class="slide-num">12 / 15</span>
+    <div class="slide-tag">A lényeg</div>
+    <h2 class="st">Három gondolat, amit érdemes megjegyezni</h2>
+    <div class="grid g3" style="margin-top:.6rem">
+      <div class="card accented"><div class="num-badge">1</div><h3>A tudás a cégé marad</h3><p>Nem kerül be „tanításra” a modellbe; ott marad, ahol van, és csak a kérdés pillanatában kerül elő.</p></div>
+      <div class="card accented"><div class="num-badge">2</div><h3>Az integráció a lényeg</h3><p>Nem a modell a szűk keresztmetszet, hanem az, hogyan kötjük össze a céges rendszerekkel.</p></div>
+      <div class="card accented"><div class="num-badge">3</div><h3>A governance vezetői feladat</h3><p>Ki mit láthat, mi naplózódik — ezt nem lehet a technikára bízni.</p></div>
+    </div>
+  </section>
+
+  <!-- 13 -->
+  <section class="slide">
+    <span class="slide-num">13 / 15</span>
+    <div class="slide-tag">Következő lépés</div>
+    <h2 class="st">Az oldal hét része</h2>
+    <div class="grid g2">
+      <div class="card"><h3>Vállalati AI rendszer</h3><p>Architektúra és kockázatok — a teljes kép.</p></div>
+      <div class="card"><h3>Elérhető szállítók</h3><p>OpenAI, Anthropic, Microsoft, Google összehasonlítva.</p></div>
+      <div class="card"><h3>Előfizetések</h3><p>Csomagok, API-árak és interaktív költségkalkulátor.</p></div>
+      <div class="card"><h3>Use case szimulátor</h3><p>Lépésről lépésre: mit kérdez a felhasználó, mit ad vissza a rendszer.</p></div>
+      <div class="card"><h3>Fő működési pontok</h3><p>Egyedi rendszerek, MCP, fájlok sorsa, ügynökök.</p></div>
+      <div class="card"><h3>Terminológia</h3><p>A kulcsfogalmak laikus nyelven, hasonlatokkal.</p></div>
+    </div>
+  </section>
+
+  <!-- 14 -->
+  <section class="slide center">
+    <span class="slide-num">14 / 15</span>
+    <div class="slide-tag">Összegzés</div>
+    <h2 class="st" style="max-width:32ch">A szervezeti AI nem egy modell bevezetése — hanem a cég tudásának összekötése a modellel.</h2>
+    <p class="lead" style="margin-top:1.2rem">Aki ezt megérti, az már a jó kérdéseket teszi fel: mit láthat az AI, melyik rendszereket kötjük be először, és ki szabályozza a hozzáférést.</p>
+    <p class="byline">by <b>DarwinAI</b> · www.darwinai.hu</p>
+  </section>
+
+  <!-- 15 -->
+  <section class="slide center">
+    <span class="slide-num">15 / 15</span>
+    <div class="slide-tag">Részletek</div>
+    <h2 class="st">Nézd meg a teljes oldalt</h2>
+    <p class="lead" style="margin-bottom:1.8rem">Ez a prezentáció a lényeget foglalta össze. A részletes, forrásolt elemzés a weboldalon olvasható — szolgáltatónként, szimulátorral és költségkalkulátorral.</p>
+    <div style="display:flex;gap:.8rem;flex-wrap:wrap;justify-content:center">
+      <a class="pill blue" style="text-decoration:none;padding:.6rem 1.1rem" href="index.html">← Vissza a kezdőlapra</a>
+      <a class="pill blue" style="text-decoration:none;padding:.6rem 1.1rem" href="szallitok.html">Elérhető szállítók</a>
+      <a class="pill blue" style="text-decoration:none;padding:.6rem 1.1rem" href="elofizetesek.html">Előfizetések</a>
+      <a class="pill blue" style="text-decoration:none;padding:.6rem 1.1rem" href="mukodesi-pontok.html">Fő működési pontok</a>
+    </div>
+    <p class="byline">by <b>DarwinAI</b> · www.darwinai.hu</p>
+  </section>
+
+</div>
+
+<div class="hint" id="hint">← → a léptetéshez · O: áttekintés · F: teljes képernyő</div>
+
+<div class="overview" id="overview">
+  <h3>Áttekintés — kattints egy diára</h3>
+  <div class="ov-grid" id="ovGrid"></div>
+</div>
+
+<footer class="pres-footer">by <a href="https://www.darwinai.hu" target="_blank" rel="noopener">DarwinAI</a> · www.darwinai.hu</footer>
+<div class="bar">
+  <div class="bar-left">
+    <a class="home" href="index.html" title="Vissza a kezdőlapra">← Kezdőlap</a>
+    <button id="btnOverview" title="Diák áttekintése (O)">Áttekintés</button>
+  </div>
+  <div class="progress"><span id="prog"></span></div>
+  <div class="bar-right">
+    <span class="counter" id="counter">1 / 15</span>
+    <button id="btnPrev" title="Előző dia (←)">←</button>
+    <button id="btnNext" title="Következő dia (→)">→</button>
+    <button id="btnFs" title="Teljes képernyő (F)">Teljes képernyő</button>
+    <button id="btnPrint" title="Nyomtatás vagy PDF export">PDF / Nyomtatás</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  const slides=[...document.querySelectorAll('.slide')];
+  const total=slides.length;
+  let i=0;
+
+  const prog=document.getElementById('prog');
+  const counter=document.getElementById('counter');
+  const ovGrid=document.getElementById('ovGrid');
+  const overview=document.getElementById('overview');
+  const hint=document.getElementById('hint');
+
+  // Áttekintés rács felépítése a diák címéből
+  slides.forEach((s,idx)=>{
+    const title=(s.querySelector('h1.title,h2.st')?.textContent||'Dia').trim().replace(/\s+/g,' ');
+    const tag=(s.querySelector('.slide-tag')?.textContent||'').trim();
+    const item=document.createElement('div');
+    item.className='ov-item';
+    item.innerHTML='<div class="n">'+String(idx+1).padStart(2,'0')+'</div><div class="t">'+(tag?tag+' — ':'')+title+'</div>';
+    item.addEventListener('click',()=>{go(idx);toggleOverview(false);});
+    ovGrid.appendChild(item);
+  });
+
+  function go(n){
+    i=Math.max(0,Math.min(total-1,n));
+    slides.forEach((s,k)=>s.classList.toggle('active',k===i));
+    counter.textContent=(i+1)+' / '+total;
+    prog.style.width=(((i+1)/total)*100)+'%';
+    slides[i].scrollTop=0;
+  }
+  function next(){if(i<total-1)go(i+1);}
+  function prev(){if(i>0)go(i-1);}
+  function toggleOverview(force){
+    const show=force===undefined?!overview.classList.contains('show'):force;
+    overview.classList.toggle('show',show);
+  }
+  function toggleFs(){
+    if(!document.fullscreenElement){document.documentElement.requestFullscreen?.();}
+    else{document.exitFullscreen?.();}
+  }
+
+  document.getElementById('btnNext').addEventListener('click',next);
+  document.getElementById('btnPrev').addEventListener('click',prev);
+  document.getElementById('btnOverview').addEventListener('click',()=>toggleOverview());
+  document.getElementById('btnFs').addEventListener('click',toggleFs);
+  document.getElementById('btnPrint').addEventListener('click',()=>window.print());
+
+  document.addEventListener('keydown',e=>{
+    if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' '){e.preventDefault();next();}
+    else if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();prev();}
+    else if(e.key==='Home'){go(0);}
+    else if(e.key==='End'){go(total-1);}
+    else if(e.key==='o'||e.key==='O'){toggleOverview();}
+    else if(e.key==='f'||e.key==='F'){toggleFs();}
+    else if(e.key==='Escape'){toggleOverview(false);}
+  });
+
+  // Érintés / swipe
+  let x0=null;
+  document.addEventListener('touchstart',e=>{x0=e.touches[0].clientX;},{passive:true});
+  document.addEventListener('touchend',e=>{
+    if(x0===null)return;
+    const dx=e.changedTouches[0].clientX-x0;
+    if(Math.abs(dx)>55){dx<0?next():prev();}
+    x0=null;
+  },{passive:true});
+
+  setTimeout(()=>hint.classList.add('hide'),5200);
+  window.addEventListener('mousemove',()=>{hint.classList.add('hide');},{once:true});
+
+  go(0);
+})();
+</script>
+</body>
+</html>

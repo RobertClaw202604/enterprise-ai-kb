@@ -332,6 +332,20 @@
   .mgmt li{margin-bottom:8px}
 
   @media(max-width:820px){.mcp-row{grid-template-columns:1fr}}
+
+/* --- Prezentáció gomb és DarwinAI lábléc --- */
+.pres-bar{margin:0 auto;max-width:1180px;padding:0 24px}
+.pres-bar .wrap{display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding-top:18px}
+.pres-bar span{font-size:.85rem;color:var(--dim)}
+.pres-btn{
+  display:inline-block;text-decoration:none;font-weight:700;font-size:.92rem;
+  background:var(--acc);color:#fff;padding:.7rem 1.2rem;border-radius:10px;
+  border:1px solid var(--acc);transition:.15s;
+}
+.pres-btn:hover{background:#ff6a1f;border-color:#ff6a1f;transform:translateY(-1px)}
+.byline-foot{margin-top:14px;font-size:.88rem;color:var(--dim)}
+.byline-foot a{color:var(--acc);font-weight:700;text-decoration:none}
+.byline-foot a:hover{text-decoration:underline}
 </style>
 </head>
 <body>
@@ -344,6 +358,7 @@
     <p class="lede">Válassz egy részleget, és indítsd el a folyamatot: lépésről lépésre látszik, hogyan dolgozza fel az AI a kérést, milyen rendszerekhez nyúl, és milyen választ ad forrásmegjelöléssel.</p>
   </div>
 </header>
+<div class="pres-bar"><div class="wrap"><a class="pres-btn" href="prezentacio.html">▶ Prezentáció indítása (15 dia)</a><span>Vezetői összefoglaló — végigkattintva megérthető a lényeg</span></div></div>
 <nav class="toc topnav">
   <ul>
     <li><a href="index.html">Kezdőlap</a></li>
@@ -495,6 +510,8 @@
   <div class="wrap">
     <p><strong>Céges tudásbázis a nagy AI platformokon</strong> — összehasonlító elemzés. Készítette: Rob (ARworks), 2026. október 4.</p>
     <p>Az oldal nyilvános szolgáltatói dokumentációk és bejelentések alapján készült. A terméknevek és funkciók a szolgáltatók tulajdonát képezik; a részletek idővel változhatnak — éles döntés előtt érdemes a legfrissebb hivatalos dokumentációt ellenőrizni.</p>
+    <p class="byline-foot">by <a href="https://www.darwinai.hu" target="_blank" rel="noopener">DarwinAI</a> · www.darwinai.hu</p>
+
   </div>
 </footer>
 <script>
