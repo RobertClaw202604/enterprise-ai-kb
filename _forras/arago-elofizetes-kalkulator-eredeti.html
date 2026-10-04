@@ -1,0 +1,867 @@
+<!doctype html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Arago AI előfizetés- és API-költségkalkulátor – 2026.09.15.</title>
+<style>
+:root{
+  --bg:#0b0d10; --panel:#13171c; --panel2:#181e25; --line:#2a323d;
+  --text:#f3f5f7; --muted:#aeb7c2; --accent:#f0a23a; --good:#65d091;
+  --warn:#f3c969; --bad:#ff8585; --blue:#7ab7ff; --radius:14px;
+}
+*{box-sizing:border-box}
+body{margin:0;background:linear-gradient(180deg,#090b0e,#10151b 45%,#090b0e);color:var(--text);
+font:15px/1.48 Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+a{color:#9bc8ff}
+.wrap{max-width:1480px;margin:auto;padding:28px 22px 70px}
+header{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:end;margin-bottom:20px}
+h1{font-size:clamp(29px,4vw,48px);line-height:1.05;margin:0 0 8px;letter-spacing:-.03em}
+h2{font-size:24px;margin:0 0 14px} h3{font-size:17px;margin:0 0 10px}
+.kicker{color:var(--accent);font-weight:800;text-transform:uppercase;letter-spacing:.11em;font-size:12px}
+.sub{color:var(--muted);max-width:920px}
+.datebox{border:1px solid var(--line);background:var(--panel);padding:12px 15px;border-radius:12px;color:var(--muted);white-space:nowrap}
+.grid{display:grid;gap:14px}.g4{grid-template-columns:repeat(4,minmax(0,1fr))}.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.card{background:rgba(19,23,28,.94);border:1px solid var(--line);border-radius:var(--radius);padding:18px}
+.metric{font-size:27px;font-weight:850;letter-spacing:-.02em}.metric small{font-size:13px;color:var(--muted);font-weight:600}
+.label{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.07em}
+.good{color:var(--good)}.warn{color:var(--warn)}.bad{color:var(--bad)}.accent{color:var(--accent)}
+.section{margin-top:26px}
+.note{padding:13px 15px;border-left:3px solid var(--accent);background:#171c22;border-radius:8px;color:#d8dee5}
+.note.warnnote{border-left-color:var(--warn)}
+.controls{display:flex;gap:9px;flex-wrap:wrap;align-items:center}
+button,select,input{font:inherit}
+button{border:1px solid var(--line);background:#202833;color:var(--text);padding:9px 12px;border-radius:9px;cursor:pointer}
+button:hover{border-color:#586679} button.primary{background:var(--accent);color:#111;border-color:var(--accent);font-weight:800}
+button.ghost{background:transparent}
+input,select{background:#0f141a;color:var(--text);border:1px solid #35404c;border-radius:8px;padding:8px 9px}
+input[type=number]{width:105px}
+.small{font-size:12px;color:var(--muted)}
+.tablewrap{overflow:auto;border:1px solid var(--line);border-radius:12px}
+table{width:100%;border-collapse:collapse;min-width:980px;background:#101419}
+th,td{padding:11px 10px;border-bottom:1px solid #232b34;vertical-align:top;text-align:left}
+th{position:sticky;top:0;background:#1b2129;color:#cfd6de;font-size:12px;text-transform:uppercase;letter-spacing:.045em;z-index:1}
+tr:last-child td{border-bottom:0} tbody tr:hover{background:#141a21}
+.tag{display:inline-block;padding:3px 7px;border:1px solid #36414e;border-radius:99px;color:#cbd3dc;font-size:11px;margin:1px}
+.tag.good{border-color:#2d6f4b;color:#7ce0a5}.tag.warn{border-color:#7b642a;color:#f1cc72}.tag.bad{border-color:#7f3d3d;color:#ff9c9c}
+.price{font-weight:800;white-space:nowrap}.muted{color:var(--muted)}
+.group-row,.assign-row,.api-row,.tier-row{display:grid;gap:9px;align-items:center;margin:8px 0}
+.group-row{grid-template-columns:minmax(180px,1fr) 120px 42px}
+.tier-row{grid-template-columns:minmax(260px,1.3fr) 120px minmax(240px,1fr);padding:10px 12px;border:1px solid #29333e;border-radius:10px;background:#10161c}
+.tier-row .tier-name{font-weight:800}.tier-row .tier-note{font-size:12px;color:var(--muted)}
+.tier-row input{width:105px}
+.assign-row{grid-template-columns:32px minmax(250px,1.6fr) minmax(150px,.8fr) minmax(190px,1fr) minmax(110px,.5fr) 44px}
+.api-row{grid-template-columns:32px minmax(280px,1.4fr) 130px 130px minmax(150px,.7fr) 44px}
+.headrow{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.06em}
+.sep{height:1px;background:var(--line);margin:16px 0}
+.summarybox{background:#0f1419;border:1px solid #33404d;border-radius:12px;padding:14px;white-space:pre-wrap;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:12px}
+.reco{border:1px solid #665023;background:linear-gradient(135deg,#1e1a13,#171b20)}
+.reco strong{color:#ffd486}
+.decision-summary{margin-top:0;padding:0;overflow:hidden;border-color:#745725;background:linear-gradient(145deg,#211b12,#141a20 55%)}
+.decision-head{display:flex;justify-content:space-between;gap:18px;align-items:flex-start;padding:22px 22px 18px;border-bottom:1px solid #4b3c24}
+.decision-head h2{font-size:28px;margin:3px 0 7px}.decision-head .sub{max-width:780px}
+.scenario-badge{flex:none;padding:7px 10px;border:1px solid #85662e;border-radius:999px;color:#ffd486;background:#2a2114;font-size:12px;font-weight:800}
+.recommendation-table{padding:0 22px}
+.recommendation-row{display:grid;grid-template-columns:minmax(390px,1.42fr) minmax(188px,.66fr) minmax(230px,.75fr) minmax(340px,1.28fr) 42px;gap:18px;align-items:stretch;padding:16px 12px;border-bottom:1px solid #30302c;border-radius:10px;transition:background-color .18s ease,box-shadow .18s ease}
+.recommendation-row.recommendation-headrow{padding:10px 0 8px;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.065em}
+.fx-cell{display:grid;gap:6px}.fx-inline{display:flex;gap:6px;flex-wrap:wrap}.fx-rate{display:flex;align-items:center;gap:4px;padding:3px 5px;border:1px solid #3b4652;border-radius:7px;background:#10151b;color:#c8d0d9;font-size:10px;letter-spacing:0;text-transform:none}.fx-rate input{width:58px;min-height:0;padding:4px 3px;border:0;background:transparent;font-size:11px;font-weight:750}
+.recommendation-row:last-child{border-bottom:0}.rec-platform{color:var(--accent);font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.07em}.rec-plan{font-weight:800;margin-top:2px}
+.rec-product{display:grid;gap:8px;align-content:center}.rec-field{display:grid;gap:4px}.rec-field-label{color:var(--muted);font-size:10px;font-weight:750;text-transform:uppercase;letter-spacing:.055em}.rec-product select{width:100%;min-height:39px}.rec-product .rec-plan-select{font-weight:750}.rec-product .billing-select{color:#ffd486;border-color:#59472b}
+.rec-audience{display:grid;grid-template-columns:68px minmax(100px,1fr);gap:7px;align-items:center;align-self:center}.rec-audience input{width:100%;min-height:39px;font-weight:800}.rec-audience select{width:100%;min-height:39px;font-weight:750}.rec-sum{align-self:center;font-weight:800;font-size:17px}.rec-sum small{display:block;font-weight:500;color:var(--muted);font-size:11px;margin-top:3px}.rec-reason{align-self:center;color:#d1d8e0;font-size:14.5px;line-height:1.5}.rec-remove{align-self:center;font-size:20px;line-height:1;padding:7px 10px}
+.recommendation-row.group-basic{background:linear-gradient(90deg,rgba(62,132,207,.17),rgba(62,132,207,.045));box-shadow:inset 4px 0 #62a8ee}
+.recommendation-row.group-office{background:linear-gradient(90deg,rgba(76,172,123,.17),rgba(76,172,123,.045));box-shadow:inset 4px 0 #65d091}
+.recommendation-row.group-expert{background:linear-gradient(90deg,rgba(240,162,58,.18),rgba(240,162,58,.045));box-shadow:inset 4px 0 #f0a23a}
+.recommendation-row.group-management{background:linear-gradient(90deg,rgba(170,112,224,.19),rgba(170,112,224,.045));box-shadow:inset 4px 0 #b67be8}
+.recommendation-controls{padding:14px 22px;border-top:1px solid #3c3325;background:#14191e}
+.decision-api{padding:18px 22px;border-top:1px solid #3c3325;background:#11161b}.decision-api-head{display:flex;align-items:end;justify-content:space-between;gap:16px;margin-bottom:12px}.decision-api h3{margin:0;font-size:18px}.decision-api .api-row:not(.headrow){padding:9px 10px;border:1px solid #29333e;border-radius:9px;background:#0e1419}.decision-api .controls{margin-top:10px}
+.group-legend{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto}.group-chip{padding:4px 8px;border-radius:999px;border:1px solid;font-size:11px;font-weight:750}.group-chip.basic{color:#9acbff;border-color:#437bb2;background:rgba(62,132,207,.13)}.group-chip.office{color:#8ce1b0;border-color:#387b58;background:rgba(76,172,123,.13)}.group-chip.expert{color:#ffd18e;border-color:#8c632a;background:rgba(240,162,58,.13)}.group-chip.management{color:#d5a9fa;border-color:#765097;background:rgba(170,112,224,.14)}
+.decision-total{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:#3c3325;border-top:1px solid #5d4825;margin-top:3px}
+.total-cell{background:#171b20;padding:17px 22px}.total-cell.main{background:#251d12}.total-cell .metric{margin-top:3px}.total-cell.main .metric{color:var(--accent)}
+.config-actions{display:flex;align-items:center;gap:14px;padding:15px 22px;border-top:1px solid #3b3327;background:#181b1f}.config-actions-title{flex:none}.config-actions-title b{display:block}.config-actions-title span{display:block;margin-top:2px}.config-actions .controls{flex:1}.file-button{display:inline-flex;align-items:center;border:1px solid var(--line);background:#202833;color:var(--text);padding:9px 12px;border-radius:9px;cursor:pointer}.file-button:hover{border-color:#586679}.file-button input{display:none}.save-status{min-height:18px;color:var(--good);font-size:12px}
+.decision-actions{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:13px 22px;background:#12171c}.decision-actions a{font-weight:800;text-decoration:none}.decision-actions .small{max-width:860px}
+.market-intro{position:relative;overflow:hidden;padding:28px 30px;border:1px solid #4b6178;background:linear-gradient(125deg,#172330,#171b21 58%,#231b12)}.market-intro::after{content:'';position:absolute;right:-70px;top:-100px;width:290px;height:290px;border-radius:50%;background:radial-gradient(circle,rgba(122,183,255,.18),transparent 68%);pointer-events:none}.market-intro h2{position:relative;font-size:clamp(28px,3.2vw,42px);line-height:1.08;letter-spacing:-.025em;margin:5px 0 10px;max-width:900px}.market-intro .sub{position:relative;max-width:980px;font-size:16px}.market-intro .kicker{color:var(--blue)}
+.section-intro{display:flex;justify-content:space-between;align-items:end;gap:18px}.section-intro .sub{max-width:760px}
+.wrap{display:flex;flex-direction:column}
+header{order:0}.decision-summary{order:1}#decisionLogic{order:2}#marketIntro{order:3}#plansOverview{order:4}#microsoftLicensing{order:5}#apiOverview{order:6}#microsoftOverview{order:7}#finalRecommendation{order:8}#sources{order:9}
+#calculator,#subscriptionsCalculator,#totals{display:none}
+.sources li{margin:8px 0;color:#cbd2da}
+details{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:#11161c}
+details+details{margin-top:8px} summary{cursor:pointer;font-weight:800}
+@media(max-width:1100px){.recommendation-row{grid-template-columns:minmax(310px,1.25fr) minmax(188px,.7fr) minmax(220px,.72fr) 42px}.recommendation-row .rec-reason{grid-column:1/-1;padding:3px 0 4px}.recommendation-row .rec-remove{grid-column:4;grid-row:1}.recommendation-headrow div:nth-last-child(2){display:none}}
+@media(max-width:1000px){.g4,.g3,.g2{grid-template-columns:1fr 1fr}header{grid-template-columns:1fr}.assign-row,.api-row{grid-template-columns:1fr}.headrow{display:none}.decision-total{grid-template-columns:1fr 1fr}}
+@media(max-width:920px){.g4,.g3,.g2{grid-template-columns:1fr}.wrap{padding:18px 12px 50px}.decision-head,.decision-actions{display:block}.scenario-badge{display:inline-block;margin-top:13px}.recommendation-table{padding:0 16px}.recommendation-headrow{display:block}.recommendation-headrow>div{display:none}.recommendation-headrow>.fx-cell{display:grid}.recommendation-row{grid-template-columns:1fr 1fr 42px;gap:12px;padding:16px 10px}.recommendation-row .rec-product{grid-column:1/-1;grid-row:1}.recommendation-row .rec-audience{grid-column:1/-1;grid-row:2}.recommendation-row .rec-audience::before{content:'Létszám / munkatársi csoport';grid-column:1/-1;color:var(--muted);font-size:11px;font-weight:500;text-transform:uppercase}.rec-sum{grid-column:1/3;grid-row:3}.rec-sum::before{content:'Részösszeg';display:block;color:var(--muted);font-size:11px;font-weight:500;text-transform:uppercase}.recommendation-row .rec-remove{grid-column:3;grid-row:3}.recommendation-row .rec-reason{grid-column:1/-1;grid-row:4}.decision-total{grid-template-columns:1fr}.section-intro{display:block}.recommendation-controls{padding:14px 16px}.decision-api{padding:16px}.decision-api-head{display:block}.decision-api-head .small{margin-top:4px}.config-actions{display:block}.config-actions .controls{margin-top:10px}.save-status{margin-top:7px}}
+@page{size:A4 landscape;margin:9mm}
+@media print{
+ *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+ body{background:white;color:#111;font-size:11px}
+ .wrap{display:block;max-width:none;padding:0}
+ .wrap>*,.decision-summary .config-actions,.decision-summary .decision-actions,.decision-summary .recommendation-controls{display:none!important}
+ .wrap>.decision-summary{display:block!important;margin:0;border:1px solid #999;background:white;color:#111;overflow:visible}
+ .decision-head{padding:12px 14px 10px;border-bottom-color:#bbb}.decision-head h2{font-size:22px;margin:2px 0 4px}.decision-head .sub{color:#444;font-size:10px}.scenario-badge{padding:5px 8px;color:#5b3c00;background:#fff3d9;border-color:#b98a35}
+ .recommendation-table{padding:0 10px}.recommendation-row{grid-template-columns:2.05fr 1fr .9fr 1.45fr 24px;gap:9px;padding:8px 8px;border-color:#bbb;border-radius:5px;break-inside:avoid}.recommendation-row.recommendation-headrow{padding:7px 0 5px;font-size:8px;color:#444}
+ .rec-product{gap:4px}.rec-field{gap:2px}.rec-field-label{font-size:7px;color:#555}.rec-product select,.rec-audience input,.rec-audience select{min-height:25px;padding:3px 5px;background:white;color:#111;border-color:#aaa;font-size:9px}.rec-product .billing-select{color:#5b3c00;border-color:#b98a35}.rec-audience{grid-template-columns:38px 1fr;gap:4px}.rec-sum{font-size:12px}.rec-sum small{font-size:8px;color:#555}.rec-reason{font-size:9px;line-height:1.3;color:#222}.rec-remove{display:none}
+ .fx-cell{gap:3px}.fx-inline{gap:3px}.fx-rate{padding:1px 3px;background:white;color:#333;border-color:#aaa;font-size:7px}.fx-rate input{width:43px;padding:2px;background:white;color:#111;font-size:8px}
+ .decision-api{padding:9px 14px;background:#f7f7f7;border-top-color:#bbb;break-inside:avoid}.decision-api-head{margin-bottom:5px}.decision-api h3{font-size:13px}.decision-api .small{color:#555;font-size:8px}.decision-api .api-row{grid-template-columns:20px 1.6fr .65fr .65fr .8fr 24px;gap:6px;margin:4px 0}.decision-api .api-row:not(.headrow){padding:5px 6px;background:white;border-color:#bbb}.decision-api input,.decision-api select{min-height:25px;padding:3px 5px;background:white;color:#111;font-size:9px}.decision-api .controls,.decision-api button{display:none}.decision-api .headrow{display:grid;color:#555;font-size:7px}
+ .decision-total{grid-template-columns:repeat(4,1fr);border-top-color:#999;background:#aaa;break-inside:avoid}.total-cell,.total-cell.main{padding:9px 12px;background:white;color:#111}.total-cell.main{background:#fff3d9}.total-cell .label{color:#555;font-size:8px}.total-cell .metric,.total-cell.main .metric{font-size:16px;color:#111}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div>
+    <div class="kicker">Arago • döntés-előkészítő anyag</div>
+    <h1>AI előfizetés- és API-költségkalkulátor</h1>
+    <div class="sub">ChatGPT / OpenAI, Claude / Anthropic, Perplexity, DeepSeek és Microsoft Copilot.
+      Magyarországi vállalati tervezéshez, nettó költségszemlélettel. Az ár- és termékadatok állapota: 2026. szeptember 15.</div>
+  </div>
+  <div class="datebox">Adatállapot: <b>2026.09.15.</b><br><span class="small">HUF-konverzió referencia, szerkeszthető</span></div>
+</header>
+
+<section class="section card decision-summary" aria-labelledby="recommendedTitle">
+  <div class="decision-head">
+    <div>
+      <div class="kicker">A döntés lényege</div>
+      <h2 id="recommendedTitle">Javasolt előfizetési mix</h2>
+      <div class="sub">A 30 fős Arago alapszcenárió havi nettó kalkulációja. A csomag, a számlázás, a seat-szám és a munkatársi csoport közvetlenül a táblázatban módosítható.</div>
+    </div>
+    <div class="scenario-badge" id="scenarioBadge">Ajánlott • 30 / 20 / 10 / 5 fő</div>
+  </div>
+  <div class="recommendation-table">
+    <div class="recommendation-row recommendation-headrow">
+      <div>Platform + csomag / ár</div>
+      <div>Létszám / munkatársi csoport</div>
+      <div class="fx-cell"><span>Részösszeg / hó</span><div class="fx-inline"><label class="fx-rate">USD <input id="usdHuf" type="number" step="0.001" value="317.435" aria-label="USD per HUF árfolyam"></label><label class="fx-rate">EUR <input id="eurHuf" type="number" step="0.001" value="366.346" aria-label="EUR per HUF árfolyam"></label></div></div>
+      <div>Miért ezt?</div><div></div>
+    </div>
+    <div id="recommendationRows"></div>
+  </div>
+  <div class="recommendation-controls controls">
+    <button class="primary" id="addRecommendation">+ Előfizetés hozzáadása</button>
+    <button id="resetRecommendation">Ajánlott alapbeállítás visszaállítása</button>
+    <div class="group-legend" aria-label="Munkatársi csoportok színjelölése"><span class="group-chip basic">Alap</span><span class="group-chip office">Irodai</span><span class="group-chip expert">Szakértői</span><span class="group-chip management">Management</span></div>
+  </div>
+  <div class="decision-api">
+    <div class="decision-api-head"><h3>API-fogyasztás <span class="small">• opcionális</span></h3><div class="small">A becsült havi input és output mennyisége millió tokenben.</div></div>
+    <div class="api-row headrow"><div></div><div>Modell</div><div>Input MTok/hó</div><div>Output MTok/hó</div><div>Havi nettó</div><div></div></div>
+    <div id="apiRows"></div>
+    <div class="controls"><button id="addApi">+ API sor hozzáadása</button></div>
+  </div>
+  <div class="decision-total">
+    <div class="total-cell"><div class="label">Előfizetések / hó</div><div class="metric" id="recommendedSeatTotal">0 Ft</div></div>
+    <div class="total-cell"><div class="label">API-használat / hó</div><div class="metric" id="recommendedApiTotal">0 Ft</div></div>
+    <div class="total-cell main"><div class="label">Végösszeg / hó</div><div class="metric" id="recommendedGrandMonthly">0 Ft</div></div>
+    <div class="total-cell"><div class="label">Évesített végösszeg</div><div class="metric" id="recommendedGrandAnnual">0 Ft</div></div>
+  </div>
+  <div class="config-actions">
+    <div class="config-actions-title"><b>Konfiguráció mentése</b><span class="small">Export vagy későbbi folytatás</span></div>
+    <div class="controls">
+      <button id="savePdf">PDF mentése</button>
+      <button id="saveExcel">Excel (.csv)</button>
+      <button id="saveJson">JSON mentése</button>
+      <label class="file-button">JSON betöltése<input id="importConfigFile" type="file" accept="application/json,.json"></label>
+    </div>
+    <div class="save-status" id="saveStatus" role="status" aria-live="polite"></div>
+  </div>
+  <div class="decision-actions">
+    <div class="small">Nettó döntéstámogató becslés. A 0 Ft-os Copilot Chat jogosult Microsoft 365-alaplicencet feltételez; az alaplicenc meglévő költségét nem tartalmazza.</div>
+    <a href="#plansOverview">Csomagok részletesen ↓</a>
+  </div>
+</section>
+
+<section class="section card reco" id="decisionLogic">
+<h2>Javasolt döntési logika</h2>
+<div class="grid g2">
+ <div>
+  <h3>1. Microsoft-alap mindenkinek</h3>
+  <div class="muted">A kiinduló Arago-stackben minden munkatárs megkapja a <b>Microsoft 365 Copilot Chatet</b>, ha a meglévő Microsoft 365 licencek alapján €0 extra díjjal jár. Erre épülnek rá a magasabb szintek, egymás részhalmazaiként.</div>
+ </div>
+ <div>
+  <h3>2. 20 fő: Copilot Business</h3>
+  <div class="muted">A 30 fős teljes létszámból alapértelmezésként <b>20 fő</b> kap Microsoft 365 Copilot Businesst a mély Word / Excel / PowerPoint / Outlook / Teams integráció miatt.</div>
+ </div>
+ <div>
+  <h3>3. 10 fő: ChatGPT Business</h3>
+  <div class="muted">A Copilot Business csoportból <b>10 fő</b> kap plusz <b>ChatGPT Business Standard</b> hozzáférést a Codex, ChatGPT Work, vibe coding, deep research és az OpenAI-specifikus workflow-k miatt.</div>
+ </div>
+ <div>
+  <h3>4. 5 fő management: Perplexity Enterprise Pro + Claude Pro</h3>
+  <div class="muted">A ChatGPT Business csoportból <b>5 fős management</b> kap még <b>Perplexity Enterprise Pro</b>-t többmodellű kutatásra és <b>Claude Pro</b>-t natív Claude-hozzáférésre. A Claude Pro egyéni csomag; ha központi céges adminisztráció kell, helyette Claude Team Standard célszerű.</div>
+ </div>
+</div>
+</section>
+
+
+<section class="section card" id="microsoftLicensing" style="border-color:#35577d">
+<h2>Microsoft Copilot – hogyan épül fel a licencelés?</h2>
+<p class="sub" style="max-width:none">A Microsoftnál három külön dolgot érdemes szétválasztani: a <b>lakossági Windows/Copilotot</b>, a <b>munkahelyi Copilot Chatet</b>, és a <b>fizetős Microsoft 365 Copilotot</b>. Az Arago beszerzési döntésében főleg az utóbbi kettő releváns.</p>
+
+<div class="grid g2" style="margin-top:14px">
+  <div class="card">
+    <div class="kicker">0. szint • consumer</div>
+    <h3>Copilot Free – 0 Ft</h3>
+    <p><b>Mi ez?</b> A Windowsból/webből elérhető általános Microsoft AI-asszisztens.</p>
+    <p><b>Mi nem ez?</b> Nem vállalati Microsoft 365 Copilot seat. Nem erre építeném a céges AI-governance-et.</p>
+    <div class="tag warn">magán / általános használat</div>
+  </div>
+
+  <div class="card">
+    <div class="kicker">1. szint • céges, plusz díj nélkül</div>
+    <h3>Microsoft 365 Copilot Chat – €0 extra</h3>
+    <p><b>Feltétel:</b> jogosult Microsoft 365-előfizetés + Microsoft Entra munkahelyi fiók.</p>
+    <p><b>Mit ad?</b> Vállalati adatvédelemmel működő, alapvetően webes információkra támaszkodó AI-chatet, fájlfeltöltést, IT-felügyeletet és agent-kezelést.</p>
+    <p><b>Mit nem ad teljesen?</b> Nem ugyanaz a mély Word/Excel/Outlook/Teams + céges Work IQ integráció, mint a fizetős Copilot Business/Enterprise.</p>
+    <div class="tag good">Ezt kapcsolnám be először mindenkinek, ha jogosultak</div>
+  </div>
+
+  <div class="card">
+    <div class="kicker">2A. szint • AI add-on meglévő M365 mellé</div>
+    <h3>Microsoft 365 Copilot Business</h3>
+    <p><b>Akkor ezt kell nézni, ha már van megfelelő M365 üzleti licencetek.</b></p>
+    <p><b>Ár:</b> <span class="price">€15,60/fő/hó promó</span> éves elköteleződéssel; normál éves lista €18,20; havi konstrukció €21,84. Nettó, ÁFA nélkül.</p>
+    <p><b>Mit ad pluszban?</b> Copilot Wordben, Excelben, PowerPointban, Outlookban és Teamsben; Work IQ; céges munkaadatokra épülő chat; Researcher, Analyst, Facilitator; használati/adopciós analytics.</p>
+    <p><b>Méret:</b> Business konstrukció legfeljebb 300 felhasználóig.</p>
+    <div class="tag good">meglévő M365 mellé</div>
+  </div>
+
+  <div class="card">
+    <div class="kicker">2B. szint • alaplicenc + AI egyben</div>
+    <h3>M365 Business Standard + Copilot Business</h3>
+    <p><b>Akkor érdekes, ha nincs már megfelelő Microsoft 365 alaplicenc.</b></p>
+    <p><b>Jelenlegi HU ár:</b> <span class="price">€20,36/fő/hó</span>, évente fizetve, nettó.</p>
+    <p>Ebben egyben kapod a Microsoft 365 Business Standardot – Office desktop/web/mobile appok, üzleti e-mail, 1 TB tárhely stb. – és a Copilot Business AI-funkciókat.</p>
+    <div class="tag good">komplett „Office + AI” csomag</div>
+  </div>
+
+  <div class="card">
+    <div class="kicker">2C. szint • erősebb security + AI</div>
+    <h3>M365 Business Premium + Copilot Business</h3>
+    <p><b>Jelenlegi HU ár:</b> <span class="price">€27,73/fő/hó</span>, évente fizetve, nettó.</p>
+    <p>A Business Premium magasabb biztonsági és identitásvédelmi képességeit kombinálja a Copilot Business funkcióival.</p>
+    <div class="tag">max. 300 felhasználó</div>
+  </div>
+
+  <div class="card">
+    <div class="kicker">3. szint • enterprise</div>
+    <h3>Microsoft 365 Copilot Enterprise</h3>
+    <p><b>Ár:</b> <span class="price">€26/fő/hó</span>, évente fizetve, nettó.</p>
+    <p><b>Fontos:</b> ez önmagában nem Microsoft 365 alaplicenc: megfelelő jogosító M365 enterprise licenc külön szükséges hozzá.</p>
+    <p>Nagyvállalati security, compliance, Copilot Studio/agent lehetőségek és nagyobb vállalati környezethez való menedzsment miatt releváns.</p>
+    <div class="tag warn">Arago-méretben valószínűleg nem első választás</div>
+  </div>
+</div>
+
+<div class="note" style="margin-top:14px">
+<b>Arago default feltételezés:</b> a cégnek már van megfelelő Microsoft 365 üzleti alaplicence, ezért a kalkulátor alapból csak a Copilot Business <i>add-on</i> díjával számol a kijelölt 20 főre.<br><br>
+<b>Egyszerű döntési fa Aragonak:</b><br>
+1. Már van megfelelő Microsoft 365 üzleti licence? → <b>Igen:</b> Copilot Chatet €0 extrával bekapcsolni; akinek kell mély Office-integráció, annak Copilot Business add-on.<br>
+2. Nincs megfelelő M365 alaplicenc? → A <b>Business Standard + Copilot Business (€20,36/fő/hó)</b> kombinált csomagot érdemes összevetni a mostani Microsoft-költséggel.<br>
+3. Business Premium security funkciók is kellenek? → <b>Business Premium + Copilot Business (€27,73/fő/hó)</b>.<br>
+4. 300+ user / enterprise compliance? → Enterprise konstrukció.
+</div>
+</section>
+
+<section class="section card" id="calculator">
+<div class="section-intro"><div><div class="kicker">Finomhangolás</div><h2>1. Létszám és hozzáférési szintek</h2></div><div class="sub">Itt módosítható a fenti ajánlat. Minden változtatás azonnal átvezetődik a legfelső kalkulációba.</div></div>
+<p class="small">A négy szám egymásba ágyazott: <b>Management ⊂ ChatGPT csoport ⊂ Copilot Business csoport ⊂ teljes létszám</b>. Bármelyik számot átírhatod; a kalkulátor automatikusan megtartja ezt a hierarchiát.</p>
+<div id="tiers"></div>
+<div class="note" style="margin-top:12px">
+<b>Default:</b> 30 fő Copilot Chat → ebből 20 fő Copilot Business → ebből 10 fő ChatGPT Business → ebből 5 fő management, akik még Perplexity Enterprise Pro + Claude Pro hozzáférést kapnak.
+</div>
+</section>
+
+<section class="section card" id="subscriptionsCalculator">
+<h2>2. Seat-alapú előfizetések kalkulátora</h2>
+<p class="small">A „Célcsoport” a fenti egymásra épülő szintek valamelyike. Így például a management 5 fője egyszerre része a 30 fős Copilot Chat, a 20 fős Copilot Business és a 10 fős ChatGPT Business körnek is. Az éves díjak havi ekvivalensként jelennek meg.</p>
+<div class="controls" style="margin-bottom:12px">
+ <button class="primary" data-preset="lean">Preset: Arago 30 / 20 / 10 / 5</button>
+ <button data-preset="everything">Preset: management mindent</button>
+ <button data-preset="ms">Preset: Microsoft-first • M365+Copilot</button>
+ <button class="ghost" id="clearAssignments">Kijelölések törlése</button>
+</div>
+<div class="assign-row headrow"><div></div><div>Csomag</div><div>Célcsoport</div><div>Számlázás</div><div>Havi nettó</div><div></div></div>
+<div id="assignments"></div>
+<div class="controls"><button id="addAssignment">+ Előfizetés hozzáadása</button></div>
+</section>
+
+<section class="section" id="totals">
+<div class="grid g4">
+ <div class="card"><div class="label">Seat költség / hó</div><div class="metric" id="seatMonthly">0 Ft</div></div>
+ <div class="card"><div class="label">API költség / hó</div><div class="metric" id="apiMonthly">0 Ft</div></div>
+ <div class="card"><div class="label">Teljes költség / hó</div><div class="metric accent" id="totalMonthly2">0 Ft</div></div>
+ <div class="card"><div class="label">Teljes költség / év</div><div class="metric" id="totalAnnual2">0 Ft</div></div>
+</div>
+<div class="card" style="margin-top:14px">
+ <div class="controls"><button id="copySummary">Konfiguráció másolása</button><button onclick="window.print()">Nyomtatás / PDF</button></div>
+ <div id="summaryText" class="summarybox" style="margin-top:12px"></div>
+</div>
+</section>
+
+<section class="section card market-intro" id="marketIntro">
+  <div class="kicker">Magyarázó, értelmező és piaci információk</div>
+  <h2>Piaci háttér és előfizetési útmutató</h2>
+  <div class="sub">A következő fejezetek az ajánlott konfiguráció értelmezését segítik: vállalati csomagok, licenckonstrukciók, használati limitek, API-árak, Microsoft-szintek és további döntési szempontok.</div>
+</section>
+
+<section class="section" id="plansOverview">
+<h2>Vállalati előfizetések – 2026.09.15.</h2>
+<div class="tablewrap">
+<table>
+<thead><tr><th>Platform / csomag</th><th>Seat</th><th>Éves díjazás havi ekvivalens</th><th>Havi díjazás</th><th>Mi van benne?</th><th>Publikált használati limit</th><th>EU/HU nettó szempont</th></tr></thead>
+<tbody>
+<tr><td><b>ChatGPT Business – Standard</b></td><td>2–200</td><td class="price">$20 / fő / hó</td><td class="price">$25 / fő / hó</td><td>ChatGPT, ChatGPT Work, Codex; desktop/web/mobile; Google Workspace, Slack, GitHub, Microsoft 365 connectorok; SAML/SSO/MFA; admin, usage analytics; üzleti adatot alapból nem használ modelltréningre.</td><td>Nincs publikált havi tokenkeret. Standard használati limitek + opcionális workspace credit.</td><td>USD listaár; Tax/VAT ID megadható. Vállalati nettó budgethez árfolyam-konverzióval számolva.</td></tr>
+<tr><td><b>ChatGPT Business – Premium</b></td><td>2–200, Standarddal keverhető</td><td class="price">$100 / fő / hó</td><td class="price">$125 / fő / hó</td><td>Standard minden funkciója.</td><td><b>5× több usage</b> Standardhoz képest, nincs 5 órás limit; más heti/guardrail limitek lehetnek.</td><td>Ugyanaz, mint Standard.</td></tr>
+<tr><td><b>ChatGPT Enterprise</b></td><td>sales / egyedi</td><td class="price">egyedi</td><td class="price">egyedi</td><td>Nagyobb kontextus, SCIM/EKM/RBAC, retention, data residency, SLA, enterprise support.</td><td>Seat/credit/token konstrukció szerződéstől függ.</td><td>Ajánlatkérés szükséges.</td></tr>
+
+<tr><td><b>Claude Pro – egyéni</b></td><td>1 user / account</td><td class="price">$200/év = $16.67 / hó</td><td class="price">$20 / hó</td><td>Claude chat, több usage, Claude Code, Cowork, Research, több modell, projektek.</td><td>Standard Pro usage limitek; API külön.</td><td><span class="tag warn">nem vállalati Team-seat</span> Egyéni csomag, nincs Team központi admin/billing/SSO. 5 management userre használható, de governance szempontból a Team tisztább.</td></tr>
+<tr><td><b>Claude Team – Standard</b></td><td>2–150</td><td class="price">$20 / fő / hó</td><td class="price">$25 / fő / hó</td><td>Összes elérhető modell, Claude Code, Cowork, Projects/knowledge, workplace connectorok, 200K chat context.</td><td>Pro-hoz képest 1.25× usage/session; heti egyéni limit; usage credit vásárolható.</td><td>Anthropic jelzi, hogy régió/adó eltérhet; VAT ID megadható.</td></tr>
+<tr><td><b>Claude Team – Premium</b></td><td>2–150, Standarddal keverhető</td><td class="price">$100 / fő / hó</td><td class="price">$125 / fő / hó</td><td>Standard minden funkciója.</td><td>Pro-hoz képest 6.25× usage/session; heti egyéni limit.</td><td>Ugyanaz, mint Standard.</td></tr>
+<tr><td><b>Claude Enterprise – új usage-based modell</b></td><td>min. 20 self-serve / 50 sales-assisted</td><td class="price">seat fee nincs nyilvánosan számszerűsítve</td><td>éves seat szerződés</td><td>Team + audit log, SCIM, retention, Compliance/Analytics API, customer-managed encryption key, US-only inference opció.</td><td><b>Nincs benne usage.</b> Minden token standard Claude API-áron megy a seat fee fölött.</td><td>20 főnél kisebb csapatra nem releváns.</td></tr>
+
+<tr><td><b>Perplexity Enterprise Pro</b></td><td>aktív felhasználónként; Pro/Max mix</td><td class="price">$400/év = $33.33 / hó</td><td class="price">$40 / hó</td><td>Enterprise privacy (adat nem megy tréningre), admin/seat management, shared projects, file connectorok, support; advanced modellek.</td><td>400 Pro Search/hét, 50 Research/hó, 80 Browser Agent/hó, 50 file/app creation/hó, 100 upload session/hét.</td><td>EU reverse-charge VAT ID kezelhető.</td></tr>
+<tr><td><b>Perplexity Enterprise Max</b></td><td>Pro-val keverhető</td><td class="price">$3,250/év = $270.83 / hó</td><td class="price">$325 / hó</td><td>Enterprise Pro + legmagasabb limitek, 15 videó/hó, nagyobb file capacity, prémium security hozzáférés.</td><td>4,000 Pro Search/hét, 500 Research/hó, 800 Browser Agent/hó, 500 file/app creation/hó, 1,000 upload/hét.</td><td>EU reverse-charge VAT ID kezelhető.</td></tr>
+
+<tr><td><b>DeepSeek web/app</b></td><td>nincs publikált céges seat csomag</td><td class="price">$0</td><td class="price">$0</td><td>Publikus chat/app.</td><td>Nincs vállalati seat SLA/admin/tokenkeret publikálva.</td><td><span class="tag bad">adatkezelési kockázat</span> A jelenlegi privacy policy szerint személyes adat Kínában kerül közvetlen feldolgozásra/tárolásra.</td></tr>
+
+<tr><td><b>Microsoft 365 Copilot Chat</b></td><td>jogosult M365 + Entra felhasználók</td><td class="price">€0 extra</td><td class="price">€0 extra</td><td>Biztonságos, web-grounded AI chat; enterprise data protection; bizonyos M365 appok; IT control. Agenthasználat lehet usage-based.</td><td>Nem publikált tokenkeret.</td><td>A meglévő jogosult Microsoft 365 licenc előfeltétel.</td></tr>
+<tr><td><b>Microsoft 365 Copilot Business – add-on</b></td><td>max. 300</td><td class="price">€15.60 / fő / hó PROMÓ<br><span class="small">lista: €18.20</span></td><td class="price">€21.84 / fő / hó</td><td><b>Meglévő jogosult M365 üzleti licenc mellé.</b> Copilot Word/Excel/PowerPoint/Outlook/Teams; Work IQ; Researcher/Analyst/Facilitator; analytics; LLM model choice.</td><td>Nem publikált tokenkeret.</td><td>HU Microsoft oldal nettó, ÁFA nélküli árat mutat. A €15.60 promó 2026.07.01–12.31 között köthető, első évre, 1 éves commitmenttel.</td></tr>
+<tr><td><b>M365 Business Standard + Copilot Business</b></td><td>max. 300</td><td class="price">€20.36 / fő / hó</td><td class="price">€24.43 / fő / hó</td><td><b>Alap M365 + Copilot egyben:</b> desktop/web/mobile Office appok, üzleti e-mail, 1 TB tárhely + teljes Copilot Business funkciók.</td><td>Nem publikált tokenkeret.</td><td>Nettó HU Microsoft ár; jó összehasonlítási pont, ha nincs már megfelelő M365 alaplicenc.</td></tr>
+<tr><td><b>M365 Business Premium + Copilot Business</b></td><td>max. 300</td><td class="price">€27.73 / fő / hó</td><td class="price">€29.93 / fő / hó</td><td>Business Premium security/identity képességek + Copilot Business.</td><td>Nem publikált tokenkeret.</td><td>Nettó HU Microsoft ár.</td></tr>
+<tr><td><b>Microsoft 365 Copilot Enterprise</b></td><td>enterprise</td><td class="price">€26 / fő / hó</td><td class="price">€27.30 / fő / hó<br><span class="small">1 éves commitment mellett</span></td><td>Copilot Chat + Work IQ + M365 appok + agents + enterprise security/privacy/compliance.</td><td>Nem publikált tokenkeret.</td><td>Megfelelő Microsoft 365 alaplicenc külön szükséges; HU oldal ÁFA nélküli árat közöl.</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+
+<section class="section" id="apiOverview">
+<h2>API árak – összehasonlítható tokenköltség</h2>
+<div class="tablewrap">
+<table>
+<thead><tr><th>Szolgáltató / modell</th><th>Input / 1M token</th><th>Cached input / 1M</th><th>Output / 1M token</th><th>Megjegyzés</th></tr></thead>
+<tbody>
+<tr><td>OpenAI GPT-6 Astra</td><td>$10</td><td>$1</td><td>$50</td><td>Legmagasabb OpenAI tier; 1.05M context.</td></tr>
+<tr><td>OpenAI GPT-5.6 Sol</td><td>$4</td><td>$0.40</td><td>$20</td><td>Promóciós API ár legalább 2026.11.21-ig; 1.05M context.</td></tr>
+<tr><td>OpenAI GPT-5.6 Terra</td><td>$2</td><td>$0.20</td><td>$12</td><td>&gt;272K inputnál a teljes kérésre magasabb long-context multiplikátor.</td></tr>
+<tr><td>OpenAI GPT-5.6 Luna</td><td>$0.20</td><td>$0.02</td><td>$1.20</td><td>Költségérzékeny, nagy volumenre.</td></tr>
+
+<tr><td>Anthropic Claude Fable 5.1</td><td>$10</td><td>$0.25 cache read</td><td>$50</td><td>1M context, 128K max output.</td></tr>
+<tr><td>Anthropic Claude Opus 5</td><td>$5</td><td>akár 90% cache saving</td><td>$25</td><td>Frontier Opus.</td></tr>
+<tr><td>Anthropic Claude Sonnet 5</td><td>$2</td><td>akár 90% cache saving</td><td>$10</td><td>A $2/$10 ár 2026.08.10-től permanent.</td></tr>
+<tr><td>Anthropic Claude Haiku 4.5</td><td>$1</td><td>akár 90% cache saving</td><td>$5</td><td>Gyors, költséghatékony.</td></tr>
+
+<tr><td>Perplexity Sonar</td><td>$1</td><td>–</td><td>$1</td><td>+ search request fee: $5/$8/$12 per 1K low/medium/high context.</td></tr>
+<tr><td>Perplexity Sonar Pro</td><td>$3</td><td>–</td><td>$15</td><td>+ request fee: $6/$10/$14 per 1K.</td></tr>
+<tr><td>Perplexity Sonar Reasoning Pro</td><td>$2</td><td>–</td><td>$8</td><td>+ request fee: $6/$10/$14 per 1K.</td></tr>
+<tr><td>Perplexity Sonar Deep Research</td><td>$2</td><td>–</td><td>$8</td><td>+ citation $2/MTok + search $5/1K + reasoning $3/MTok.</td></tr>
+
+<tr><td>DeepSeek V4.1 Flash – off-peak</td><td>$0.15 cache miss</td><td>$0.003 cache hit</td><td>$0.60</td><td>Minden nem-peak időszak. 1M context, 384K max output.</td></tr>
+<tr><td>DeepSeek V4.1 Flash – peak</td><td>$0.30 cache miss</td><td>$0.006 cache hit</td><td>$1.20</td><td>H–P 01:00–04:00 és 06:00–10:00 UTC. 2026.09.14-től a v4-pro endpoint is V4.1 Flashra route-ol és Flash áron számlázódik.</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+
+<section class="section" id="microsoftOverview">
+<h2>Microsoft Copilot – Windows / egyéni és vállalati szintek</h2>
+<div class="tablewrap">
+<table>
+<thead><tr><th>Szint</th><th>Magyar ár</th><th>AI jogosultság</th><th>Vállalati használatra?</th><th>Megjegyzés</th></tr></thead>
+<tbody>
+<tr><td><b>Microsoft Copilot Free</b></td><td class="price">0 Ft</td><td>Általános AI chat, írás, összegzés, képkészítés; kapacitás/limit függő.</td><td><span class="tag warn">nem céges governance</span></td><td>Windows 11-en appként is elérhető, Microsoft Store-ból ingyen telepíthető.</td></tr>
+<tr><td><b>Microsoft 365 Personal</b></td><td>3,549 Ft/hó vagy 35,499 Ft/év</td><td>1 tulajdonos; Copilot M365 desktop appokban; magasabb usage mint free.</td><td><span class="tag warn">consumer</span></td><td>1 TB. Egyéni licenc.</td></tr>
+<tr><td><b>Microsoft 365 Family</b></td><td>4,649 Ft/hó vagy 46,499 Ft/év</td><td>1–6 user, de az AI <b>csak az előfizetés tulajdonosának</b>.</td><td><span class="tag bad">nem csapatlicenc</span></td><td>A Microsoft kifejezetten üzleti csomagot ajánl munkahelyi csapatnak.</td></tr>
+<tr><td><b>Microsoft 365 Premium</b></td><td>8,789 Ft/hó vagy 87,899 Ft/év</td><td>Kiterjedt AI usage; advanced AI/agents; AI csak tulajdonos.</td><td><span class="tag warn">consumer</span></td><td>Nem helyettesíti a céges Copilot Business licencet.</td></tr>
+<tr><td><b>Microsoft 365 Pro</b></td><td>43,999 Ft/hó, csak havi</td><td>Legmagasabb consumer AI usage; AI csak tulajdonos.</td><td><span class="tag warn">consumer</span></td><td>1–6 user storage/app sharing, de Copilot AI csak account owner.</td></tr>
+<tr><td><b>Microsoft 365 Copilot Chat</b></td><td>€0 extra jogosult M365 licencek mellett</td><td>Vállalati web-grounded chat + enterprise data protection.</td><td><span class="tag good">IGEN</span></td><td><b>Nem külön fizetős AI-seat.</b> Jogosult M365 + Entra munkahelyi account mellett jár; ezt érdemes elsőként bekapcsolni.</td></tr>
+<tr><td><b>Copilot Business add-on</b></td><td>€15.60/fő/hó promó; €18.20 lista; €21.84 havi</td><td>Mély M365 app-integráció + Work IQ + munkaadatok.</td><td><span class="tag good">IGEN</span></td><td><b>Már meglévő megfelelő M365 alaplicenc mellé.</b> Max. 300 user.</td></tr>
+<tr><td><b>Business Standard + Copilot Business</b></td><td>€20.36/fő/hó évesen; €24.43 havi</td><td>Office/M365 alapcsomag + Copilot Business egyben.</td><td><span class="tag good">IGEN</span></td><td>Akkor érdekes, ha nincs már megfelelő M365 alaplicenc.</td></tr>
+<tr><td><b>Business Premium + Copilot Business</b></td><td>€27.73/fő/hó évesen; €29.93 havi</td><td>Erősebb security/identity + Copilot Business.</td><td><span class="tag good">IGEN</span></td><td>Max. 300 user; magasabb biztonsági igénynél.</td></tr>
+<tr><td><b>Microsoft 365 Copilot Enterprise</b></td><td>€26/fő/hó évesen</td><td>Enterprise app-integráció, agents, security/compliance.</td><td><span class="tag good">IGEN</span></td><td><b>Ez is add-on:</b> megfelelő enterprise M365 alaplicenc külön szükséges; 300+ vagy enterprise governance esetén releváns.</td></tr>
+</tbody>
+</table>
+</div>
+<div class="note warnnote" style="margin-top:12px"><b>Consumer HUF árak:</b> a Microsoft magyar fogyasztói oldalain megjelenő retail összegek. Ezeket nem érdemes céges nettó licencköltségként használni; az Arago döntésében a Copilot Chat / Business / Enterprise sorok a relevánsak. A Business/Enterprise HU oldalak kifejezetten ÁFA nélküli EUR árat közölnek.</div>
+</section>
+
+<section class="section" id="finalRecommendation">
+<h2>Mit javasolnék Aragonak?</h2>
+<div class="grid g2">
+<div class="card">
+<h3 class="good">A. Első kör – legjobb ár/használhatóság arány</h3>
+<p><b>30 fő:</b> Microsoft 365 Copilot Chat, ha a meglévő M365 licencekkel €0 extra díjjal jár.</p>
+<p><b>20 fő:</b> Copilot Business add-on a napi Word / Excel / PowerPoint / Outlook / Teams integrációhoz.</p>
+<p><b>10 fő:</b> plusz ChatGPT Business Standard a Codex, Work, vibe coding, deep research és OpenAI-workflow-k miatt.</p>
+<p><b>5 fő management:</b> plusz <b>Perplexity Enterprise Pro + Claude Pro</b>. Claude Pro helyett Claude Team Standard akkor jobb, ha fontos a központi céges adminisztráció.</p>
+<p><b>DeepSeek:</b> API/pilot csak előre meghatározott, nem bizalmas adatkörre vagy kontrollált architektúrában.</p>
+</div>
+<div class="card">
+<h3 class="accent">B. Management: miért két extra rendszer?</h3>
+<p>A <b>Perplexity Enterprise Pro</b> a gyors, több forrású webes kutatás és modellek közötti ellenőrzés rétege. A <b>Claude Pro</b> pedig natív Claude-hozzáférést ad olyan esetekre, amikor a Claude saját felülete, Research, Cowork vagy Claude Code előnyösebb. Ha governance fontosabb, a Claude Pro 5 egyéni seat helyett 5 Claude Team Standard seatre lehet váltani.</p>
+<p class="small">Fontos: a Perplexityben futó külső modellek Perplexity search/tool környezetben működnek; ez nem 1:1 azonos a natív ChatGPT/Claude termékkel.</p>
+</div>
+</div>
+</section>
+
+<section class="section" id="sources">
+<h2>Források és értelmezési megjegyzések</h2>
+<div class="card">
+<ul class="sources">
+<li><a href="https://openai.com/business/pricing/" target="_blank">OpenAI – Business Pricing</a>; <a href="https://help.openai.com/en/articles/8792536-chatgpt-team-billing" target="_blank">ChatGPT Business billing/seats</a>; <a href="https://developers.openai.com/api/docs/models" target="_blank">OpenAI API models/pricing</a>.</li>
+<li><a href="https://claude.com/pricing" target="_blank">Anthropic – Claude pricing / Pro</a>; <a href="https://support.claude.com/en/articles/9266767-what-is-the-team-plan" target="_blank">Claude Team</a>; <a href="https://support.claude.com/en/articles/9797531-what-is-the-enterprise-plan" target="_blank">Claude Enterprise</a>; <a href="https://platform.claude.com/docs/en/models/fable-5-1/overview" target="_blank">Claude model pricing</a>.</li>
+<li><a href="https://www.perplexity.ai/help-center/en/articles/10352986-enterprise-pricing-and-billing-frequently-asked-questions" target="_blank">Perplexity Enterprise pricing</a>; <a href="https://www.perplexity.ai/help-center/en/articles/11187416-which-perplexity-subscription-plan-is-right-for-you" target="_blank">plan limits</a>; <a href="https://docs.perplexity.ai/docs/getting-started/pricing" target="_blank">Sonar API pricing</a>.</li>
+<li><a href="https://api-docs.deepseek.com/quick_start/pricing/" target="_blank">DeepSeek API pricing</a>; <a href="https://cdn.deepseek.com/policies/en-US/deepseek-privacy-policy.html" target="_blank">DeepSeek Privacy Policy</a>.</li>
+<li><a href="https://www.microsoft.com/hu-hu/microsoft-365-copilot/business" target="_blank">Microsoft 365 Copilot Business – HU</a>; <a href="https://www.microsoft.com/hu-hu/microsoft-365-copilot/pricing/enterprise" target="_blank">Copilot Enterprise – HU</a>; <a href="https://www.microsoft.com/hu-hu/microsoft-365-copilot/pricing/individuals" target="_blank">Copilot individual plans – HU</a>.</li>
+</ul>
+<div class="small">A kalkulátor nettó vállalati döntéstámogató becslés. USD/EUR szolgáltatások tényleges HUF könyvelési értéke a bank/kártya/számlázás árfolyamától változik. EU-s B2B esetben a VAT ID és reverse-charge kezelés szolgáltatónként/számlázó entitásonként ellenőrizendő. Az API tool-call, search, computer, media, long-context és egyéb extra díjai nincsenek minden esetben beépítve a puszta input/output tokenbecslésbe.</div>
+</div>
+</section>
+</div>
+
+<script>
+const fmtHuf = n => new Intl.NumberFormat('hu-HU',{style:'currency',currency:'HUF',maximumFractionDigits:0}).format(n||0);
+const fmtUsd = n => new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',maximumFractionDigits:2}).format(n||0);
+const fmtEur = n => new Intl.NumberFormat('de-DE',{style:'currency',currency:'EUR',maximumFractionDigits:2}).format(n||0);
+
+let tiers = {
+ total: 30,
+ copilotBiz: 20,
+ chatgpt: 10,
+ management: 5
+};
+
+const tierDefs = [
+ {id:'all', key:'total', name:'Teljes létszám • Copilot Chat', note:'Mindenki: Microsoft 365 Copilot Chat, ha a meglévő M365 licenc alapján €0 extra.'},
+ {id:'copilotBiz', key:'copilotBiz', name:'Ebből: Copilot Business', note:'Mély Word / Excel / PowerPoint / Outlook / Teams integráció.'},
+ {id:'chatgpt', key:'chatgpt', name:'Ebből: ChatGPT Business', note:'Codex, ChatGPT Work, vibe coding, deep research és OpenAI workflow-k.'},
+ {id:'management', key:'management', name:'Ebből: Management', note:'Plusz Perplexity Enterprise Pro + Claude Pro.'}
+];
+
+const plans = {
+ chatgpt_standard:{vendor:'OpenAI',name:'ChatGPT Business – Standard',currency:'USD',choices:{annual:{label:'Éves • $20/fő/hó',price:20},monthly:{label:'Havi • $25/fő/hó',price:25}}},
+ chatgpt_premium:{vendor:'OpenAI',name:'ChatGPT Business – Premium',currency:'USD',choices:{annual:{label:'Éves • $100/fő/hó',price:100},monthly:{label:'Havi • $125/fő/hó',price:125}}},
+ claude_pro:{vendor:'Anthropic',name:'Claude Pro – egyéni',currency:'USD',choices:{annual:{label:'Éves • $200/év = $16.67/hó',price:200/12},monthly:{label:'Havi • $20/hó',price:20}}},
+ claude_standard:{vendor:'Anthropic',name:'Claude Team – Standard',currency:'USD',choices:{annual:{label:'Éves • $20/fő/hó',price:20},monthly:{label:'Havi • $25/fő/hó',price:25}}},
+ claude_premium:{vendor:'Anthropic',name:'Claude Team – Premium',currency:'USD',choices:{annual:{label:'Éves • $100/fő/hó',price:100},monthly:{label:'Havi • $125/fő/hó',price:125}}},
+ perplexity_pro:{vendor:'Perplexity',name:'Perplexity Enterprise Pro',currency:'USD',choices:{annual:{label:'Éves • $400/év = $33.33/hó',price:400/12},monthly:{label:'Havi • $40/hó',price:40}}},
+ perplexity_max:{vendor:'Perplexity',name:'Perplexity Enterprise Max',currency:'USD',choices:{annual:{label:'Éves • $3,250/év = $270.83/hó',price:3250/12},monthly:{label:'Havi • $325/hó',price:325}}},
+ ms_chat:{vendor:'Microsoft',name:'Microsoft 365 Copilot Chat – jogosult M365 mellett',currency:'EUR',choices:{included:{label:'€0 extra',price:0}}},
+ ms_business:{vendor:'Microsoft',name:'Copilot Business add-on • meglévő M365 mellé',currency:'EUR',choices:{
+   promo:{label:'Éves PROMÓ • €15.60/fő/hó',price:15.60},
+   annual:{label:'Éves LISTA • €18.20/fő/hó',price:18.20},
+   monthly:{label:'Havi • €21.84/fő/hó',price:21.84}}},
+ ms_bundle_standard:{vendor:'Microsoft',name:'M365 Business Standard + Copilot Business',currency:'EUR',choices:{
+   annual:{label:'Éves • €20.36/fő/hó',price:20.36},
+   monthly:{label:'Havi • €24.43/fő/hó',price:24.43}}},
+ ms_bundle_premium:{vendor:'Microsoft',name:'M365 Business Premium + Copilot Business',currency:'EUR',choices:{
+   annual:{label:'Éves • €27.73/fő/hó',price:27.73},
+   monthly:{label:'Havi • €29.93/fő/hó',price:29.93}}},
+ ms_enterprise:{vendor:'Microsoft',name:'Microsoft 365 Copilot Enterprise add-on',currency:'EUR',choices:{
+   annual:{label:'Éves • €26/fő/hó',price:26},
+   monthly:{label:'Havi fizetés, 1 éves commitment • €27.30/fő/hó',price:27.30}}},
+  deepseek_free:{vendor:'DeepSeek',name:'DeepSeek web/app – ingyenes, governance nélkül',currency:'USD',choices:{free:{label:'$0',price:0}}}
+};
+
+const planReasons = {
+  ms_chat:'Biztonságos céges AI-chat mindenkinek, ha a meglévő Microsoft 365 licenc mellett plusz díj nélkül elérhető.',
+  ms_business:'Mély Word-, Excel-, PowerPoint-, Outlook- és Teams-integráció azoknak, akik napi szinten dolgoznak a Microsoft 365-ben.',
+  ms_bundle_standard:'Teljes Microsoft 365-alapcsomag és Copilot egyben, ha még nincs megfelelő üzleti alaplicenc.',
+  ms_bundle_premium:'Copilot mellett erősebb biztonsági és identitásvédelmi képességeket is ad.',
+  ms_enterprise:'Nagyvállalati governance, compliance és ügynökfunkciók; 300+ felhasználónál lehet indokolt.',
+  chatgpt_standard:'Codex, ChatGPT Work, deep research és OpenAI-specifikus munkafolyamatok a kiemelt felhasználóknak.',
+  chatgpt_premium:'Nagyobb használati keret a legintenzívebb ChatGPT-felhasználóknak.',
+  claude_pro:'Natív Claude-hozzáférés a management számára; központi adminisztrációhoz inkább Claude Team javasolt.',
+  claude_standard:'Központilag kezelhető natív Claude és Claude Code csapatoknak.',
+  claude_premium:'Magasabb Claude-használati keret a legintenzívebb felhasználóknak.',
+  perplexity_pro:'Többmodellű, forrásolt kutatás és gyors vezetői információgyűjtés.',
+  perplexity_max:'Nagyon magas kutatási és agentlimitek speciális, intenzív használathoz.',
+  deepseek_free:'Költségmentes publikus chat, de vállalati governance nélkül és fokozott adatkezelési kockázattal.'
+};
+
+const employeeGroups = {
+  basic:{name:'Alap',note:'Microsoft 365 Copilot Chat • ingyenes'},
+  office:{name:'Irodai',note:'fizetős Microsoft 365 Copilot'},
+  expert:{name:'Szakértői',note:'Irodai csomag + ChatGPT'},
+  management:{name:'Management',note:'Szakértői csomag + Perplexity + Claude'}
+};
+
+const apiModels = {
+ oai_astra:{name:'OpenAI GPT-6 Astra',in:10,out:50,note:''},
+ oai_sol:{name:'OpenAI GPT-5.6 Sol',in:4,out:20,note:'promó API ár legalább 2026.11.21-ig'},
+ oai_terra:{name:'OpenAI GPT-5.6 Terra',in:2,out:12,note:'>272K inputnál long-context multiplikátor'},
+ oai_luna:{name:'OpenAI GPT-5.6 Luna',in:.2,out:1.2,note:''},
+ claude_fable:{name:'Claude Fable 5.1',in:10,out:50,note:''},
+ claude_opus:{name:'Claude Opus 5',in:5,out:25,note:''},
+ claude_sonnet:{name:'Claude Sonnet 5',in:2,out:10,note:''},
+ claude_haiku:{name:'Claude Haiku 4.5',in:1,out:5,note:''},
+ pplx_sonar:{name:'Perplexity Sonar',in:1,out:1,note:'+ request fee'},
+ pplx_pro:{name:'Perplexity Sonar Pro',in:3,out:15,note:'+ request fee'},
+ pplx_reason:{name:'Perplexity Sonar Reasoning Pro',in:2,out:8,note:'+ request fee'},
+ pplx_deep:{name:'Perplexity Sonar Deep Research',in:2,out:8,note:'+ citation/search/reasoning díjak'},
+ ds_off:{name:'DeepSeek V4.1 Flash – off-peak',in:.15,out:.6,note:'cache miss input'},
+ ds_peak:{name:'DeepSeek V4.1 Flash – peak',in:.30,out:1.2,note:'cache miss input'}
+};
+
+let assignments = [];
+let apiRows = [];
+
+function uid(){return Math.random().toString(36).slice(2,9)}
+function assignmentCount(a){
+ const direct=Number(a?.seats);
+ return Number.isFinite(direct) ? Math.max(0,Math.round(direct)) : targetCount(a?.target);
+}
+function totalPeople(){
+ const counts=assignments.filter(a=>a.enabled).map(assignmentCount);
+ return counts.length ? Math.max(...counts) : 0;
+}
+function targetCount(t){
+ const d=tierDefs.find(x=>x.id===t);
+ return d ? (+tiers[d.key]||0) : 0;
+}
+function targetName(t){
+ const d=tierDefs.find(x=>x.id===t);
+ return d ? d.name.replace(' • Copilot Chat','').replace('Ebből: ','') : '–';
+}
+function fx(currency){return currency==='USD'?+document.getElementById('usdHuf').value:+document.getElementById('eurHuf').value}
+
+function normalizeTiers(changed){
+ tiers.total=Math.max(0,Math.round(+tiers.total||0));
+ tiers.copilotBiz=Math.max(0,Math.round(+tiers.copilotBiz||0));
+ tiers.chatgpt=Math.max(0,Math.round(+tiers.chatgpt||0));
+ tiers.management=Math.max(0,Math.round(+tiers.management||0));
+
+ if(changed==='total'){
+   tiers.copilotBiz=Math.min(tiers.copilotBiz,tiers.total);
+   tiers.chatgpt=Math.min(tiers.chatgpt,tiers.copilotBiz);
+   tiers.management=Math.min(tiers.management,tiers.chatgpt);
+ } else if(changed==='copilotBiz'){
+   tiers.copilotBiz=Math.min(tiers.copilotBiz,tiers.total);
+   tiers.chatgpt=Math.min(tiers.chatgpt,tiers.copilotBiz);
+   tiers.management=Math.min(tiers.management,tiers.chatgpt);
+ } else if(changed==='chatgpt'){
+   tiers.chatgpt=Math.min(tiers.chatgpt,tiers.copilotBiz);
+   tiers.management=Math.min(tiers.management,tiers.chatgpt);
+ } else if(changed==='management'){
+   tiers.management=Math.min(tiers.management,tiers.chatgpt);
+ }
+}
+
+function renderTiers(){
+ normalizeTiers('total');
+ const box=document.getElementById('tiers'); box.innerHTML='';
+ tierDefs.forEach((d,i)=>{
+   let row=document.createElement('div'); row.className='tier-row';
+   row.innerHTML=`<div><div class="tier-name">${i+1}. ${d.name}</div></div>
+     <input class="tiercount" type="number" min="0" step="1" value="${tiers[d.key]}" aria-label="${d.name} létszám">
+     <div class="tier-note">${d.note}</div>`;
+   row.querySelector('.tiercount').onchange=e=>{
+     tiers[d.key]=Math.max(0,+e.target.value||0);
+     normalizeTiers(d.key);
+     renderTiers();
+     renderAssignments();
+     recalc();
+   };
+   box.appendChild(row);
+ });
+ const totalPeopleEl=document.getElementById('totalPeople');
+ if(totalPeopleEl) totalPeopleEl.textContent=totalPeople();
+}
+
+function planOptions(sel){
+ return Object.entries(plans).map(([id,p])=>`<option value="${id}" ${id===sel?'selected':''}>${p.vendor} — ${p.name}</option>`).join('');
+}
+function targetOptions(sel){
+ return tierDefs.map(d=>`<option value="${d.id}" ${sel===d.id?'selected':''}>${d.name} (${targetCount(d.id)} fő)</option>`).join('');
+}
+function assignmentGroup(a){
+ if(employeeGroups[a?.group]) return a.group;
+ return ({all:'basic',copilotBiz:'office',chatgpt:'expert',management:'management'})[a?.target]||'basic';
+}
+function groupOptions(sel){
+ return Object.entries(employeeGroups).map(([id,g])=>`<option value="${id}" ${id===sel?'selected':''}>${g.name}</option>`).join('');
+}
+function groupName(id){return employeeGroups[id]?.name||employeeGroups.basic.name}
+function billingOptions(planId,sel){
+ let p=plans[planId];return Object.entries(p.choices).map(([id,c])=>`<option value="${id}" ${id===sel?'selected':''}>${c.label}</option>`).join('');
+}
+
+function renderAssignments(preserve=true){
+ const box=document.getElementById('assignments');box.innerHTML='';
+ assignments.forEach(a=>{
+   if(!plans[a.plan]) a.plan='chatgpt_standard';
+   if(!tierDefs.find(g=>g.id===a.target)) a.target='all';
+   if(!plans[a.plan].choices[a.billing]) a.billing=Object.keys(plans[a.plan].choices)[0];
+   let row=document.createElement('div'); row.className='assign-row';
+   row.innerHTML=`<input type="checkbox" class="enabled" ${a.enabled?'checked':''}>
+     <select class="plan">${planOptions(a.plan)}</select>
+     <select class="target">${targetOptions(a.target)}</select>
+     <select class="billing">${billingOptions(a.plan,a.billing)}</select>
+     <div class="price cost">–</div>
+     <button class="ghost remove">×</button>`;
+   row.querySelector('.enabled').onchange=e=>{a.enabled=e.target.checked;recalc()};
+   row.querySelector('.plan').onchange=e=>{a.plan=e.target.value;a.billing=Object.keys(plans[a.plan].choices)[0];renderAssignments();recalc()};
+   row.querySelector('.target').onchange=e=>{a.target=e.target.value;recalc()};
+   row.querySelector('.billing').onchange=e=>{a.billing=e.target.value;recalc()};
+   row.querySelector('.remove').onclick=()=>{assignments=assignments.filter(x=>x.id!==a.id);renderAssignments();recalc()};
+   a._costEl=row.querySelector('.cost');
+   box.appendChild(row);
+ });
+}
+
+function apiOptions(sel){
+ return Object.entries(apiModels).map(([id,m])=>`<option value="${id}" ${id===sel?'selected':''}>${m.name} — $${m.in}/$${m.out} per MTok</option>`).join('');
+}
+function renderApi(){
+ const box=document.getElementById('apiRows');box.innerHTML='';
+ apiRows.forEach(r=>{
+   let row=document.createElement('div');row.className='api-row';
+   row.innerHTML=`<input type="checkbox" class="enabled" ${r.enabled?'checked':''}>
+     <select class="model">${apiOptions(r.model)}</select>
+     <input class="in" type="number" min="0" step="0.1" value="${r.input}">
+     <input class="out" type="number" min="0" step="0.1" value="${r.output}">
+     <div class="price cost">–</div>
+     <button class="ghost remove">×</button>`;
+   row.querySelector('.enabled').onchange=e=>{r.enabled=e.target.checked;recalc()};
+   row.querySelector('.model').onchange=e=>{r.model=e.target.value;recalc()};
+   row.querySelector('.in').oninput=e=>{r.input=Math.max(0,+e.target.value||0);recalc()};
+   row.querySelector('.out').oninput=e=>{r.output=Math.max(0,+e.target.value||0);recalc()};
+   row.querySelector('.remove').onclick=()=>{apiRows=apiRows.filter(x=>x.id!==r.id);renderApi();recalc()};
+   r._costEl=row.querySelector('.cost');box.appendChild(row);
+ });
+}
+
+function renderRecommendationSummary(seatHuf,apiHuf){
+ const box=document.getElementById('recommendationRows');
+ const enabled=assignments.filter(a=>a.enabled && plans[a.plan] && plans[a.plan].choices[a.billing]);
+ box.innerHTML='';
+ enabled.forEach(a=>{
+   const p=plans[a.plan], c=p.choices[a.billing], seats=assignmentCount(a), group=assignmentGroup(a);
+   const unitHuf=c.price*fx(p.currency), subtotal=unitHuf*seats;
+   const row=document.createElement('div');
+   row.className=`recommendation-row group-${group}`;
+   row.innerHTML=`<div class="rec-product">
+       <label class="rec-field"><span class="rec-field-label">Platform + csomag</span><select class="rec-plan-select" aria-label="Platform és csomag">${planOptions(a.plan)}</select></label>
+       <label class="rec-field"><span class="rec-field-label">Ár / számlázás</span><select class="billing-select" aria-label="Ár és számlázási konstrukció">${billingOptions(a.plan,a.billing)}</select></label>
+     </div>
+     <div class="rec-audience"><input class="rec-seat-input" type="number" min="0" step="1" value="${seats}" aria-label="Seat-szám"><select class="rec-group-select" aria-label="Munkatársi csoport">${groupOptions(group)}</select></div>
+     <div class="rec-sum">${fmtHuf(subtotal)}<small>nettó / hó</small></div>
+     <div class="rec-reason">${planReasons[a.plan]||'A kiválasztott felhasználói kör igényeihez rendelt előfizetés.'}</div>
+     <button class="ghost rec-remove" title="Sor eltávolítása" aria-label="Előfizetési sor eltávolítása">×</button>`;
+   row.querySelector('.rec-plan-select').onchange=e=>{
+     a.plan=e.target.value;
+     a.billing=Object.keys(plans[a.plan].choices)[0];
+     recalc();
+   };
+   row.querySelector('.rec-seat-input').onchange=e=>{
+     a.seats=Math.max(0,Math.round(+e.target.value||0));
+     recalc();
+   };
+   row.querySelector('.rec-group-select').onchange=e=>{a.group=e.target.value;recalc()};
+   row.querySelector('.billing-select').onchange=e=>{a.billing=e.target.value;recalc()};
+   row.querySelector('.rec-remove').onclick=()=>{
+     assignments=assignments.filter(x=>x.id!==a.id);
+     recalc();
+   };
+   box.appendChild(row);
+ });
+ if(!enabled.length){
+   box.innerHTML='<div class="recommendation-row"><div class="rec-product"><div class="rec-plan">Nincs kiválasztott előfizetés</div></div><div class="rec-reason">Kattints az „Előfizetés hozzáadása” gombra egy új sor létrehozásához.</div></div>';
+ }
+ const total=seatHuf+apiHuf;
+ document.getElementById('recommendedSeatTotal').textContent=fmtHuf(seatHuf);
+ document.getElementById('recommendedApiTotal').textContent=fmtHuf(apiHuf);
+ document.getElementById('recommendedGrandMonthly').textContent=fmtHuf(total);
+ document.getElementById('recommendedGrandAnnual').textContent=fmtHuf(total*12);
+ document.getElementById('scenarioBadge').textContent=`Aktuális • ${enabled.length} előfizetési sor`;
+}
+
+function recalc(){
+ const usd=+document.getElementById('usdHuf').value||0, eur=+document.getElementById('eurHuf').value||0;
+ const totalPeopleEl=document.getElementById('totalPeople');
+ if(totalPeopleEl) totalPeopleEl.textContent=totalPeople();
+ let seatHuf=0, apiHuf=0, detail=[];
+ assignments.forEach(a=>{
+   let p=plans[a.plan], c=p.choices[a.billing], q=assignmentCount(a), local=c.price*q, huf=local*fx(p.currency);
+   if(a._costEl) a._costEl.textContent = a.enabled ? `${fmtHuf(huf)}/hó` : '–';
+   if(a.enabled){seatHuf+=huf;detail.push(`${p.name} • ${groupName(assignmentGroup(a))}: ${q} seat × ${p.currency==='USD'?fmtUsd(c.price):fmtEur(c.price)} = ${fmtHuf(huf)}/hó`)}
+ });
+ apiRows.forEach(r=>{
+   let m=apiModels[r.model], usdCost=(+r.input||0)*m.in+(+r.output||0)*m.out, huf=usdCost*usd;
+   if(r._costEl) r._costEl.textContent=r.enabled?`${fmtHuf(huf)}/hó (${fmtUsd(usdCost)})`:'–';
+   if(r.enabled){apiHuf+=huf;detail.push(`API ${m.name}: ${r.input}M input + ${r.output}M output ≈ ${fmtHuf(huf)}/hó ${m.note?'['+m.note+']':''}`)}
+ });
+ let total=seatHuf+apiHuf;
+ document.getElementById('seatMonthly').textContent=fmtHuf(seatHuf);
+ document.getElementById('apiMonthly').textContent=fmtHuf(apiHuf);
+ document.getElementById('totalMonthly2').textContent=fmtHuf(total);
+ document.getElementById('totalAnnual2').textContent=fmtHuf(total*12);
+ renderRecommendationSummary(seatHuf,apiHuf);
+ let groupText=`Aktív előfizetési sorok: ${assignments.filter(a=>a.enabled).length}`;
+ document.getElementById('summaryText').textContent =
+`ARAGO AI LICENC-/API-SZCENÁRIÓ
+Adatállapot: 2026.09.15.
+Létszám / hozzáférési szintek: ${groupText}
+Árfolyam: 1 USD = ${usd} HUF | 1 EUR = ${eur} HUF
+
+${detail.length?detail.join('\n'):'Nincs kiválasztott tétel.'}
+
+Seat költség: ${fmtHuf(seatHuf)}/hó
+API költség:  ${fmtHuf(apiHuf)}/hó
+ÖSSZESEN:     ${fmtHuf(total)}/hó
+ÉVESÍTETT:    ${fmtHuf(total*12)}/év
+
+Nettó döntéstámogató becslés. A tényleges számla függhet árfolyamtól, adó/VAT-kezeléstől, promóciótól és usage/tool díjaktól.`;
+}
+
+function getExportSnapshot(){
+ const usd=+document.getElementById('usdHuf').value||0;
+ const eur=+document.getElementById('eurHuf').value||0;
+ const subscriptionRows=assignments.filter(a=>a.enabled && plans[a.plan] && plans[a.plan].choices[a.billing]).map(a=>{
+   const p=plans[a.plan], c=p.choices[a.billing], seats=assignmentCount(a);
+   const monthlyHuf=seats*c.price*fx(p.currency);
+   return {platform:p.vendor,package:p.name,group:groupName(assignmentGroup(a)),seats,billing:c.label,currency:p.currency,unitPrice:c.price,monthlyHuf,reason:planReasons[a.plan]||''};
+ });
+ const apiExportRows=apiRows.filter(r=>r.enabled && apiModels[r.model]).map(r=>{
+   const m=apiModels[r.model],usdCost=(+r.input||0)*m.in+(+r.output||0)*m.out;
+   return {model:m.name,inputMTok:+r.input||0,outputMTok:+r.output||0,monthlyUsd:usdCost,monthlyHuf:usdCost*usd,note:m.note||''};
+ });
+ const subscriptionTotal=subscriptionRows.reduce((sum,r)=>sum+r.monthlyHuf,0);
+ const apiTotal=apiExportRows.reduce((sum,r)=>sum+r.monthlyHuf,0);
+ return {usd,eur,subscriptionRows,apiExportRows,subscriptionTotal,apiTotal,total:subscriptionTotal+apiTotal};
+}
+
+function downloadBlob(content,type,filename){
+ const url=URL.createObjectURL(new Blob([content],{type}));
+ const link=document.createElement('a');
+ link.href=url;link.download=filename;document.body.appendChild(link);link.click();link.remove();
+ setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+
+function csvCell(value){return `"${String(value??'').replace(/"/g,'""')}"`}
+function csvNumber(value){return Number(value||0).toFixed(2).replace('.',',')}
+function exportExcelCsv(){
+ const s=getExportSnapshot(), rows=[];
+ rows.push(['ARAGO AI ELŐFIZETÉSI KONFIGURÁCIÓ']);
+ rows.push(['Adatállapot','2026.09.15.']);
+ rows.push(['USD / HUF',csvNumber(s.usd)]);
+ rows.push(['EUR / HUF',csvNumber(s.eur)]);
+ rows.push([]);
+ rows.push(['ELŐFIZETÉSEK']);
+ rows.push(['Platform','Csomag','Munkatársi csoport','Seat','Ár / számlázás','Deviza','Egységár / hó','Részösszeg HUF / hó','Magyarázat']);
+ s.subscriptionRows.forEach(r=>rows.push([r.platform,r.package,r.group,r.seats,r.billing,r.currency,csvNumber(r.unitPrice),Math.round(r.monthlyHuf),r.reason]));
+ rows.push([]);
+ rows.push(['API-HASZNÁLAT']);
+ rows.push(['Modell','Input MTok / hó','Output MTok / hó','Havi USD','Havi HUF','Megjegyzés']);
+ s.apiExportRows.forEach(r=>rows.push([r.model,csvNumber(r.inputMTok),csvNumber(r.outputMTok),csvNumber(r.monthlyUsd),Math.round(r.monthlyHuf),r.note]));
+ rows.push([]);
+ rows.push(['Előfizetések / hó',Math.round(s.subscriptionTotal)]);
+ rows.push(['API / hó',Math.round(s.apiTotal)]);
+ rows.push(['VÉGÖSSZEG / HÓ',Math.round(s.total)]);
+ rows.push(['ÉVESÍTETT VÉGÖSSZEG',Math.round(s.total*12)]);
+ const csv='\ufeff'+rows.map(row=>row.map(csvCell).join(';')).join('\r\n');
+ downloadBlob(csv,'text/csv;charset=utf-8','arago-ai-konfiguracio-2026-09-15.csv');
+}
+
+function exportJson(){
+ const config={
+   format:'arago-ai-cost-config',version:1,exportedAt:new Date().toISOString(),dataDate:'2026-09-15',
+   rates:{usdHuf:+document.getElementById('usdHuf').value||0,eurHuf:+document.getElementById('eurHuf').value||0},
+   assignments:assignments.filter(a=>a.enabled).map(a=>({plan:a.plan,billing:a.billing,seats:assignmentCount(a),group:assignmentGroup(a),enabled:true})),
+   apiRows:apiRows.filter(r=>r.enabled).map(r=>({model:r.model,input:+r.input||0,output:+r.output||0,enabled:true}))
+ };
+ downloadBlob(JSON.stringify(config,null,2),'application/json;charset=utf-8','arago-ai-konfiguracio-2026-09-15.json');
+}
+
+function setSaveStatus(message,isError=false){
+ const el=document.getElementById('saveStatus');
+ el.textContent=message;el.style.color=isError?'var(--bad)':'var(--good)';
+}
+
+async function importJsonFile(file){
+ try{
+   const config=JSON.parse(await file.text());
+   if(config.format!=='arago-ai-cost-config'||!Array.isArray(config.assignments)) throw new Error('Nem támogatott konfigurációs fájl.');
+   const loadedAssignments=config.assignments.filter(a=>plans[a.plan]).map(a=>{
+     const billing=plans[a.plan].choices[a.billing]?a.billing:Object.keys(plans[a.plan].choices)[0];
+     const group=employeeGroups[a.group]?a.group:'basic';
+     return {id:uid(),enabled:true,plan:a.plan,billing,group,target:'all',seats:Math.max(0,Math.round(+a.seats||0))};
+   });
+   const loadedApiRows=(Array.isArray(config.apiRows)?config.apiRows:[]).filter(r=>apiModels[r.model]).map(r=>({id:uid(),enabled:true,model:r.model,input:Math.max(0,+r.input||0),output:Math.max(0,+r.output||0)}));
+   assignments=loadedAssignments;
+   apiRows=loadedApiRows;
+   if(Number.isFinite(+config.rates?.usdHuf)) document.getElementById('usdHuf').value=+config.rates.usdHuf;
+   if(Number.isFinite(+config.rates?.eurHuf)) document.getElementById('eurHuf').value=+config.rates.eurHuf;
+   renderAssignments();renderApi();recalc();
+   setSaveStatus(`Betöltve: ${file.name}`);
+ }catch(error){
+   setSaveStatus(error.message||'A JSON-fájl nem tölthető be.',true);
+ }
+}
+
+function renderAll(){renderTiers();renderAssignments();renderApi();recalc()}
+
+function setPreset(kind){
+ assignments=[];
+ if(kind==='lean'){
+   tiers={total:30,copilotBiz:20,chatgpt:10,management:5};
+   apiRows=[{id:uid(),enabled:true,model:'ds_peak',input:50,output:300}];
+   assignments=[
+    {id:uid(),enabled:true,plan:'ms_chat',target:'all',group:'basic',seats:30,billing:'included'},
+    {id:uid(),enabled:true,plan:'ms_business',target:'copilotBiz',group:'office',seats:20,billing:'promo'},
+    {id:uid(),enabled:true,plan:'chatgpt_standard',target:'chatgpt',group:'expert',seats:10,billing:'annual'},
+    {id:uid(),enabled:true,plan:'perplexity_pro',target:'management',group:'management',seats:5,billing:'annual'},
+    {id:uid(),enabled:true,plan:'claude_pro',target:'management',group:'management',seats:5,billing:'annual'}
+   ];
+ } else if(kind==='everything'){
+   assignments=[
+    {id:uid(),enabled:true,plan:'chatgpt_standard',target:'all',group:'basic',seats:30,billing:'annual'},
+    {id:uid(),enabled:true,plan:'claude_standard',target:'management',group:'management',seats:5,billing:'annual'},
+    {id:uid(),enabled:true,plan:'perplexity_pro',target:'management',group:'management',seats:5,billing:'annual'},
+    {id:uid(),enabled:true,plan:'ms_business',target:'management',group:'management',seats:5,billing:'promo'},
+    {id:uid(),enabled:false,plan:'deepseek_free',target:'management',group:'management',seats:5,billing:'free'}
+   ];
+ } else if(kind==='ms'){
+   assignments=[
+    {id:uid(),enabled:true,plan:'ms_bundle_standard',target:'all',group:'basic',seats:30,billing:'annual'},
+    {id:uid(),enabled:true,plan:'perplexity_pro',target:'management',group:'management',seats:5,billing:'annual'}
+   ];
+ }
+ renderAssignments();renderApi();recalc();
+}
+
+document.getElementById('addRecommendation').onclick=()=>{
+ assignments.push({id:uid(),enabled:true,plan:'chatgpt_standard',target:'all',group:'basic',seats:1,billing:'annual'});
+ renderAssignments();
+ recalc();
+};
+document.getElementById('resetRecommendation').onclick=()=>setPreset('lean');
+document.getElementById('addAssignment').onclick=()=>{
+ assignments.push({id:uid(),enabled:true,plan:'chatgpt_standard',target:'all',group:'basic',seats:1,billing:'annual'});renderAssignments();recalc()
+};
+document.getElementById('addApi').onclick=()=>{
+ apiRows.push({id:uid(),enabled:true,model:'oai_sol',input:1,output:.25});renderApi();recalc()
+};
+document.querySelectorAll('[data-preset]').forEach(b=>b.onclick=()=>setPreset(b.dataset.preset));
+document.getElementById('clearAssignments').onclick=()=>{assignments=[];apiRows=[];renderAll()};
+document.getElementById('usdHuf').oninput=recalc;document.getElementById('eurHuf').oninput=recalc;
+document.getElementById('savePdf').onclick=()=>window.print();
+document.getElementById('saveExcel').onclick=()=>{exportExcelCsv();setSaveStatus('Excel-kompatibilis CSV letöltve ✓')};
+document.getElementById('saveJson').onclick=()=>{exportJson();setSaveStatus('JSON-konfiguráció letöltve ✓')};
+document.getElementById('importConfigFile').onchange=async e=>{
+ const file=e.target.files?.[0];
+ if(file) await importJsonFile(file);
+ e.target.value='';
+};
+document.getElementById('copySummary').onclick=async()=>{
+ let t=document.getElementById('summaryText').textContent;
+ try{await navigator.clipboard.writeText(t);document.getElementById('copySummary').textContent='Másolva ✓';setTimeout(()=>document.getElementById('copySummary').textContent='Konfiguráció másolása',1200)}
+ catch(e){alert('A böngésző nem engedte a vágólap használatát. Jelöld ki az összefoglalót kézzel.')}
+};
+
+setPreset('lean');
+renderTiers();
+renderApi();
+recalc();
+</script>
+</body>
+</html>
