@@ -1,0 +1,267 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 1870" width="1440" height="1870" font-family="'Segoe UI',Roboto,Helvetica,Arial,sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0d1117"/>
+      <stop offset="100%" stop-color="#0b0f14"/>
+    </linearGradient>
+    <linearGradient id="band" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FF5100" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#FF5100" stop-opacity="0.01"/>
+    </linearGradient>
+    <marker id="a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#6e7681"/>
+    </marker>
+    <marker id="ao" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#FF5100"/>
+    </marker>
+    <marker id="ag" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#3fb950"/>
+    </marker>
+    <marker id="ab" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#58a6ff"/>
+    </marker>
+  </defs>
+
+  <rect width="1440" height="1870" fill="url(#bg)"/>
+
+  <text x="60" y="64" fill="#ffffff" font-size="32" font-weight="800">Egy vállalati AI-rendszer architektúrája</text>
+  <text x="60" y="95" fill="#8b949e" font-size="16.5">Hogyan működik a céges tudás és az AI ügynökök együtt — OpenAI, Anthropic, Microsoft és Google enterprise ajánlatai alapján</text>
+  <line x1="60" y1="116" x2="1380" y2="116" stroke="#FF5100" stroke-width="2" opacity="0.5"/>
+
+  <!-- LAYER 1 -->
+  <rect x="60" y="140" width="1320" height="150" rx="16" fill="#161b22" stroke="#30363d"/>
+  <rect x="60" y="140" width="6" height="150" rx="3" fill="#FF5100"/>
+  <text x="88" y="170" fill="#8b949e" font-size="12.5" font-weight="700" letter-spacing="1.4">1 · FELHASZNÁLÓK</text>
+  <text x="88" y="198" fill="#ffffff" font-size="18" font-weight="700">Emberek — a szokásos felületükön kérdeznek</text>
+
+  <rect x="88" y="216" width="240" height="56" rx="10" fill="#0d1117" stroke="#30363d"/>
+  <text x="208" y="241" fill="#c9d1d9" font-size="14.5" font-weight="600" text-anchor="middle">Chat / web app</text>
+  <text x="208" y="261" fill="#8b949e" font-size="12" text-anchor="middle">ChatGPT · Claude · Copilot · Gemini</text>
+
+  <rect x="344" y="216" width="240" height="56" rx="10" fill="#0d1117" stroke="#30363d"/>
+  <text x="464" y="241" fill="#c9d1d9" font-size="14.5" font-weight="600" text-anchor="middle">Teams / Slack / e-mail</text>
+  <text x="464" y="261" fill="#8b949e" font-size="12" text-anchor="middle">ahol a munka amúgy is folyik</text>
+
+  <rect x="600" y="216" width="240" height="56" rx="10" fill="#0d1117" stroke="#30363d"/>
+  <text x="720" y="241" fill="#c9d1d9" font-size="14.5" font-weight="600" text-anchor="middle">Mobil / belső portál</text>
+  <text x="720" y="261" fill="#8b949e" font-size="12" text-anchor="middle">céges app, intranet</text>
+
+  <rect x="856" y="216" width="240" height="56" rx="10" fill="#0d1117" stroke="#30363d"/>
+  <text x="976" y="241" fill="#c9d1d9" font-size="14.5" font-weight="600" text-anchor="middle">Automatizált folyamatok</text>
+  <text x="976" y="261" fill="#8b949e" font-size="12" text-anchor="middle">rendszeres, gépi hívások</text>
+
+  <rect x="1112" y="216" width="240" height="56" rx="10" fill="#0d1117" stroke="#30363d"/>
+  <text x="1232" y="241" fill="#c9d1d9" font-size="14.5" font-weight="600" text-anchor="middle">Külső partnerek</text>
+  <text x="1232" y="261" fill="#8b949e" font-size="12" text-anchor="middle">korlátozott, vendég-hozzáférés</text>
+
+  <line x1="720" y1="290" x2="720" y2="322" stroke="#6e7681" stroke-width="2.5" marker-end="url(#a)"/>
+  <text x="736" y="312" fill="#8b949e" font-size="12.5">kérdés · kérés</text>
+
+  <!-- LAYER 2 -->
+  <rect x="60" y="328" width="1320" height="300" rx="16" fill="url(#band)" stroke="#FF5100" stroke-width="1.5"/>
+  <text x="88" y="358" fill="#FF5100" font-size="12.5" font-weight="700" letter-spacing="1.4">2 · AZ AI RÉTEG — MODELL, ÜGYNÖKÖK, VEZÉRLÉS</text>
+  <text x="88" y="386" fill="#ffffff" font-size="18" font-weight="700">Itt dől el, mit kérdez, honnan, és mit kap vissza</text>
+
+  <rect x="88" y="406" width="380" height="200" rx="12" fill="#161b22" stroke="#30363d"/>
+  <text x="108" y="434" fill="#ffffff" font-size="15.5" font-weight="700">Asszisztens (alap AI)</text>
+  <text x="108" y="458" fill="#8b949e" font-size="13">A modell, amely megérti a kérdést,</text>
+  <text x="108" y="476" fill="#8b949e" font-size="13">megtervezi a lépéseket, és válaszol.</text>
+  <rect x="108" y="490" width="340" height="46" rx="8" fill="#0d1117" stroke="#30363d"/>
+  <text x="122" y="510" fill="#c9d1d9" font-size="12.5">Modell: GPT · Claude · Copilot · Gemini</text>
+  <text x="122" y="527" fill="#8b949e" font-size="12">+ utasítások, szerepkör, korlátok</text>
+  <rect x="108" y="548" width="340" height="42" rx="8" fill="#0d1117" stroke="#30363d"/>
+  <text x="122" y="575" fill="#3fb950" font-size="12.5">Nem tanul a céges adatból — csak felhasználja</text>
+
+  <rect x="486" y="406" width="380" height="200" rx="12" fill="#161b22" stroke="#30363d"/>
+  <text x="506" y="434" fill="#ffffff" font-size="15.5" font-weight="700">Célügynökök (beállított szerepek)</text>
+  <text x="506" y="458" fill="#8b949e" font-size="13">Egy feladatra szabott AI-munkatársak,</text>
+  <text x="506" y="476" fill="#8b949e" font-size="13">amelyeket a dolgozók hívhatnak.</text>
+  <text x="506" y="504" fill="#c9d1d9" font-size="12.5">• Szerződés-ellenőrző ügynök</text>
+  <text x="506" y="524" fill="#c9d1d9" font-size="12.5">• Szerződésíró ügynök</text>
+  <text x="506" y="544" fill="#c9d1d9" font-size="12.5">• HR-onboarding ügynök</text>
+  <text x="506" y="564" fill="#c9d1d9" font-size="12.5">• Sales-ajánlat ügynök</text>
+  <text x="506" y="590" fill="#8b949e" font-size="11.5" font-style="italic">mindegyik csak a saját tudására szabva</text>
+
+  <rect x="884" y="406" width="468" height="200" rx="12" fill="#161b22" stroke="#30363d"/>
+  <text x="904" y="434" fill="#ffffff" font-size="15.5" font-weight="700">Rendszerszintű vezérlés (orchestration)</text>
+  <text x="904" y="458" fill="#8b949e" font-size="13">A vállalati platform rétege: ügynök-katalógus,</text>
+  <text x="904" y="476" fill="#8b949e" font-size="13">jogosultság, naplózás, megfelelőség.</text>
+  <rect x="904" y="490" width="428" height="46" rx="8" fill="#0d1117" stroke="#30363d"/>
+  <text x="918" y="510" fill="#c9d1d9" font-size="12.5">Agent-katalógus · ki mit érhet el</text>
+  <text x="918" y="527" fill="#8b949e" font-size="12">(Copilot Studio · Gemini agent gallery · workspace agents)</text>
+  <rect x="904" y="544" width="428" height="46" rx="8" fill="#0d1117" stroke="#30363d"/>
+  <text x="918" y="564" fill="#c9d1d9" font-size="12.5">Naplózás és audit · Compliance API</text>
+  <text x="918" y="581" fill="#8b949e" font-size="12">ki, mikor, mit kérdezett — utólag visszakereshető</text>
+
+  <line x1="280" y1="628" x2="280" y2="666" stroke="#FF5100" stroke-width="2.5" marker-end="url(#ao)"/>
+  <text x="296" y="652" fill="#FF5100" font-size="12.5" font-weight="600">eszközhívás (MCP)</text>
+
+  <line x1="1118" y1="628" x2="1118" y2="666" stroke="#6e7681" stroke-width="2.5" marker-end="url(#a)"/>
+  <text x="1134" y="652" fill="#8b949e" font-size="12.5">szabály · napló</text>
+
+  <!-- LAYER 3 : ACCESS -->
+  <rect x="60" y="672" width="660" height="420" rx="16" fill="#161b22" stroke="#30363d"/>
+  <rect x="60" y="672" width="660" height="5" rx="2.5" fill="#FF5100"/>
+  <text x="88" y="704" fill="#FF5100" font-size="12.5" font-weight="700" letter-spacing="1.4">3 · HOZZÁFÉRÉSI RÉTEG — CONNECTOROK ÉS MCP</text>
+  <text x="88" y="730" fill="#8b949e" font-size="13">Ez a híd a céges rendszerek felé.</text>
+
+  <rect x="88" y="748" width="290" height="150" rx="10" fill="#0d1117" stroke="#30363d"/>
+  <text x="106" y="774" fill="#c9d1d9" font-size="14.5" font-weight="700">Kész connectorok</text>
+  <text x="106" y="796" fill="#8b949e" font-size="12.5">Előre megírt hidak a gyakori</text>
+  <text x="106" y="814" fill="#8b949e" font-size="12.5">rendszerekhez — csak engedélyezni.</text>
+  <text x="106" y="840" fill="#c9d1d9" font-size="12.5">SharePoint · OneDrive · Drive</text>
+  <text x="106" y="859" fill="#c9d1d9" font-size="12.5">Slack · Teams · Jira · Salesforce</text>
+  <text x="106" y="880" fill="#8b949e" font-size="11.5" font-style="italic">több száz kész integráció</text>
+
+  <rect x="398" y="748" width="290" height="150" rx="10" fill="#0d1117" stroke="#FF5100" stroke-width="1.5"/>
+  <text x="416" y="774" fill="#FF5100" font-size="14.5" font-weight="700">MCP-szerver (egyedi)</text>
+  <text x="416" y="796" fill="#8b949e" font-size="12.5">A saját fejlesztésű rendszerekhez —</text>
+  <text x="416" y="814" fill="#8b949e" font-size="12.5">ez a híd, amit te építesz.</text>
+  <text x="416" y="840" fill="#c9d1d9" font-size="12.5">Szerződésadatbázis</text>
+  <text x="416" y="859" fill="#c9d1d9" font-size="12.5">Belső ügyvitel · referencia-lista</text>
+  <text x="416" y="880" fill="#8b949e" font-size="11.5" font-style="italic">tool-lista szabályozza, mit lehet</text>
+
+  <text x="88" y="928" fill="#ffffff" font-size="15" font-weight="700">Kétféle elérési mód — a döntés kulcskérdés</text>
+  <rect x="88" y="942" width="290" height="130" rx="10" fill="#0d1117" stroke="#58a6ff"/>
+  <text x="106" y="968" fill="#58a6ff" font-size="14" font-weight="700">Föderált (valós idejű)</text>
+  <text x="106" y="990" fill="#8b949e" font-size="12.5">Semmit nem másol be. Minden kérdésnél</text>
+  <text x="106" y="1008" fill="#8b949e" font-size="12.5">a forrásrendszertől kéri le élőben.</text>
+  <text x="106" y="1032" fill="#c9d1d9" font-size="12">+ mindig friss adat, a jogosultság él</text>
+  <text x="106" y="1050" fill="#c9d1d9" font-size="12">− lassabb, a forrás terhelődik</text>
+
+  <rect x="398" y="942" width="290" height="130" rx="10" fill="#0d1117" stroke="#3fb950"/>
+  <text x="416" y="968" fill="#3fb950" font-size="14" font-weight="700">Indexelt (bemásolt)</text>
+  <text x="416" y="990" fill="#8b949e" font-size="12.5">A tartalmat előre beemeli egy kereshető</text>
+  <text x="416" y="1008" fill="#8b949e" font-size="12.5">indexbe a cégen belül.</text>
+  <text x="416" y="1032" fill="#c9d1d9" font-size="12">+ gyors keresés, nagy volumenre jó</text>
+  <text x="416" y="1050" fill="#c9d1d9" font-size="12">− frissítés kell, másolat keletkezik</text>
+
+  <!-- LAYER 4 : GOVERNANCE -->
+  <rect x="740" y="672" width="640" height="420" rx="16" fill="#161b22" stroke="#30363d"/>
+  <rect x="740" y="672" width="640" height="5" rx="2.5" fill="#3fb950"/>
+  <text x="768" y="704" fill="#3fb950" font-size="12.5" font-weight="700" letter-spacing="1.4">4 · JOGOSULTSÁG ÉS BIZTONSÁG — VÉGIG AZ EGÉSZ RENDSZEREN</text>
+  <text x="768" y="730" fill="#8b949e" font-size="13">Nem külön lépés: minden kérésnél egyszerre érvényesül.</text>
+
+  <rect x="768" y="748" width="584" height="46" rx="8" fill="#0d1117" stroke="#30363d"/>
+  <text x="786" y="768" fill="#c9d1d9" font-size="13.5" font-weight="600">Ki vagy? (identitás)</text>
+  <text x="786" y="786" fill="#8b949e" font-size="12">A kérés a bejelentkezett munkatárs nevében fut — nem közös szuperfiókkal.</text>
+
+  <rect x="768" y="802" width="584" height="46" rx="8" fill="#0d1117" stroke="#30363d"/>
+  <text x="786" y="822" fill="#c9d1d9" font-size="13.5" font-weight="600">Mit láthatsz? (jogosultság-tudatos keresés)</text>
+  <text x="786" y="840" fill="#8b949e" font-size="12">Csak az jön vissza, amihez a forrásrendszerben is joga van — a többi láthatatlan.</text>
+
+  <rect x="768" y="856" width="584" height="46" rx="8" fill="#0d1117" stroke="#30363d"/>
+  <text x="786" y="876" fill="#c9d1d9" font-size="13.5" font-weight="600">Titkosítás és kulcsok</text>
+  <text x="786" y="894" fill="#8b949e" font-size="12">Céges kulcskezelés (CMEK): a cégé a kulcs, visszavonható, az adat zárt marad.</text>
+
+  <rect x="768" y="910" width="584" height="46" rx="8" fill="#0d1117" stroke="#30363d"/>
+  <text x="786" y="930" fill="#c9d1d9" font-size="13.5" font-weight="600">Naplózás és megfelelőség</text>
+  <text x="786" y="948" fill="#8b949e" font-size="12">Minden kérés és művelet naplózva — auditálható, visszakereshető.</text>
+
+  <rect x="768" y="964" width="584" height="46" rx="8" fill="#0d1117" stroke="#30363d"/>
+  <text x="786" y="984" fill="#c9d1d9" font-size="13.5" font-weight="600">Veszélyek kezelése</text>
+  <text x="786" y="1002" fill="#8b949e" font-size="12">Behúzott dokumentum rejtett utasítása (prompt injection) — külön védelem kell.</text>
+
+  <rect x="768" y="1018" width="584" height="54" rx="8" fill="#0d1117" stroke="#d29922"/>
+  <text x="786" y="1039" fill="#d29922" font-size="13.5" font-weight="700">A gyakorlat legfontosabb szabálya</text>
+  <text x="786" y="1058" fill="#c9d1d9" font-size="12">A jogosultságot soha nem az AI dönti el — a szerver oldalán érvényesül.</text>
+
+  <line x1="280" y1="1092" x2="280" y2="1130" stroke="#58a6ff" stroke-width="2.5" marker-end="url(#ab)"/>
+  <line x1="543" y1="1092" x2="543" y2="1130" stroke="#3fb950" stroke-width="2.5" marker-end="url(#ag)"/>
+
+  <!-- LAYER 5 : DATA -->
+  <rect x="60" y="1136" width="1320" height="230" rx="16" fill="#161b22" stroke="#30363d"/>
+  <rect x="60" y="1136" width="6" height="230" rx="3" fill="#58a6ff"/>
+  <text x="88" y="1166" fill="#8b949e" font-size="12.5" font-weight="700" letter-spacing="1.4">5 · A CÉGES TUDÁS — A VALÓDI ADAT</text>
+  <text x="88" y="1194" fill="#ffffff" font-size="18" font-weight="700">Itt él a tudás. Ez marad a cég tulajdona, a jogosultságok változatlanok.</text>
+
+  <rect x="88" y="1212" width="240" height="60" rx="10" fill="#0d1117" stroke="#30363d"/>
+  <text x="208" y="1238" fill="#c9d1d9" font-size="14" font-weight="600" text-anchor="middle">Dokumentumtárak</text>
+  <text x="208" y="1258" fill="#8b949e" font-size="12" text-anchor="middle">SharePoint · Drive · wiki</text>
+
+  <rect x="344" y="1212" width="240" height="60" rx="10" fill="#0d1117" stroke="#30363d"/>
+  <text x="464" y="1238" fill="#c9d1d9" font-size="14" font-weight="600" text-anchor="middle">Adatbázisok</text>
+  <text x="464" y="1258" fill="#8b949e" font-size="12" text-anchor="middle">Postgres · MySQL · Supabase</text>
+
+  <rect x="600" y="1212" width="240" height="60" rx="10" fill="#0d1117" stroke="#30363d"/>
+  <text x="720" y="1238" fill="#c9d1d9" font-size="14" font-weight="600" text-anchor="middle">Üzleti rendszerek</text>
+  <text x="720" y="1258" fill="#8b949e" font-size="12" text-anchor="middle">CRM · ERP · számlázás</text>
+
+  <rect x="856" y="1212" width="240" height="60" rx="10" fill="#0d1117" stroke="#30363d"/>
+  <text x="976" y="1238" fill="#c9d1d9" font-size="14" font-weight="600" text-anchor="middle">Beszélgetések</text>
+  <text x="976" y="1258" fill="#8b949e" font-size="12" text-anchor="middle">Teams · Slack · e-mail</text>
+
+  <rect x="1112" y="1212" width="240" height="60" rx="10" fill="#0d1117" stroke="#30363d"/>
+  <text x="1232" y="1238" fill="#c9d1d9" font-size="14" font-weight="600" text-anchor="middle">Saját fejlesztés</text>
+  <text x="1232" y="1258" fill="#8b949e" font-size="12" text-anchor="middle">szerződéskezelő · egyedi appok</text>
+
+  <rect x="88" y="1288" width="1264" height="54" rx="10" fill="#0d1117" stroke="#30363d"/>
+  <text x="108" y="1310" fill="#3fb950" font-size="13.5" font-weight="700">Fontos: a modell nem tanul a céges adatból.</text>
+  <text x="108" y="1330" fill="#8b949e" font-size="12.5">A tudás a helyén marad, a válasz pedig a forrás megjelölésével érkezik (grounding) — így ellenőrizhető.</text>
+
+  <!-- LAYER 6 : OUTPUT -->
+  <line x1="720" y1="1366" x2="720" y2="1400" stroke="#FF5100" stroke-width="2.5" marker-end="url(#ao)"/>
+  <text x="736" y="1388" fill="#FF5100" font-size="12.5" font-weight="600">válasz · dokumentum · művelet</text>
+
+  <rect x="60" y="1406" width="1320" height="180" rx="16" fill="url(#band)" stroke="#FF5100" stroke-width="1.5"/>
+  <text x="88" y="1436" fill="#FF5100" font-size="12.5" font-weight="700" letter-spacing="1.4">6 · AMI KIJÖN — EREDMÉNY ÉS FELELŐSSÉG</text>
+  <text x="88" y="1464" fill="#ffffff" font-size="18" font-weight="700">A válasz és a művelet ugyanoda kerül, ahol a munka folyik</text>
+
+  <rect x="88" y="1482" width="290" height="80" rx="10" fill="#0d1117" stroke="#30363d"/>
+  <text x="106" y="1508" fill="#c9d1d9" font-size="14" font-weight="600">Válasz a felhasználónak</text>
+  <text x="106" y="1530" fill="#8b949e" font-size="12.5">Forrásmegjelöléssel, ellenőrizhetően.</text>
+  <text x="106" y="1548" fill="#8b949e" font-size="12.5">Nem fejből, hanem a céges tudásból.</text>
+
+  <rect x="398" y="1482" width="290" height="80" rx="10" fill="#0d1117" stroke="#30363d"/>
+  <text x="416" y="1508" fill="#c9d1d9" font-size="14" font-weight="600">Keletkező fájl / dokumentum</text>
+  <text x="416" y="1530" fill="#8b949e" font-size="12.5">A cég kijelölt célmappájába kerül,</text>
+  <text x="416" y="1548" fill="#8b949e" font-size="12.5">a szokásos jogosultsággal és verzióval.</text>
+
+  <rect x="708" y="1482" width="290" height="80" rx="10" fill="#0d1117" stroke="#30363d"/>
+  <text x="726" y="1508" fill="#c9d1d9" font-size="14" font-weight="600">Művelet a rendszerben</text>
+  <text x="726" y="1530" fill="#8b949e" font-size="12.5">Írás csak jóváhagyással és naplózással,</text>
+  <text x="726" y="1548" fill="#8b949e" font-size="12.5">a tool-lista szabályai szerint.</text>
+
+  <rect x="1018" y="1482" width="334" height="80" rx="10" fill="#0d1117" stroke="#d29922"/>
+  <text x="1036" y="1508" fill="#d29922" font-size="14" font-weight="700">Döntés mindig embernél</text>
+  <text x="1036" y="1530" fill="#c9d1d9" font-size="12.5">Az ügynök javasol, nem dönt. Az aláírás,</text>
+  <text x="1036" y="1548" fill="#c9d1d9" font-size="12.5">a jóváhagyás és a felelősség emberi.</text>
+
+  <!-- FOOTER FLOW -->
+  <rect x="60" y="1610" width="1320" height="212" rx="16" fill="#161b22" stroke="#30363d"/>
+  <text x="88" y="1642" fill="#ffffff" font-size="16.5" font-weight="700">A teljes folyamat egy kérésnél — hat lépés</text>
+
+  <circle cx="112" cy="1680" r="15" fill="#FF5100"/><text x="112" y="1685" fill="#0d1117" font-size="13" font-weight="800" text-anchor="middle">1</text>
+  <text x="140" y="1677" fill="#c9d1d9" font-size="13.5" font-weight="600">Kérés</text>
+  <text x="140" y="1695" fill="#8b949e" font-size="12">A munkatárs kérdez a megszokott felületén.</text>
+
+  <circle cx="112" cy="1734" r="15" fill="#FF5100"/><text x="112" y="1739" fill="#0d1117" font-size="13" font-weight="800" text-anchor="middle">2</text>
+  <text x="140" y="1731" fill="#c9d1d9" font-size="13.5" font-weight="600">Megértés és terv</text>
+  <text x="140" y="1749" fill="#8b949e" font-size="12">Az AI értelmezi, és kiválasztja a szükséges eszközöket.</text>
+
+  <circle cx="112" cy="1788" r="15" fill="#FF5100"/><text x="112" y="1793" fill="#0d1117" font-size="13" font-weight="800" text-anchor="middle">3</text>
+  <text x="140" y="1785" fill="#c9d1d9" font-size="13.5" font-weight="600">Jogosultság-ellenőrzés</text>
+  <text x="140" y="1803" fill="#8b949e" font-size="12">A rendszer a hívó személye szerint szűkít.</text>
+
+  <circle cx="560" cy="1680" r="15" fill="#FF5100"/><text x="560" y="1685" fill="#0d1117" font-size="13" font-weight="800" text-anchor="middle">4</text>
+  <text x="588" y="1677" fill="#c9d1d9" font-size="13.5" font-weight="600">Lekérés a forrásból</text>
+  <text x="588" y="1695" fill="#8b949e" font-size="12">Connectoron vagy MCP-n át, élőben vagy indexből.</text>
+
+  <circle cx="560" cy="1734" r="15" fill="#FF5100"/><text x="560" y="1739" fill="#0d1117" font-size="13" font-weight="800" text-anchor="middle">5</text>
+  <text x="588" y="1731" fill="#c9d1d9" font-size="13.5" font-weight="600">Válasz a céges tudásból</text>
+  <text x="588" y="1749" fill="#8b949e" font-size="12">Forrásmegjelöléssel, ellenőrizhetően.</text>
+
+  <circle cx="560" cy="1788" r="15" fill="#FF5100"/><text x="560" y="1793" fill="#0d1117" font-size="13" font-weight="800" text-anchor="middle">6</text>
+  <text x="588" y="1785" fill="#c9d1d9" font-size="13.5" font-weight="600">Naplózás és felelősség</text>
+  <text x="588" y="1803" fill="#8b949e" font-size="12">Minden lépés naplózva; a döntés embernél marad.</text>
+
+  <circle cx="1010" cy="1680" r="15" fill="#3fb950"/><text x="1010" y="1685" fill="#0d1117" font-size="13" font-weight="800" text-anchor="middle">✓</text>
+  <text x="1038" y="1677" fill="#c9d1d9" font-size="13.5" font-weight="600">Amit mindez ad</text>
+  <text x="1038" y="1695" fill="#8b949e" font-size="12">Pontos válasz · kontrollált hozzáférés ·</text>
+  <text x="1038" y="1713" fill="#8b949e" font-size="12">auditálhatóság · a tudás a cég kezében marad.</text>
+
+  <circle cx="1010" cy="1760" r="15" fill="#f85149"/><text x="1010" y="1765" fill="#0d1117" font-size="13" font-weight="800" text-anchor="middle">!</text>
+  <text x="1038" y="1757" fill="#c9d1d9" font-size="13.5" font-weight="600">Amit meg kell oldani</text>
+  <text x="1038" y="1775" fill="#8b949e" font-size="12">Jogosultság a forrásban · naplózás ·</text>
+  <text x="1038" y="1793" fill="#8b949e" font-size="12">frissesség és a veszélyek kezelése.</text>
+</svg>

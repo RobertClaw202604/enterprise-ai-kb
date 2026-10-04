@@ -356,6 +356,7 @@
   <ul>
     <li><a href="#osszefoglalo">Összefoglaló</a></li>
     <li><a href="#minta">Közös minta</a></li>
+    <li><a href="#architektura">Architektúra</a></li>
     <li><a href="#openai">OpenAI</a></li>
     <li><a href="#anthropic">Anthropic</a></li>
     <li><a href="#microsoft">Microsoft</a></li>
@@ -753,6 +754,45 @@
           </tr>
         </tbody>
       </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ARCHITEKTÚRA ============ -->
+<section id="architektura">
+  <div class="wrap">
+    <h2>A teljes rendszer egyben — hogyan működik a vállalaton belül</h2>
+    <p class="sub">A hat réteg, amelyen egy kérés végigmegy — a felhasználótól a céges tudásig és vissza.</p>
+
+    <figure style="margin:24px 0 26px">
+      <img src="architektura.svg" alt="Vállalati AI-rendszer architektúrája: felhasználók, AI réteg, hozzáférési réteg (connectorok és MCP), jogosultság, céges tudás, eredmény" style="width:100%;height:auto;display:block;border-radius:14px;border:1px solid var(--line)">
+      <figcaption style="font-size:.82rem;color:var(--dim2);margin-top:10px;text-align:center">A hat réteg együtt: felhasználók → AI réteg → hozzáférés (connectorok és MCP) → jogosultság → céges tudás → eredmény. A folyamat hat lépése az alsó sorban.</figcaption>
+    </figure>
+
+    <div class="grid g2">
+      <div class="card">
+        <h3>Amit az ábra mutat</h3>
+        <ul style="font-size:.9rem;color:var(--dim);margin:0;padding-left:18px">
+          <li><strong>Egy kérés hat rétegen megy át</strong> — nem varázslat, hanem mérnöki folyamat.</li>
+          <li>A <strong>jogosultság nem egy lépés</strong>, hanem végig jelen van: minden rétegen egyszerre érvényesül.</li>
+          <li>A <strong>hivatkozási pont a céges tudás</strong>: a modell nem tanul belőle, csak felhasználja.</li>
+          <li>Ez a mûködés <strong>ugyanígy néz ki mind a négy szolgáltatónál</strong> — a különbség a connectorok szélességében és a jogosultság mélységében van.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Az öt kulcskérdés egy bevezetésnél</h3>
+        <ul style="font-size:.9rem;color:var(--dim);margin:0;padding-left:18px">
+          <li><strong>Melyik rendszerekre kell hozzáférés?</strong> Kész connector vagy MCP-szerver?</li>
+          <li><strong>Föderált vagy indexelt</strong> elérés kell az egyes adatokhoz?</li>
+          <li><strong>Hogyan érvényesül a jogosultság</strong> a forrásrendszerben? A kérés a hívó nevében fut-e?</li>
+          <li><strong>Mi naplózódik</strong>, és visszakereshető-e utólag?</li>
+          <li><strong>Mi az, amihez az AI egyáltalán hozzányúlhat</strong> (tool-lista) — és ehhez ki ad jóváhagyást?</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="note">
+      <b>A vizuális rövidítés:</b> az ábra szándékosan nem említ konkrét termékneveket a rétegeknél — mert a mûködés a négy szolgáltatónál azonos logikájú. A terméknevek a fenti szolgáltatói szekciókban vannak (Copilot Studio, Gemini agent gallery, Workspace agents, MCP connector).
     </div>
   </div>
 </section>
